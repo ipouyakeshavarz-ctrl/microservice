@@ -12,8 +12,8 @@ http_server:
 
 
 mysql:
-  port: 3309
+  port: 3311
   host: localhost
-  db_name: myapp_db
-  username: myapp
-  password: myappt0lk2o20
+  db_name: user_db
+  username: user
+  password: usert0lk2o20

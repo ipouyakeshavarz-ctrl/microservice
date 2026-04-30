@@ -7,8 +7,9 @@ import (
 	authservice "productapp/internal/auth"
 	cfg "productapp/internal/config"
 	httpserver "productapp/internal/delivery/http"
+	"productapp/internal/repository/migrator"
 	"productapp/internal/repository/mysql"
-	mysqlproduct "productapp/internal/repository/mysql/musqlproduct"
+	mysqlproduct "productapp/internal/repository/mysql/mysqlproduct"
 	productservice "productapp/internal/service"
 )
 
@@ -19,8 +20,8 @@ func main() {
 		log.Fatal(err)
 	}
 	fmt.Printf("cfg:%v\n", cfg2)
-	//mgr := migrator.New(cfg2.Mysql)
-	//mgr.Up()
+	mgr := migrator.New(cfg2.Mysql)
+	mgr.Up()
 	MysqlRepo := mysql.New(cfg2.Mysql)
 	productRepo := mysqlproduct.New(MysqlRepo)
 	authSvc := authservice.New(cfg2.Auth)

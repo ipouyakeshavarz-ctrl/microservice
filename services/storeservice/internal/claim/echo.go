@@ -1,8 +1,8 @@
 package claim
 
 import (
-	"productapp/internal/auth"
-	cfg "productapp/internal/config"
+	"storeapp/internal/auth"
+	cfg "storeapp/internal/config"
 
 	"github.com/labstack/echo/v4"
 )

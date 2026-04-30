@@ -1,53 +1,49 @@
 services:
-  # --- User Service ---
-  user-app:
-    build:
-      context: ./services/userservice
-      dockerfile: Dockerfile
-    ports:
-      - "8087:8087"
-    depends_on:
-      - user-database
-    environment:
-      MYSQL_HOST: user-database
-
   user-database:
     image: mysql:8.0
     ports:
-      - "3309:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: root123
-      MYSQL_DATABASE: myapp_db
-      MYSQL_USER: myapp
-      MYSQL_PASSWORD: myappt0lk2o20
+      - "3311:3306"
+    container_name: user-database
     volumes:
-      - user-db-data:/var/lib/mysql
-
-  # --- Product Service ---
-  product-app:
-    build:
-      context: ./services/productservice
-      dockerfile: Dockerfile
-
-    ports:
-      - "8088:8088"
-    depends_on:
-      - product-database
+      - userdbdata:/var/lib/mysql
+    restart: always
+    command: [ 'mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci' ]
     environment:
-      MYSQL_HOST: product-database
+      MYSQL_ROOT_PASSWORD: Mp13831383
+      MYSQL_DATABASE: user_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: usert0lk2o20
 
   product-database:
     image: mysql:8.0
     ports:
       - "3310:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: root123
-      MYSQL_DATABASE: product_db
-      MYSQL_USER: product_user
-      MYSQL_PASSWORD: product_password
+    container_name: product-database
     volumes:
-      - product-db-data:/var/lib/mysql
+      - productdbdata:/var/lib/mysql
+    restart: always
+    command: [ 'mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci' ]
+    environment:
+      MYSQL_ROOT_PASSWORD: Mp13831383
+      MYSQL_DATABASE: product_db
+      MYSQL_USER: product
+      MYSQL_PASSWORD: productt0lk2o20
+  store-database:
+    image: mysql:8.0
+    ports:
+      - "3312:3306"
+    container_name: store-database
+    volumes:
+      - storedbdata:/var/lib/mysql
+    restart: always
+    command: [ 'mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci' ]
+    environment:
+      MYSQL_ROOT_PASSWORD: Mp13831383
+      MYSQL_DATABASE: store_db
+      MYSQL_USER: store
+      MYSQL_PASSWORD: storet0lk2o20
 
 volumes:
-  user-db-data:
-  product-db-data:
+  userdbdata:
+  productdbdata:
+  storedbdata:
