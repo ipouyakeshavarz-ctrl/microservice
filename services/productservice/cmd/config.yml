@@ -1,0 +1,19 @@
+
+auth:
+  sign_key: jwt_secret
+  refresh_expiration_time: "168h"
+  access_expiration_time: "24h"
+  access_subject: "ac"
+  refresh_subject: "rt"
+
+http_server:
+  port: 8087
+
+
+
+mysql:
+  port: 3309
+  host: localhost
+  db_name: myapp_db
+  username: myapp
+  password: myappt0lk2o20

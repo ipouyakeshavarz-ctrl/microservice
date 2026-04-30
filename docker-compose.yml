@@ -1,0 +1,53 @@
+services:
+  # --- User Service ---
+  user-app:
+    build:
+      context: ./services/userservice
+      dockerfile: Dockerfile
+    ports:
+      - "8087:8087"
+    depends_on:
+      - user-database
+    environment:
+      MYSQL_HOST: user-database
+
+  user-database:
+    image: mysql:8.0
+    ports:
+      - "3309:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: myapp_db
+      MYSQL_USER: myapp
+      MYSQL_PASSWORD: myappt0lk2o20
+    volumes:
+      - user-db-data:/var/lib/mysql
+
+  # --- Product Service ---
+  product-app:
+    build:
+      context: ./services/productservice
+      dockerfile: Dockerfile
+
+    ports:
+      - "8088:8088"
+    depends_on:
+      - product-database
+    environment:
+      MYSQL_HOST: product-database
+
+  product-database:
+    image: mysql:8.0
+    ports:
+      - "3310:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: product_db
+      MYSQL_USER: product_user
+      MYSQL_PASSWORD: product_password
+    volumes:
+      - product-db-data:/var/lib/mysql
+
+volumes:
+  user-db-data:
+  product-db-data:
