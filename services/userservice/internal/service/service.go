@@ -4,28 +4,26 @@ import (
 	"context"
 	"crypto/md5"
 	"encoding/hex"
-	"userapp/internal/entity"
+	"userapp/internal/domain"
 )
 
 type Repository interface {
-	Register(ctx context.Context, u entity.User) (entity.User, error)
-	GetUserByPhoneNumber(ctx context.Context, phoneNumber string) (entity.User, error)
-	GetUserByID(ctx context.Context, userID uint) (entity.User, error)
+	Register(ctx context.Context, u domain.User) (domain.User, error)
+	GetUserByPhoneNumber(ctx context.Context, phoneNumber string) (domain.User, error)
+	GetUserByID(ctx context.Context, userID uint) (domain.User, error)
 }
 
-// AuthGenerator todo if need add ctx to this interface
-type AuthGenerator interface {
-	CreateAccessToken(user entity.User) (string, error)
-	CreateRefreshToken(user entity.User) (string, error)
+type AuthClient interface {
+	GenerateTokens(ctx context.Context, user domain.User) (accessToken string, refreshToken string, err error)
 }
 
 type Service struct {
-	auth AuthGenerator
-	repo Repository
+	authClient AuthClient
+	repo       Repository
 }
 
-func New(auth AuthGenerator, repo Repository) Service {
-	return Service{auth: auth, repo: repo}
+func New(authClient AuthClient, repo Repository) Service {
+	return Service{authClient: authClient, repo: repo}
 }
 
 func getMD5Hash(text string) string {

@@ -2,7 +2,7 @@ package validator
 
 import (
 	"context"
-	"userapp/internal/entity"
+	"userapp/internal/domain"
 )
 
 const (
@@ -11,7 +11,7 @@ const (
 
 type Repository interface {
 	IsPhoneNumberUnique(ctx context.Context, phoneNumber string) (bool, error)
-	GetUserByPhoneNumber(ctx context.Context, phoneNumber string) (entity.User, error)
+	GetUserByPhoneNumber(ctx context.Context, phoneNumber string) (domain.User, error)
 }
 
 type Validator struct {

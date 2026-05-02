@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package auth.v1;
+
+option go_package = "authservice/internal/delivery/grpc/gen;gen";
+
+service AuthService {
+  rpc GenerateTokens(UserInfo) returns (LoginTokenResponse);
+}
+
+message UserInfo {
+  uint64 id = 1;
+  string phone_number = 2;
+  string name = 3;
+  string role = 4;
+}
+
+message LoginTokenResponse {
+  string access_token = 1;
+  string refresh_token = 2;
+  int64 expires_in = 3;
+}

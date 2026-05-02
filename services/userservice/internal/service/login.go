@@ -22,16 +22,10 @@ func (s Service) Login(ctx context.Context, req param.LoginRequest) (param.Login
 			WithKind(richerror.KindInvalid).WithMessage(errmsg.ErrorMsgUserNameOrPasswordNotCorrect)
 	}
 
-	accessToken, aErr := s.auth.CreateAccessToken(user)
-	if aErr != nil {
-		return param.LoginResponse{}, richerror.New(op).WithErr(aErr).
-			WithKind(richerror.KindUnexpected)
-	}
+	accessToken, refreshToken, gErr := s.authClient.GenerateTokens(ctx, user)
 
-	refreshToken, cErr := s.auth.CreateRefreshToken(user)
-	if cErr != nil {
-		return param.LoginResponse{}, richerror.New(op).WithErr(aErr).
-			WithKind(richerror.KindUnexpected)
+	if gErr != nil {
+		return param.LoginResponse{}, richerror.New(op).WithErr(gErr)
 	}
 
 	return param.LoginResponse{

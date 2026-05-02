@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package user;
+
+option go_package = "authservice/internal/delivery/grpc/gen;gen";
+
+service UserService {
+  rpc Register (RegisterRequest) returns (RegisterResponse);
+  rpc Login (LoginRequest) returns (LoginResponse);
+  rpc GetProfile (ProfileRequest) returns (ProfileResponse);
+}
+
+message RegisterRequest {
+  string name = 1;
+  string phoneNumber= 2;
+  string password = 3;
+}
+
+message RegisterResponse{
+  UserInfo user = 1;
+}
+
+message LoginRequest {
+  string phoneNumber = 1;
+  string password = 2;
+}
+
+
+message LoginResponse {
+  UserInfo user = 1;
+  Tokens tokens = 2;
+}
+
+message ProfileRequest {
+  string user_id = 1;
+}
+
+message ProfileResponse {
+  string user_id = 1;
+  string name = 2;
+}
+
+message UserInfo {
+  uint64 ID = 1 ;
+  string PhoneNumber = 2;
+  string Name = 3;
+}
+
+message Tokens {
+  string access_token = 1;
+  string refresh_token = 2;
+}

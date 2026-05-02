@@ -2,7 +2,6 @@ package httpserver
 
 import (
 	"fmt"
-	authservice "productapp/internal/auth"
 	"productapp/internal/config"
 	"productapp/internal/delivery/http/producthandler"
 	productservice "productapp/internal/service"
@@ -17,12 +16,11 @@ type Server struct {
 	Router         *echo.Echo
 }
 
-func New(config config.Config, productSvc productservice.Service,
-	authSvc authservice.Service) Server {
+func New(config config.Config, productSvc productservice.Service) Server {
 	return Server{
 		Router:         echo.New(),
 		config:         config,
-		productHandler: producthandler.New(config.Auth, authSvc, productSvc),
+		productHandler: producthandler.New(productSvc),
 	}
 }
 

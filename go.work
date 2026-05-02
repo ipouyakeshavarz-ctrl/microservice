@@ -4,5 +4,7 @@ use (
 	.
 	./services/userservice
 	./services/productservice
-	services/storeservice
+	./services/storeservice
+	./services/authservice
+	services/gateway
 )

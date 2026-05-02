@@ -2,7 +2,6 @@ package httpserver
 
 import (
 	"fmt"
-	authservice "userapp/internal/auth"
 	"userapp/internal/config"
 
 	"userapp/internal/service"
@@ -21,11 +20,11 @@ type Server struct {
 }
 
 func New(config config.Config, userSvc userservice.Service,
-	userValidator validator.Validator, authSvc authservice.Service) Server {
+	userValidator validator.Validator) Server {
 	return Server{
 		Router:      echo.New(),
 		config:      config,
-		userHandler: userhandler.New(userSvc, userValidator, config.Auth, authSvc),
+		userHandler: userhandler.New(userSvc, userValidator),
 	}
 }
 

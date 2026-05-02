@@ -17,7 +17,7 @@ func (s *Service) CreateStore(ctx context.Context, req param.CreateStoreRequest)
 		Description: req.Description,
 		PhoneNumber: req.PhoneNumber,
 		LogoURL:     req.LogoURL,
-		//Address: entity.Address{
+		//Address: domain.Address{
 		//	Street:   req.Address.Street,
 		//	City:     req.Address.City,
 		//	Province: req.Address.Province,

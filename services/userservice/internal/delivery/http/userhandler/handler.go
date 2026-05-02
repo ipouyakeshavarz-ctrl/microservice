@@ -1,7 +1,6 @@
 package userhandler
 
 import (
-	authservice "userapp/internal/auth"
 	"userapp/internal/service"
 	"userapp/internal/validator"
 )
@@ -9,17 +8,12 @@ import (
 type Handler struct {
 	userSvc       userservice.Service
 	userValidator validator.Validator
-	authConfig    authservice.Config
-	authSvc       authservice.Service
 }
 
 func New(userSvc userservice.Service,
-	userValidator validator.Validator, authConfig authservice.Config,
-	authSvc authservice.Service) Handler {
+	userValidator validator.Validator) Handler {
 	return Handler{
 		userSvc:       userSvc,
 		userValidator: userValidator,
-		authConfig:    authConfig,
-		authSvc:       authSvc,
 	}
 }
