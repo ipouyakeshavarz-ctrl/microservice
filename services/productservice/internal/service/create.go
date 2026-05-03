@@ -4,7 +4,7 @@ import (
 	"context"
 	"myapp/pkg/errmsg"
 	"myapp/pkg/richerror"
-	"productapp/internal/entity"
+	"productapp/internal/domain"
 	"productapp/internal/param"
 )
 
@@ -13,7 +13,7 @@ func (s *Service) Create(ctx context.Context, p param.CreateProductRequest) (par
 	if !p.Category.IsValid() {
 		return param.CreateProductResponse{}, richerror.New(op).WithKind(richerror.KindInvalid).WithMessage(errmsg.ErrorMsgCategoryIsNotValid)
 	}
-	createdProduct, err := s.repo.Create(ctx, entity.Product{
+	createdProduct, err := s.repo.Create(ctx, domain.Product{
 		StoreID:     p.StoreID,
 		Name:        p.Name,
 		Description: p.Description,

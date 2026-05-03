@@ -6,6 +6,7 @@ import (
 	"gatewayapp/internal/client/productclient"
 	"gatewayapp/internal/client/storeclient"
 	"gatewayapp/internal/client/userclient"
+	"gatewayapp/internal/config"
 	"gatewayapp/internal/delivery/http/producthandler"
 	"gatewayapp/internal/delivery/http/storehandler"
 	"gatewayapp/internal/delivery/http/userhandler"
@@ -15,6 +16,7 @@ import (
 )
 
 type Server struct {
+	config         config.Config
 	storeHandler   storehandler.Handler
 	userHandler    userhandler.Handler
 	productHandler producthandler.Handler
@@ -24,12 +26,14 @@ type Server struct {
 func New(userClient userclient.Client,
 	authClient authclient.Client,
 	storeClient storeclient.Client,
-	productClient productclient.Client) Server {
+	productClient productclient.Client,
+	config config.Config) Server {
 	return Server{
 		Router:         echo.New(),
 		userHandler:    userhandler.New(userClient, authClient),
 		storeHandler:   storehandler.New(storeClient, authClient),
 		productHandler: producthandler.New(productClient, authClient),
+		config:         config,
 	}
 }
 
@@ -44,9 +48,7 @@ func (s Server) Serve() {
 	s.productHandler.SetRoutes(s.Router)
 
 	// Start server
+	fmt.Printf("Listening on %s\n", s.config.HttpServer.Address)
 
-	fmt.Printf("start echo server on %s\n", "127.0.0.1:8887")
-	if err := s.Router.Start("127.0.0.1:8887"); err != nil {
-		fmt.Println("router start error", err)
-	}
+	s.Router.Logger.Fatal(s.Router.Start(s.config.HttpServer.Address))
 }

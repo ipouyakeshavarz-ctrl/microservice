@@ -1,7 +1,7 @@
 package param
 
 type ProfileRequest struct {
-	UserID uint
+	UserID uint `json:"user_id"`
 }
 
 type ProfileResponse struct {

@@ -11,7 +11,6 @@ const (
 	ErrorMsgCategoryIsNotValid           = "category is not valid"
 	ErrorMsgUserNameOrPasswordNotCorrect = "username or password isn't correct"
 	ErrorMsgProductNotFound              = "ProductNotFound"
-	ErrorMsgRequestIsNil                 = "request is nil"
 	ErrorMsgTokenIsRequired              = "token is required"
 	ErrorMsgTokenIsNotValid              = "token is not valid"
 )

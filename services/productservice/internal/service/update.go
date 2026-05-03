@@ -4,7 +4,7 @@ import (
 	"context"
 	"myapp/pkg/errmsg"
 	"myapp/pkg/richerror"
-	"productapp/internal/entity"
+	"productapp/internal/domain"
 	"productapp/internal/param"
 )
 
@@ -23,7 +23,7 @@ func (s *Service) Update(ctx context.Context, p param.UpdateProductRequest) (par
 		return param.UpdateProductResponse{}, richerror.New(op).WithKind(richerror.KindUnexpected).WithMessage(errmsg.ErrorMsgUserNotAllowed)
 	}
 
-	updatedProduct, err := s.repo.Update(ctx, entity.Product{
+	updatedProduct, err := s.repo.Update(ctx, domain.Product{
 		StoreID:     p.StoreID,
 		Name:        p.Name,
 		Description: p.Description,

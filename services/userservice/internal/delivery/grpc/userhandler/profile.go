@@ -3,12 +3,15 @@ package userhandler
 import (
 	"context"
 	"myapp/api/gen/user"
+	"myapp/pkg/richerror"
 	"strconv"
 
 	"userapp/internal/param"
 )
 
-func (h *Handler) GetProfile(ctx context.Context, req *user.ProfileRequest) (*user.ProfileResponse, error) {
+func (h *Handler) GetProfile(ctx context.Context,
+	req *user.ProfileRequest) (*user.ProfileResponse, error) {
+	const op = "userhandler.GetProfile"
 	userid, err := strconv.Atoi(req.UserId)
 	if err != nil {
 		return nil, err
@@ -18,7 +21,7 @@ func (h *Handler) GetProfile(ctx context.Context, req *user.ProfileRequest) (*us
 			UserID: uint(userid),
 		})
 	if err != nil {
-		return nil, err
+		return nil, richerror.New(op).WithErr(err)
 	}
 
 	return &user.ProfileResponse{

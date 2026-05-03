@@ -9,6 +9,7 @@ import (
 )
 
 func (h Handler) createProduct(c echo.Context) error {
+
 	var req product.CreateProductRequest
 
 	if err := c.Bind(&req); err != nil {

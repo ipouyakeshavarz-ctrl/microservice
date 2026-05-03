@@ -3,7 +3,6 @@ package mysqluser
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	"myapp/pkg/errmsg"
 	"myapp/pkg/richerror"
 	"time"
@@ -30,13 +29,15 @@ func (d *DB) IsPhoneNumberUnique(ctx context.Context, phoneNumber string) (bool,
 }
 
 func (d *DB) Register(ctx context.Context, u domain.User) (domain.User, error) {
+	const op = "userservice.Register"
 	res, err := d.conn.Conn().ExecContext(ctx, `insert into users(name, phone_number, password, role) values(?, ?, ?, ?)`,
 		u.Name, u.PhoneNumber, u.Password, u.Role.String())
 	if err != nil {
-		return domain.User{}, fmt.Errorf("can't execute command: %w", err)
+		return domain.User{}, richerror.New(op).WithErr(err).
+			WithMessage(errmsg.ErrorMsgCantScanQueryResult).
+			WithKind(richerror.KindUnexpected)
 	}
 
-	// error is always nil
 	id, _ := res.LastInsertId()
 	u.ID = uint(id)
 

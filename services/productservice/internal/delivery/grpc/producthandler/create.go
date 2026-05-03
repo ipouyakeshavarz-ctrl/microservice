@@ -5,7 +5,7 @@ import (
 	"myapp/api/gen/product"
 	"myapp/pkg/errmsg"
 	"myapp/pkg/richerror"
-	"productapp/internal/entity"
+	"productapp/internal/domain"
 
 	"productapp/internal/param"
 )
@@ -13,7 +13,7 @@ import (
 func (h *Handler) CreateProduct(ctx context.Context,
 	req *product.CreateProductRequest) (*product.CreateProductResponse, error) {
 	const op = "productHandler.CreateProduct"
-	category := entity.Category(req.GetCategory())
+	category := domain.Category(req.GetCategory())
 	ok := category.IsValid()
 	if !ok {
 		return &product.CreateProductResponse{}, richerror.New(op).
@@ -34,7 +34,7 @@ func (h *Handler) CreateProduct(ctx context.Context,
 
 	resp, err := h.productSvc.Create(ctx, input)
 	if err != nil {
-		return nil, err
+		return nil, richerror.New(op).WithErr(err)
 	}
 
 	return &product.CreateProductResponse{

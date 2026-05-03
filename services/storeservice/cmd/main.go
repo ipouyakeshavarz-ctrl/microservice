@@ -29,7 +29,7 @@ func main() {
 	storeSvc := storeservice.New(storeRepo)
 	storeV := storevalidator.New()
 
-	grpcServer := grpc.NewServer(storeV, storeSvc, 50053)
+	grpcServer := grpc.NewServer(storeV, storeSvc, cfg2.GrpcServer.StoreAddress)
 
 	if err := grpcServer.Run(); err != nil {
 		log.Fatal(err)

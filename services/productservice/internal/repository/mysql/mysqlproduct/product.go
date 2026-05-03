@@ -5,10 +5,10 @@ import (
 	"database/sql"
 	"myapp/pkg/errmsg"
 	"myapp/pkg/richerror"
-	"productapp/internal/entity"
+	"productapp/internal/domain"
 )
 
-func (d *DB) Create(ctx context.Context, p entity.Product) (*entity.Product, error) {
+func (d *DB) Create(ctx context.Context, p domain.Product) (*domain.Product, error) {
 	const op = "ProductRepository.Create"
 
 	query := `
@@ -40,7 +40,7 @@ func (d *DB) Create(ctx context.Context, p entity.Product) (*entity.Product, err
 }
 
 // Update modifies an existing product.
-func (d *DB) Update(ctx context.Context, p entity.Product) (*entity.Product, error) {
+func (d *DB) Update(ctx context.Context, p domain.Product) (*domain.Product, error) {
 	const op = "ProductRepository.Update"
 
 	query := `
@@ -95,7 +95,7 @@ func (d *DB) Delete(ctx context.Context, id uint) error {
 }
 
 // GetByID fetches a product by its ID.
-func (d *DB) GetByID(ctx context.Context, id uint) (*entity.Product, error) {
+func (d *DB) GetByID(ctx context.Context, id uint) (*domain.Product, error) {
 	const op = "ProductRepository.GetByID"
 	query := `
 		SELECT id, store_id, name, description, category, price, stock, sku, image_url, is_active, created_at, updated_at
@@ -103,7 +103,7 @@ func (d *DB) GetByID(ctx context.Context, id uint) (*entity.Product, error) {
 	`
 	row := d.conn.Conn().QueryRowContext(ctx, query, id)
 
-	var p entity.Product
+	var p domain.Product
 	err := row.Scan(
 		&p.ID,
 		&p.StoreID,

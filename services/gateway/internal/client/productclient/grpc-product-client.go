@@ -2,6 +2,7 @@ package productclient
 
 import (
 	"myapp/api/gen/product"
+	"myapp/pkg/richerror"
 
 	"google.golang.org/grpc"
 )
@@ -12,10 +13,10 @@ type Client struct {
 }
 
 func New(addr string) (*Client, error) {
-
+	const op = "productclient.New"
 	conn, err := grpc.Dial(addr, grpc.WithInsecure())
 	if err != nil {
-		return nil, err
+		return nil, richerror.New(op).WithErr(err)
 	}
 
 	c := product.NewProductServiceClient(conn)

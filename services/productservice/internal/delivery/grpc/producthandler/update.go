@@ -5,17 +5,17 @@ import (
 	"myapp/api/gen/product"
 	"myapp/pkg/errmsg"
 	"myapp/pkg/richerror"
-	"productapp/internal/entity"
+	"productapp/internal/domain"
 	"productapp/internal/param"
 )
 
 func (h *Handler) UpdateProduct(ctx context.Context, req *product.UpdateProductRequest) (*product.UpdateProductResponse, error) {
 	const op = "producthandler.UpdateProduct"
 
-	var category entity.Category
+	var category domain.Category
 
 	if req.Category != "" {
-		category = entity.Category(req.GetCategory())
+		category = domain.Category(req.GetCategory())
 		ok := category.IsValid()
 		if !ok {
 			return nil, richerror.New(op).

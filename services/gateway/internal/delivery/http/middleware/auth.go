@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"myapp/pkg/errmsg"
 	"net/http"
 	"strings"
 
@@ -12,14 +13,12 @@ import (
 func AuthMiddleware(authClient auth.AuthServiceClient) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
-			// گرفتن توکن از هدر Authorization
 			authHeader := c.Request().Header.Get("Authorization")
 			if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
-				return echo.NewHTTPError(http.StatusUnauthorized, "توکن یافت نشد")
+				return echo.NewHTTPError(http.StatusUnauthorized, errmsg.ErrorMsgTokenIsNotValid)
 			}
 			token := strings.TrimPrefix(authHeader, "Bearer ")
 
-			// call service Auth
 			resp, err := authClient.VerifyToken(c.Request().Context(), &auth.VerifyTokenRequest{
 				Token: token,
 			})

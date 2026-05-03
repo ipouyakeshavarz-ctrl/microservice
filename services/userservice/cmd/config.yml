@@ -1,15 +1,10 @@
 
-auth:
-  sign_key: jwt_secret
-  refresh_expiration_time: "168h"
-  access_expiration_time: "24h"
-  access_subject: "ac"
-  refresh_subject: "rt"
+application:
+  graceful_shutdown_timeout:
 
-http_server:
-  port: 8087
-
-
+grpc_server:
+  auth_port: "127.0.0.1:50051"
+  user_address: "127.0.0.1:50052"
 
 mysql:
   port: 3311

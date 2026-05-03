@@ -35,7 +35,7 @@ func (h *Handler) CreateStore(ctx context.Context, req *store.CreateStoreRequest
 
 	resp, err := h.storeSvc.CreateStore(ctx, input)
 	if err != nil {
-		return nil, err
+		return nil, richerror.New(op).WithErr(err)
 	}
 
 	return &store.CreateStoreResponse{Store: &store.StoreInfo{

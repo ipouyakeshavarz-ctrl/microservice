@@ -1,0 +1,12 @@
+application:
+  graceful_shutdown_timeout:
+
+
+grpc_client:
+  product_address: "127.0.0.1:50054"
+  user_address: "127.0.0.1:50052"
+  store_address: "127.0.0.1:50053"
+  auth_address: "127.0.0.1:50051"
+
+http_server:
+  address: "127.0.0.1:8887"

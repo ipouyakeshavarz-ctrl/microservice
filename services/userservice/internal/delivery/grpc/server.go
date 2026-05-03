@@ -1,8 +1,8 @@
 package grpc
 
 import (
-	"fmt"
 	"log"
+	"myapp/pkg/richerror"
 	"net"
 	"userapp/internal/delivery/grpc/userhandler"
 	userservice "userapp/internal/service"
@@ -16,29 +16,30 @@ import (
 type Server struct {
 	Validator validator.Validator
 	service   userservice.Service
-	port      int
+	address   string
 }
 
-func NewServer(V validator.Validator, s userservice.Service, port int) *Server {
+func NewServer(V validator.Validator, s userservice.Service, address string) *Server {
 	return &Server{
 		Validator: V,
 		service:   s,
-		port:      port,
+		address:   address,
 	}
 }
 
 func (s *Server) Run() error {
+	const op = "grpc.server.Run"
 
-	lis, err := net.Listen("tcp", fmt.Sprintf("127.0.0.1:%v", s.port))
+	lis, err := net.Listen("tcp", s.address)
 	if err != nil {
-		return err
+		return richerror.New(op).WithErr(err).WithKind(richerror.KindUnexpected)
 	}
 
 	grpcServer := grpc.NewServer()
 
 	user.RegisterUserServiceServer(grpcServer, userhandler.New(s.service, s.Validator))
 
-	log.Println("gRPC server started on port", s.port)
+	log.Println("🚀gRPC server started on ", s.address)
 
 	return grpcServer.Serve(lis)
 }

@@ -1,7 +1,8 @@
+application:
+  graceful_shutdown_timeout:
 
-http_server:
-  port: 8089
-
+grpc_server:
+  product_address: "127.0.0.1:50054"
 
 
 mysql:

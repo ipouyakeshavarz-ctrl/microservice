@@ -3,6 +3,7 @@ package storehandler
 import (
 	"context"
 	"myapp/api/gen/store"
+	"myapp/pkg/richerror"
 	"storeapp/internal/param"
 )
 
@@ -17,7 +18,7 @@ func (h *Handler) DeleteStore(ctx context.Context,
 
 	resp, err := h.storeSvc.DeleteStore(ctx, input)
 	if err != nil {
-		return nil, err
+		return nil, richerror.New(op).WithErr(err)
 	}
 
 	return &store.DeleteStoreResponse{

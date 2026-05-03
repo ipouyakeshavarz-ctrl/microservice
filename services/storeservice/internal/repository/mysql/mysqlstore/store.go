@@ -104,6 +104,7 @@ func (d DB) ListStoresByUser(ctx context.Context, userID uint) ([]param.StoreInf
 }
 
 func scanStore(scanner mysql.Scanner) (domain.Store, error) {
+	const op = "storeRepo.scanStore"
 	var createdAt time.Time
 	var updatedAt time.Time
 	var store domain.Store
@@ -112,7 +113,7 @@ func scanStore(scanner mysql.Scanner) (domain.Store, error) {
 		&store.Address.Street, &store.Address.City, &store.Address.Province, &store.Address.PostalCode,
 		&store.PhoneNumber, &store.IsActive, &createdAt, &updatedAt)
 
-	return store, err
+	return store, richerror.New(op).WithErr(err).WithMessage(errmsg.ErrorMsgCantScanQueryResult)
 }
 
 func scanStore2(scanner mysql.Scanner) (param.StoreInfo, error) {

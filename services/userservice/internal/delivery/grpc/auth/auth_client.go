@@ -3,6 +3,7 @@ package auth
 import (
 	"context"
 	authpb "myapp/api/gen/auth"
+	"myapp/pkg/richerror"
 	"userapp/internal/domain"
 )
 
@@ -14,7 +15,9 @@ func NewGRPCAuthClient(client authpb.AuthServiceClient) *GRPCAuthClient {
 	return &GRPCAuthClient{client: client}
 }
 
-func (a *GRPCAuthClient) GenerateTokens(ctx context.Context, user domain.User) (string, string, error) {
+func (a *GRPCAuthClient) GenerateTokens(ctx context.Context,
+	user domain.User) (string, string, error) {
+	const op = "auth.GenerateTokens"
 
 	resp, err := a.client.GenerateTokens(ctx, &authpb.UserInfo{
 		Id:          uint64(user.ID),
@@ -24,7 +27,7 @@ func (a *GRPCAuthClient) GenerateTokens(ctx context.Context, user domain.User) (
 	})
 
 	if err != nil {
-		return "", "", err
+		return "", "", richerror.New(op).WithErr(err)
 	}
 
 	return resp.AccessToken, resp.RefreshToken, nil

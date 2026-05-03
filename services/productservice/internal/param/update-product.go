@@ -1,13 +1,13 @@
 package param
 
-import "productapp/internal/entity"
+import "productapp/internal/domain"
 
 type UpdateProductRequest struct {
 	ID          uint            `json:"id"`
 	StoreID     uint            `json:"store_id"`
 	Name        string          `json:"name"`
 	Description string          `json:"description"`
-	Category    entity.Category `json:"category"`
+	Category    domain.Category `json:"category"`
 	Price       float64         `json:"price"`
 	Stock       int             `json:"stock"`
 	SKU         string          `json:"sku"`

@@ -25,7 +25,7 @@ func (h *Handler) Register(ctx context.Context,
 
 	resp, err := h.userSvc.Register(ctx, input)
 	if err != nil {
-		return nil, err
+		return nil, richerror.New(op).WithErr(err)
 	}
 
 	return &user.RegisterResponse{User: &user.UserInfo{

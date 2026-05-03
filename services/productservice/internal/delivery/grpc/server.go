@@ -1,7 +1,6 @@
 package grpc
 
 import (
-	"fmt"
 	"log"
 	"myapp/api/gen/product"
 	"net"
@@ -13,19 +12,19 @@ import (
 
 type Server struct {
 	service productservice.Service
-	port    int
+	address string
 }
 
-func NewServer(s productservice.Service, port int) *Server {
+func NewServer(s productservice.Service, address string) *Server {
 	return &Server{
 		service: s,
-		port:    port,
+		address: address,
 	}
 }
 
 func (s *Server) Run() error {
 
-	lis, err := net.Listen("tcp", fmt.Sprintf("127.0.0.1:%v", s.port))
+	lis, err := net.Listen("tcp", s.address)
 	if err != nil {
 		return err
 	}
@@ -34,7 +33,7 @@ func (s *Server) Run() error {
 
 	product.RegisterProductServiceServer(grpcServer, producthandler.New(s.service))
 
-	log.Println("gRPC server started on port", s.port)
+	log.Println("🚀gRPC server started on ", s.address)
 
 	return grpcServer.Serve(lis)
 }

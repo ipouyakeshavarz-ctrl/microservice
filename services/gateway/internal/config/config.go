@@ -1,32 +1,25 @@
 package config
 
-import "os"
+import (
+	"time"
+)
 
 type Config struct {
-	authService
-	Port               string
-	AuthServiceAddr    string
-	UserServiceAddr    string
-	ProductServiceAddr string
+	HttpServer  Httpserver  `koanf:"http_server"`
+	Application Application `koanf:"application"`
+	GrpcClient  GrpcClient  `koanf:"grpc_client"`
 }
 
-func Load() *Config {
-
-	return &Config{
-		Port:               getEnv("PORT", ":8080"),
-		AuthServiceAddr:    getEnv("AUTH_SERVICE", "localhost:5001"),
-		UserServiceAddr:    getEnv("USER_SERVICE", "localhost:5002"),
-		ProductServiceAddr: getEnv("PRODUCT_SERVICE", "localhost:5003"),
-	}
+type Application struct {
+	GracefulShutdownTimeout time.Duration `koanf:"graceful_shutdown_timeout"`
+}
+type GrpcClient struct {
+	ProductAddress string `koanf:"product_address"`
+	UserAddress    string `koanf:"user_address"`
+	StoreAddress   string `koanf:"store_address"`
+	AuthAddress    string `koanf:"auth_address"`
 }
 
-func getEnv(key, fallback string) string {
-
-	v := os.Getenv(key)
-
-	if v == "" {
-		return fallback
-	}
-
-	return v
+type Httpserver struct {
+	Address string `koanf:"address"`
 }

@@ -24,15 +24,15 @@ const (
 
 type CreateProductRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	StoreId       uint64                 `protobuf:"varint,1,opt,name=store_id,json=storeId,proto3" json:"store_id,omitempty"`
-	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Description   string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
-	Category      string                 `protobuf:"bytes,4,opt,name=category,proto3" json:"category,omitempty"`
-	Price         float32                `protobuf:"fixed32,5,opt,name=price,proto3" json:"price,omitempty"`
-	Stock         int64                  `protobuf:"varint,6,opt,name=stock,proto3" json:"stock,omitempty"`
-	Sku           string                 `protobuf:"bytes,7,opt,name=sku,proto3" json:"sku,omitempty"`
-	ImageUrl      string                 `protobuf:"bytes,8,opt,name=image_url,json=imageUrl,proto3" json:"image_url,omitempty"`
-	IsActive      bool                   `protobuf:"varint,9,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty"`
+	StoreId       uint64                 `protobuf:"varint,1,opt,name=store_id,json=storeId,proto3" json:"store_id"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name"`
+	Description   string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description"`
+	Category      string                 `protobuf:"bytes,4,opt,name=category,proto3" json:"category"`
+	Price         float32                `protobuf:"fixed32,5,opt,name=price,proto3" json:"price"`
+	Stock         int64                  `protobuf:"varint,6,opt,name=stock,proto3" json:"stock"`
+	Sku           string                 `protobuf:"bytes,7,opt,name=sku,proto3" json:"sku"`
+	ImageUrl      string                 `protobuf:"bytes,8,opt,name=image_url,json=imageUrl,proto3" json:"image_url"`
+	IsActive      bool                   `protobuf:"varint,9,opt,name=is_active,json=isActive,proto3" json:"is_active"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -176,16 +176,16 @@ func (x *CreateProductResponse) GetProduct() *ProductInfo {
 
 type ProductInfo struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	StoreId       uint64                 `protobuf:"varint,2,opt,name=store_id,json=storeId,proto3" json:"store_id,omitempty"`
-	Name          string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
-	Description   string                 `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`
-	Category      string                 `protobuf:"bytes,5,opt,name=category,proto3" json:"category,omitempty"`
-	Price         float32                `protobuf:"fixed32,6,opt,name=price,proto3" json:"price,omitempty"`
-	Stock         int64                  `protobuf:"varint,7,opt,name=stock,proto3" json:"stock,omitempty"`
-	Sku           string                 `protobuf:"bytes,8,opt,name=sku,proto3" json:"sku,omitempty"`
-	ImageUrl      string                 `protobuf:"bytes,9,opt,name=image_url,json=imageUrl,proto3" json:"image_url,omitempty"`
-	IsActive      bool                   `protobuf:"varint,10,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty"`
+	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id"`
+	StoreId       uint64                 `protobuf:"varint,2,opt,name=store_id,json=storeId,proto3" json:"store_id"`
+	Name          string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name"`
+	Description   string                 `protobuf:"bytes,4,opt,name=description,proto3" json:"description"`
+	Category      string                 `protobuf:"bytes,5,opt,name=category,proto3" json:"category"`
+	Price         float32                `protobuf:"fixed32,6,opt,name=price,proto3" json:"price"`
+	Stock         int64                  `protobuf:"varint,7,opt,name=stock,proto3" json:"stock"`
+	Sku           string                 `protobuf:"bytes,8,opt,name=sku,proto3" json:"sku"`
+	ImageUrl      string                 `protobuf:"bytes,9,opt,name=image_url,json=imageUrl,proto3" json:"image_url"`
+	IsActive      bool                   `protobuf:"varint,10,opt,name=is_active,json=isActive,proto3" json:"is_active"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -292,9 +292,9 @@ func (x *ProductInfo) GetIsActive() bool {
 
 type DeleteProductRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	StoreId       uint64                 `protobuf:"varint,1,opt,name=store_id,json=storeId,proto3" json:"store_id,omitempty"`
-	UserId        uint64                 `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	ProductId     uint64                 `protobuf:"varint,3,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
+	StoreId       uint64                 `protobuf:"varint,1,opt,name=store_id,json=storeId,proto3" json:"store_id"`
+	UserId        uint64                 `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id"`
+	ProductId     uint64                 `protobuf:"varint,3,opt,name=product_id,json=productId,proto3" json:"product_id"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -396,8 +396,8 @@ func (x *DeleteProductResponse) GetSuccess() bool {
 
 type GetProductByIDRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	ProductId     uint64                 `protobuf:"varint,1,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
-	StoreId       uint64                 `protobuf:"varint,2,opt,name=store_id,json=storeId,proto3" json:"store_id,omitempty"`
+	ProductId     uint64                 `protobuf:"varint,1,opt,name=product_id,json=productId,proto3" json:"product_id"`
+	StoreId       uint64                 `protobuf:"varint,2,opt,name=store_id,json=storeId,proto3" json:"store_id"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -448,7 +448,7 @@ func (x *GetProductByIDRequest) GetStoreId() uint64 {
 
 type GetProductResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Product       *ProductInfo           `protobuf:"bytes,1,opt,name=product,proto3" json:"product,omitempty"`
+	Product       *ProductInfo           `protobuf:"bytes,1,opt,name=product,proto3" json:"product"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -493,15 +493,15 @@ func (x *GetProductResponse) GetProduct() *ProductInfo {
 type UpdateProductRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	StoreId       uint64                 `protobuf:"varint,2,opt,name=store_id,json=storeId,proto3" json:"store_id,omitempty"`
+	StoreId       uint64                 `protobuf:"varint,2,opt,name=store_id,json=storeId,proto3" json:"store_id"`
 	Name          string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
-	Description   string                 `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`
-	Category      string                 `protobuf:"bytes,5,opt,name=category,proto3" json:"category,omitempty"`
-	Price         float32                `protobuf:"fixed32,6,opt,name=price,proto3" json:"price,omitempty"`
-	Stock         int64                  `protobuf:"varint,7,opt,name=stock,proto3" json:"stock,omitempty"`
-	Sku           string                 `protobuf:"bytes,8,opt,name=sku,proto3" json:"sku,omitempty"`
-	ImageUrl      string                 `protobuf:"bytes,9,opt,name=image_url,json=imageUrl,proto3" json:"image_url,omitempty"`
-	IsActive      bool                   `protobuf:"varint,10,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty"`
+	Description   string                 `protobuf:"bytes,4,opt,name=description,proto3" json:"description"`
+	Category      string                 `protobuf:"bytes,5,opt,name=category,proto3" json:"category"`
+	Price         float32                `protobuf:"fixed32,6,opt,name=price,proto3" json:"price"`
+	Stock         int64                  `protobuf:"varint,7,opt,name=stock,proto3" json:"stock"`
+	Sku           string                 `protobuf:"bytes,8,opt,name=sku,proto3" json:"sku"`
+	ImageUrl      string                 `protobuf:"bytes,9,opt,name=image_url,json=imageUrl,proto3" json:"image_url"`
+	IsActive      bool                   `protobuf:"varint,10,opt,name=is_active,json=isActive,proto3" json:"is_active"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -608,7 +608,7 @@ func (x *UpdateProductRequest) GetIsActive() bool {
 
 type UpdateProductResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Product       *ProductInfo           `protobuf:"bytes,1,opt,name=product,proto3" json:"product,omitempty"`
+	Product       *ProductInfo           `protobuf:"bytes,1,opt,name=product,proto3" json:"product"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }

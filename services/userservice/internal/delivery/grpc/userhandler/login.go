@@ -23,7 +23,7 @@ func (h *Handler) Login(ctx context.Context, req *user.LoginRequest) (*user.Logi
 
 	resp, err := h.userSvc.Login(ctx, input)
 	if err != nil {
-		return nil, err
+		return nil, richerror.New(op).WithErr(err)
 	}
 
 	return &user.LoginResponse{

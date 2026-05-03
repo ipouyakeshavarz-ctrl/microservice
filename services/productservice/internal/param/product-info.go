@@ -1,7 +1,7 @@
 package param
 
 import (
-	"productapp/internal/entity"
+	"productapp/internal/domain"
 )
 
 type ProductInfo struct {
@@ -9,7 +9,7 @@ type ProductInfo struct {
 	StoreID     uint            `json:"store_id"`
 	Name        string          `json:"name"`
 	Description string          `json:"description"`
-	Category    entity.Category `json:"category"`
+	Category    domain.Category `json:"category"`
 	Price       float64         `json:"price"`
 	Stock       int             `json:"stock"`
 	SKU         string          `json:"sku"`

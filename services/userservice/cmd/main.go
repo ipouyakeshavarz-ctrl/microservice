@@ -32,7 +32,7 @@ func main() {
 	MysqlRepo := mysql.New(cfg2.Mysql)
 	userRepo := mysqluser.New(MysqlRepo)
 
-	conn, dErr := grpc2.Dial(fmt.Sprintf("127.0.0.1:%v", 50051), grpc2.WithInsecure())
+	conn, dErr := grpc2.Dial(cfg2.GrpcServer.AuthAddress, grpc2.WithInsecure())
 	if dErr != nil {
 		log.Fatalf("cannot connect to auth service: %v", dErr)
 	}
@@ -43,8 +43,8 @@ func main() {
 
 	userV := validator.New(userRepo)
 
-	grpcServer := grpc.NewServer(userV, userSvc, 50052)
-	
+	grpcServer := grpc.NewServer(userV, userSvc, cfg2.GrpcServer.UserAddress)
+
 	if err := grpcServer.Run(); err != nil {
 		log.Fatal(err)
 	}

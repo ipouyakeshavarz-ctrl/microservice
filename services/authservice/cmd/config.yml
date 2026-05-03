@@ -4,3 +4,6 @@ auth:
   access_expiration_time: "24h"
   access_subject: "ac"
   refresh_subject: "rt"
+
+grpc_server:
+  auth_address: "127.0.0.1:50051"

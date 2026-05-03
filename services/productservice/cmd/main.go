@@ -29,7 +29,7 @@ func main() {
 
 	productSvc := productservice.New(productRepo)
 
-	grpcServer := grpc.NewServer(productSvc, 50054)
+	grpcServer := grpc.NewServer(productSvc, cfg2.GrpcServer.ProductAddress)
 
 	if err := grpcServer.Run(); err != nil {
 		log.Fatal(err)

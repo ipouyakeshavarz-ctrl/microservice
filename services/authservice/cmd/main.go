@@ -15,7 +15,7 @@ import (
 func main() {
 	var cfg2 cfg.Config
 	err := config.Load("config.yml", &cfg2)
-	lis, err := net.Listen("tcp", ":50051")
+	lis, err := net.Listen("tcp", cfg2.GrpcServer.AuthAddress)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
@@ -26,7 +26,7 @@ func main() {
 
 	gen.RegisterAuthServiceServer(grpcServer, authServer)
 
-	fmt.Println("🚀 AuthService gRPC server running on port 50051")
+	fmt.Println("🚀 AuthService gRPC server running on ", cfg2.GrpcServer.AuthAddress)
 
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
