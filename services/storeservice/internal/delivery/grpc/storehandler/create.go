@@ -1,34 +1,56 @@
 package storehandler
 
 import (
-	"myapp/pkg/httpmsg"
+	"context"
+	"myapp/api/gen/store"
+	"myapp/pkg/richerror"
+	"storeapp/internal/domain"
 
-	"github.com/labstack/echo/v4"
-
-	"net/http"
 	"storeapp/internal/param"
 )
 
-func (h Handler) createStore(c echo.Context) error {
-	var req param.CreateStoreRequest
+func (h *Handler) CreateStore(ctx context.Context, req *store.CreateStoreRequest) (*store.CreateStoreResponse, error) {
+	const op = "storeHandler.CreateStore"
 
-	if err := c.Bind(&req); err != nil {
-
-		return echo.NewHTTPError(http.StatusBadRequest)
+	input := param.CreateStoreRequest{
+		UserID:      uint(req.UserId),
+		Name:        req.Name,
+		Description: req.Description,
+		LogoURL:     req.LogoUrl,
+		Address: domain.Address{
+			Street:      req.Address.Street,
+			City:        req.Address.City,
+			Province:    req.Address.Province,
+			PostalCode:  req.Address.PostalCode,
+			Description: req.Address.Description,
+		},
+		PhoneNumber: req.PhoneNumber,
 	}
 
-	if fieldErrors, err := h.storeValidator.ValidateCreateRequest(req); err != nil {
-		msg, code := httpmsg.Error(err)
-		return c.JSON(code, echo.Map{
-			"message": msg,
-			"errors":  fieldErrors,
-		})
+	if fieldErrors, err := h.storeValidator.ValidateCreateRequest(input); err != nil {
+		return &store.CreateStoreResponse{}, richerror.New(op).WithMeta(map[string]interface{}{
+			"validationErrors": fieldErrors,
+		}).WithErr(err)
 	}
 
-	resp, err := h.storeSvc.CreateStore(c.Request().Context(), req)
+	resp, err := h.storeSvc.CreateStore(ctx, input)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+		return nil, err
 	}
 
-	return c.JSON(http.StatusOK, resp)
+	return &store.CreateStoreResponse{Store: &store.StoreInfo{
+		Id:          uint64(resp.Store.ID),
+		UserId:      uint64(resp.Store.UserID),
+		Name:        resp.Store.Name,
+		Description: resp.Store.Description,
+		LogoUrl:     resp.Store.LogoURL,
+		Address: &store.Address{Street: resp.Store.Address.Street,
+			City:        resp.Store.Address.City,
+			Province:    resp.Store.Address.Province,
+			PostalCode:  resp.Store.Address.PostalCode,
+			Description: resp.Store.Address.Description},
+		PhoneNumber: resp.Store.PhoneNumber,
+		IsActive:    resp.Store.IsActive,
+	}}, nil
+
 }

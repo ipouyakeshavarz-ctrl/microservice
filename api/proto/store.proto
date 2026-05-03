@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+package store;
+
+option go_package = "authservice/internal/delivery/grpc/gen;gen";
+
+
+service StoreService {
+  rpc CreateStore(CreateStoreRequest) returns (CreateStoreResponse);
+  rpc DeleteStore(DeleteStoreRequest) returns (DeleteStoreResponse);
+  rpc ListStoresByUser(ListStoresByUserRequest) returns (ListStoresByUserResponse);
+  rpc UpdateStore(UpdateStoreRequest) returns (UpdateStoreResponse);
+}
+
+message CreateStoreRequest {
+  uint64 user_id = 1;
+  string name = 2;
+  string description = 3;
+  string logo_url=4;
+  Address address=5;
+  string phone_number=6;
+}
+
+message Address {
+  string Street = 1;
+  string City = 2;
+  string Province = 3;
+  string  PostalCode = 4;
+  string Description = 5;
+}
+
+message CreateStoreResponse {
+  StoreInfo store =1;
+}
+
+message StoreInfo {
+  uint64 id =1;
+  uint64 user_id=2;
+  string name=3;
+  string description=4;
+  string logo_url=5;
+  Address address =6;
+  string phone_number=7;
+  bool is_active=8;
+}
+
+message DeleteStoreRequest {
+  uint64 store_id = 1;
+  uint64 user_id = 2;
+}
+
+message DeleteStoreResponse {
+  bool success = 1;
+}
+
+message ListStoresByUserRequest {
+  uint64 user_id = 1;
+}
+
+
+message ListStoresByUserResponse {
+  repeated StoreInfo stores = 1;
+}
+
+message UpdateStoreRequest {
+  uint64 store_id=1;
+  uint64 user_id = 2;
+  string name = 3;
+  string description = 4;
+  string logo_url=5;
+  Address address=6;
+  string phone_number=7;
+  bool is_active =8;
+}
+message UpdateStoreResponse {
+  StoreInfo store = 1;
+}

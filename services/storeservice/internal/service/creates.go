@@ -3,7 +3,7 @@ package storeservice
 import (
 	"context"
 	"myapp/pkg/richerror"
-	"storeapp/internal/entity"
+	"storeapp/internal/domain"
 	"storeapp/internal/param"
 )
 
@@ -11,17 +11,17 @@ import (
 func (s *Service) CreateStore(ctx context.Context, req param.CreateStoreRequest) (param.CreateStoreResponse, error) {
 	const op = "StoreService.CreateStore"
 
-	store := &entity.Store{
+	store := &domain.Store{
 		UserID:      req.UserID,
 		Name:        req.Name,
 		Description: req.Description,
 		PhoneNumber: req.PhoneNumber,
 		LogoURL:     req.LogoURL,
-		//Address: domain.Address{
-		//	Street:   req.Address.Street,
-		//	City:     req.Address.City,
-		//	Province: req.Address.Province,
-		//},
+		Address: domain.Address{
+			Street:   req.Address.Street,
+			City:     req.Address.City,
+			Province: req.Address.Province,
+		},
 		IsActive: true,
 	}
 	finalStore, err := s.repo.CreateStore(ctx, *store)
@@ -36,7 +36,7 @@ func (s *Service) CreateStore(ctx context.Context, req param.CreateStoreRequest)
 		Description: finalStore.Description,
 		PhoneNumber: finalStore.PhoneNumber,
 		LogoURL:     finalStore.LogoURL,
-		Address: entity.Address{
+		Address: domain.Address{
 			Street:      store.Address.Street,
 			City:        store.Address.City,
 			Description: store.Address.Description,

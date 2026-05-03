@@ -1,7 +1,7 @@
 package storehandler
 
 import (
-	"storeapp/internal/delivery/http/middleware"
+	"gatewayapp/internal/delivery/http/middleware"
 
 	"github.com/labstack/echo/v4"
 )
@@ -11,12 +11,12 @@ func (h Handler) SetRoutes(e *echo.Echo) {
 
 	storeGroup.POST("/create", h.createStore)
 	storeGroup.POST("/delete", h.deleteStore,
-		middleware.Auth(h.authSvc, h.authConfig))
+		middleware.AuthMiddleware(&h.authClient))
 	storeGroup.POST("/update", h.updateStore,
-		middleware.Auth(h.authSvc, h.authConfig))
+		middleware.AuthMiddleware(&h.authClient))
 	storeGroup.POST("/update", h.updateStore,
-		middleware.Auth(h.authSvc, h.authConfig))
+		middleware.AuthMiddleware(&h.authClient))
 	storeGroup.GET("/list", h.listStore,
-		middleware.Auth(h.authSvc, h.authConfig))
+		middleware.AuthMiddleware(&h.authClient))
 
 }

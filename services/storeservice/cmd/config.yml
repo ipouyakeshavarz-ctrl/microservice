@@ -1,11 +1,4 @@
 
-auth:
-  sign_key: jwt_secret
-  refresh_expiration_time: "168h"
-  access_expiration_time: "24h"
-  access_subject: "ac"
-  refresh_subject: "rt"
-
 http_server:
   port: 8082
 

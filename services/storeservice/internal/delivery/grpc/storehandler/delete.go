@@ -1,19 +1,27 @@
 package storehandler
 
 import (
-	"net/http"
+	"context"
+	"myapp/api/gen/store"
 	"storeapp/internal/param"
-
-	"github.com/labstack/echo/v4"
 )
 
-func (h Handler) deleteStore(c echo.Context) error {
-	var req param.DeleteStoreRequest
-	if err := c.Bind(&req); err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest)
+func (h *Handler) DeleteStore(ctx context.Context,
+	req *store.DeleteStoreRequest) (*store.DeleteStoreResponse, error) {
+	const op = "storeHandler.DeleteStore"
+
+	input := param.DeleteStoreRequest{
+		StoreID: uint(req.StoreId),
+		UserID:  uint(req.UserId),
 	}
 
-	err := h.storeSvc.DeleteStore(c.Request().Context(), req)
-	return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	resp, err := h.storeSvc.DeleteStore(ctx, input)
+	if err != nil {
+		return nil, err
+	}
+
+	return &store.DeleteStoreResponse{
+		Success: resp.Success,
+	}, nil
 
 }

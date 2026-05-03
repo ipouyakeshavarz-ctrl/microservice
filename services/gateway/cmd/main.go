@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"gatewayapp/internal/client/authclient"
+	"gatewayapp/internal/client/storeclient"
 	"gatewayapp/internal/client/userclient"
 	httpserver "gatewayapp/internal/delivery/http"
 	"log"
@@ -30,10 +31,15 @@ func main() {
 		log.Fatal(uErr)
 	}
 
+	storeClient, sErr := storeclient.New("127.0.0.1:50053")
+	if sErr != nil {
+		log.Fatal(uErr)
+	}
+
 	// echo
 	fmt.Println("Hello world")
 
-	server := httpserver.New(*userClient, *authClient)
+	server := httpserver.New(*userClient, *authClient, *storeClient)
 	fmt.Println("Hello world")
 	server.Serve()
 

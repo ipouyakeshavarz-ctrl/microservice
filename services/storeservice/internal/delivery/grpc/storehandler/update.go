@@ -1,22 +1,53 @@
 package storehandler
 
 import (
-	"net/http"
+	"context"
+	"myapp/api/gen/store"
+	"myapp/pkg/richerror"
+	"storeapp/internal/domain"
 	"storeapp/internal/param"
-
-	"github.com/labstack/echo/v4"
 )
 
-func (h Handler) updateStore(c echo.Context) error {
-	var req param.UpdateStoreRequest
-	if err := c.Bind(&req); err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest)
+func (h *Handler) UpdateStore(ctx context.Context, req *store.UpdateStoreRequest) (*store.UpdateStoreResponse, error) {
+	const op = "StoreHandler.UpdateStore"
+
+	input := param.UpdateStoreRequest{
+		ID:          uint(req.StoreId),
+		UserID:      uint(req.UserId),
+		Name:        req.Name,
+		Description: req.Description,
+		LogoURL:     req.LogoUrl,
+		Address: domain.Address{
+			Street:      req.Address.Street,
+			City:        req.Address.City,
+			Province:    req.Address.Province,
+			PostalCode:  req.Address.PostalCode,
+			Description: req.Address.Description,
+		},
+		PhoneNumber: req.PhoneNumber,
+		IsActive:    req.IsActive,
 	}
 
-	resp, err := h.storeSvc.UpdateStore(c.Request().Context(), req)
+	resp, err := h.storeSvc.UpdateStore(ctx, input)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+		return nil, richerror.New(op).WithErr(err)
 	}
 
-	return c.JSON(http.StatusCreated, resp)
+	return &store.UpdateStoreResponse{
+		Store: &store.StoreInfo{
+			Id:          uint64(resp.Store.UserID),
+			UserId:      uint64(resp.Store.UserID),
+			Name:        resp.Store.Name,
+			Description: resp.Store.Description,
+			LogoUrl:     resp.Store.LogoURL,
+			Address: &store.Address{
+				Street:      resp.Store.Address.Street,
+				City:        resp.Store.Address.City,
+				Province:    resp.Store.Address.Province,
+				PostalCode:  resp.Store.Address.PostalCode,
+				Description: resp.Store.Address.Description,
+			},
+			PhoneNumber: resp.Store.PhoneNumber,
+			IsActive:    resp.Store.IsActive,
+		}}, nil
 }

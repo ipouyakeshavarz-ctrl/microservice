@@ -4,12 +4,13 @@ import (
 	"context"
 	"myapp/pkg/errmsg"
 	"myapp/pkg/richerror"
-	"storeapp/internal/entity"
+	"storeapp/internal/domain"
+	"storeapp/internal/param"
 	"storeapp/internal/repository/mysql"
 	"time"
 )
 
-func (d DB) CreateStore(ctx context.Context, s entity.Store) (*entity.Store, error) {
+func (d DB) CreateStore(ctx context.Context, s domain.Store) (*domain.Store, error) {
 	const op = "StoreRepo.CreateStore"
 	query := `
 		INSERT INTO stores (user_id, name, description, logo_url, street, city, province, postal_code, phone_number, is_active, created_at, updated_at)
@@ -35,7 +36,7 @@ func (d DB) CreateStore(ctx context.Context, s entity.Store) (*entity.Store, err
 
 }
 
-func (d DB) UpdateStore(ctx context.Context, s entity.Store) (*entity.Store, error) {
+func (d DB) UpdateStore(ctx context.Context, s domain.Store) (*domain.Store, error) {
 	const op = "StoreRepo.UpdateStore"
 	query := `
 		UPDATE stores SET user_id=?, name=?, description=?, logo_url=?, street=?, city=?, province=?, postal_code=?, phone_number=?, is_active=?, updated_at=CURRENT_TIMESTAMP
@@ -63,7 +64,7 @@ func (d DB) DeleteStore(ctx context.Context, id uint) error {
 
 }
 
-func (d DB) GetStoreByID(ctx context.Context, id uint) (*entity.Store, error) {
+func (d DB) GetStoreByID(ctx context.Context, id uint) (*domain.Store, error) {
 	const op = "StoreRepo.GetStoreByID"
 	query := `SELECT id, user_id, name, description, logo_url, street, city, province, postal_code, phone_number, is_active, created_at, updated_at FROM stores WHERE id=?`
 	row := d.conn.Conn().QueryRowContext(ctx, query, id)
@@ -77,7 +78,7 @@ func (d DB) GetStoreByID(ctx context.Context, id uint) (*entity.Store, error) {
 	return &s, nil
 }
 
-func (d DB) ListStoresByUser(ctx context.Context, userID uint) ([]entity.Store, error) {
+func (d DB) ListStoresByUser(ctx context.Context, userID uint) ([]param.StoreInfo, error) {
 	const op = "StoreRepo.ListStoresByUser"
 
 	query := `SELECT id, user_id, name, description, logo_url, street, city, province, postal_code, phone_number, is_active, created_at, updated_at FROM stores WHERE user_id=?`
@@ -87,10 +88,10 @@ func (d DB) ListStoresByUser(ctx context.Context, userID uint) ([]entity.Store, 
 			WithMessage(errmsg.ErrorMsgSomethingWentWrong).WithErr(err)
 	}
 
-	var stores []entity.Store
+	var stores []param.StoreInfo
 	for rows.Next() {
 
-		s, err := scanStore(rows)
+		s, err := scanStore2(rows)
 
 		if err != nil {
 			return nil, richerror.New(op).WithKind(richerror.KindUnexpected).
@@ -102,10 +103,22 @@ func (d DB) ListStoresByUser(ctx context.Context, userID uint) ([]entity.Store, 
 		WithMessage(errmsg.ErrorMsgSomethingWentWrong).WithErr(err)
 }
 
-func scanStore(scanner mysql.Scanner) (entity.Store, error) {
+func scanStore(scanner mysql.Scanner) (domain.Store, error) {
 	var createdAt time.Time
 	var updatedAt time.Time
-	var store entity.Store
+	var store domain.Store
+
+	err := scanner.Scan(&store.ID, &store.UserID, &store.Name, &store.Description, &store.LogoURL,
+		&store.Address.Street, &store.Address.City, &store.Address.Province, &store.Address.PostalCode,
+		&store.PhoneNumber, &store.IsActive, &createdAt, &updatedAt)
+
+	return store, err
+}
+
+func scanStore2(scanner mysql.Scanner) (param.StoreInfo, error) {
+	var createdAt time.Time
+	var updatedAt time.Time
+	var store param.StoreInfo
 
 	err := scanner.Scan(&store.ID, &store.UserID, &store.Name, &store.Description, &store.LogoURL,
 		&store.Address.Street, &store.Address.City, &store.Address.Province, &store.Address.PostalCode,

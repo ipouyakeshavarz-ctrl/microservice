@@ -2,15 +2,16 @@ package storeservice
 
 import (
 	"context"
-	"storeapp/internal/entity"
+	"storeapp/internal/domain"
+	"storeapp/internal/param"
 )
 
 type Repository interface {
-	CreateStore(ctx context.Context, s entity.Store) (*entity.Store, error)
-	UpdateStore(ctx context.Context, s entity.Store) (*entity.Store, error)
+	CreateStore(ctx context.Context, s domain.Store) (*domain.Store, error)
+	UpdateStore(ctx context.Context, s domain.Store) (*domain.Store, error)
 	DeleteStore(ctx context.Context, id uint) error
-	GetStoreByID(ctx context.Context, id uint) (*entity.Store, error)
-	ListStoresByUser(ctx context.Context, userID uint) ([]entity.Store, error)
+	GetStoreByID(ctx context.Context, id uint) (*domain.Store, error)
+	ListStoresByUser(ctx context.Context, userID uint) ([]param.StoreInfo, error)
 }
 
 type Service struct {

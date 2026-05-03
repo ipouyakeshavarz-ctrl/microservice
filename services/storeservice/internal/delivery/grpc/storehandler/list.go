@@ -1,23 +1,28 @@
 package storehandler
 
 import (
-	"myapp/pkg/httpmsg"
-	"net/http"
-	"storeapp/internal/claim"
-	"storeapp/internal/param"
+	"context"
+	"myapp/api/gen/store"
 
-	"github.com/labstack/echo/v4"
+	"myapp/pkg/richerror"
+
+	"storeapp/internal/param"
+	"storeapp/internal/pkg/portobufermaper"
 )
 
-func (h Handler) listStore(c echo.Context) error {
-	claims := claim.GetClaimsFromEchoContext(c)
+func (h *Handler) ListStoresByUser(ctx context.Context,
+	req *store.ListStoresByUserRequest) (*store.ListStoresByUserResponse, error) {
+	const op = "StoreHandler.ListStoresByUser"
 
-	resp, err := h.storeSvc.ListStoresByUser(c.Request().Context(),
-		param.ListStoresByUserRequest{UserID: claims.UserID})
-	if err != nil {
-		msg, code := httpmsg.Error(err)
-		return echo.NewHTTPError(code, msg)
+	input := param.ListStoresByUserRequest{
+		UserID: uint(req.UserId),
 	}
 
-	return c.JSON(http.StatusOK, resp)
+	resp, err := h.storeSvc.ListStoresByUser(ctx, input)
+	if err != nil {
+		return nil, richerror.New(op).WithErr(err)
+	}
+
+	return portobufermaper.MapListResponseToProtobuf(resp), nil
+
 }
