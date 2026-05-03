@@ -3,8 +3,10 @@ package httpserver
 import (
 	"fmt"
 	"gatewayapp/internal/client/authclient"
+	"gatewayapp/internal/client/productclient"
 	"gatewayapp/internal/client/storeclient"
 	"gatewayapp/internal/client/userclient"
+	"gatewayapp/internal/delivery/http/producthandler"
 	"gatewayapp/internal/delivery/http/storehandler"
 	"gatewayapp/internal/delivery/http/userhandler"
 
@@ -13,16 +15,21 @@ import (
 )
 
 type Server struct {
-	storeHandler storehandler.Handler
-	userHandler  userhandler.Handler
-	Router       *echo.Echo
+	storeHandler   storehandler.Handler
+	userHandler    userhandler.Handler
+	productHandler producthandler.Handler
+	Router         *echo.Echo
 }
 
-func New(userClient userclient.Client, authClient authclient.Client, storeClient storeclient.Client) Server {
+func New(userClient userclient.Client,
+	authClient authclient.Client,
+	storeClient storeclient.Client,
+	productClient productclient.Client) Server {
 	return Server{
-		Router:       echo.New(),
-		userHandler:  userhandler.New(userClient, authClient),
-		storeHandler: storehandler.New(storeClient, authClient),
+		Router:         echo.New(),
+		userHandler:    userhandler.New(userClient, authClient),
+		storeHandler:   storehandler.New(storeClient, authClient),
+		productHandler: producthandler.New(productClient, authClient),
 	}
 }
 
@@ -34,6 +41,7 @@ func (s Server) Serve() {
 	s.Router.GET("/health-check", s.healthCheck)
 	s.userHandler.SetRoutes(s.Router)
 	s.storeHandler.SetRoutes(s.Router)
+	s.productHandler.SetRoutes(s.Router)
 
 	// Start server
 

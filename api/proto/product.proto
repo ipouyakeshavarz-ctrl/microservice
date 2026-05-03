@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+package product;
+
+option go_package = "authservice/internal/delivery/grpc/gen;gen";
+
+
+service ProductService {
+  rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse);
+  rpc DeleteProduct(DeleteProductRequest) returns (DeleteProductResponse);
+  rpc GetProductByID(GetProductByIDRequest) returns (GetProductResponse);
+  rpc UpdateProduct(UpdateProductRequest) returns (UpdateProductResponse);
+}
+
+message CreateProductRequest {
+  uint64 store_id = 1;
+  string name = 2;
+  string description = 3;
+  string category = 4;
+  float price = 5;
+  int64 stock = 6;
+  string sku = 7;
+  string image_url = 8;
+  bool is_active=9;
+}
+
+message CreateProductResponse {
+  ProductInfo product =1;
+}
+
+message ProductInfo {
+  uint64 id =1;
+  uint64 store_id = 2;
+  string name = 3;
+  string description = 4;
+  string category = 5;
+  float price = 6;
+  int64 stock = 7;
+  string sku = 8;
+  string image_url = 9;
+  bool is_active= 10;
+}
+
+message DeleteProductRequest {
+  uint64 store_id = 1;
+  uint64 user_id = 2;
+  uint64 product_id =3;
+}
+
+message DeleteProductResponse {
+  bool success = 1;
+}
+
+message GetProductByIDRequest {
+  uint64 product_id = 1;
+  uint64 store_id =2;
+}
+
+
+message GetProductResponse {
+  ProductInfo product = 1;
+}
+
+message UpdateProductRequest {
+  uint64 id =1;
+  uint64 store_id = 2;
+  string name = 3;
+  string description = 4;
+  string category = 5;
+  float price = 6;
+  int64 stock = 7;
+  string sku = 8;
+  string image_url = 9;
+  bool is_active= 10;
+}
+message UpdateProductResponse {
+  ProductInfo product = 1;
+}

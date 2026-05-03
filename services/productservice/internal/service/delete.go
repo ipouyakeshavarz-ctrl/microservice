@@ -7,17 +7,29 @@ import (
 	"productapp/internal/param"
 )
 
-func (s *Service) Delete(ctx context.Context, req param.DeleteProductRequest) error {
+func (s *Service) Delete(ctx context.Context, req param.DeleteProductRequest) (param.DeleteProductResponse, error) {
 	const op = "ProductService.Delete"
 
 	p, err := s.repo.GetByID(ctx, req.ID)
 	if err != nil {
-		return richerror.New(op).WithErr(err)
+		return param.DeleteProductResponse{
+			Success: false,
+		}, richerror.New(op).WithErr(err)
 	}
 
 	if p.StoreID != req.StoreID {
-		return richerror.New(op).WithKind(richerror.KindUnexpected).WithMessage(errmsg.ErrorMsgUserNotAllowed)
+		return param.DeleteProductResponse{
+			Success: false,
+		}, richerror.New(op).WithKind(richerror.KindUnexpected).WithMessage(errmsg.ErrorMsgUserNotAllowed)
 	}
 
-	return s.repo.Delete(ctx, req.ID)
+	dErr := s.repo.Delete(ctx, req.ID)
+	if dErr != nil {
+		return param.DeleteProductResponse{
+			Success: false,
+		}, richerror.New(op).WithErr(dErr)
+	}
+	return param.DeleteProductResponse{
+		Success: true,
+	}, nil
 }

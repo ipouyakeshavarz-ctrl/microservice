@@ -5,7 +5,7 @@ import (
 	"log"
 	"myapp/pkg/config"
 	cfg "productapp/internal/config"
-	httpserver "productapp/internal/delivery/http"
+	"productapp/internal/delivery/grpc"
 	"productapp/internal/repository/migrator"
 	"productapp/internal/repository/mysql"
 	mysqlproduct "productapp/internal/repository/mysql/mysqlproduct"
@@ -29,7 +29,9 @@ func main() {
 
 	productSvc := productservice.New(productRepo)
 
-	server := httpserver.New(cfg2, productSvc)
+	grpcServer := grpc.NewServer(productSvc, 50054)
 
-	server.Serve()
+	if err := grpcServer.Run(); err != nil {
+		log.Fatal(err)
+	}
 }
