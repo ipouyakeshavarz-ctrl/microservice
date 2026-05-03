@@ -3,6 +3,7 @@ package config
 import "os"
 
 type Config struct {
+	authService
 	Port               string
 	AuthServiceAddr    string
 	UserServiceAddr    string

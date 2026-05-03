@@ -4,7 +4,8 @@ import (
 	"authapp/internal/domain"
 	"context"
 	"myapp/api/gen/auth"
-	"strings"
+	"myapp/pkg/errmsg"
+	"myapp/pkg/richerror"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
@@ -27,6 +28,36 @@ func New(cfg Config) *Service {
 	return &Service{
 		config: cfg,
 	}
+}
+
+// todo complate that
+func (s *Service) VerifyToken(ctx context.Context,
+	in *auth.VerifyTokenRequest) (*auth.VerifyTokenResponse, error) {
+	const op = "Authservice.VerifyToken"
+	if in == nil {
+		return nil, richerror.New(op).WithMessage(errmsg.ErrorMsgInvalidInput)
+	}
+
+	tokenStr := in.GetToken()
+	if tokenStr == "" {
+		return nil, richerror.New(op).WithMessage(errmsg.ErrorMsgTokenIsRequired)
+	}
+
+	claims, err := s.ParseToken(tokenStr)
+	if err != nil {
+		return nil, richerror.New(op).WithMessage(errmsg.ErrorMsgSomethingWentWrong)
+	}
+	if claims == nil {
+		return nil, richerror.New(op).WithMessage(errmsg.ErrorMsgInvalidInput)
+	}
+	userId := claims.UserID
+
+	role := claims.Role
+
+	return &auth.VerifyTokenResponse{
+		UserId: uint64(userId),
+		Role:   domain.MapFromRoleEntity(role),
+	}, nil
 }
 
 func (s *Service) GenerateTokens(ctx context.Context, u *auth.UserInfo) (*auth.LoginTokenResponse, error) {
@@ -69,9 +100,7 @@ func (s Service) CreateRefreshToken(user domain.User) (string, error) {
 	return s.createToken(user.ID, user.Role, s.config.RefreshSubject, s.config.RefreshExpirationTime)
 }
 
-func (s Service) ParseToken(bearerToken string) (*Claims, error) {
-
-	tokenStr := strings.Replace(bearerToken, "Bearer ", "", 1)
+func (s Service) ParseToken(tokenStr string) (*Claims, error) {
 
 	token, err := jwt.ParseWithClaims(tokenStr, &Claims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(s.config.SignKey), nil

@@ -39,3 +39,13 @@ func MapToRoleEntity(roleStr string) Role {
 	}
 	return 0
 }
+func MapFromRoleEntity(role Role) string {
+	switch role {
+	case UserRole:
+		return UserRoleStr
+	case AdminRole:
+		return AdminRoleStr
+
+	}
+	return ""
+}

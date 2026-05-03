@@ -4,6 +4,8 @@ import (
 	"authapp/internal/service"
 	"context"
 	"myapp/api/gen/auth"
+
+	"google.golang.org/grpc"
 )
 
 type AuthGRPCServer struct {
@@ -17,12 +19,20 @@ func NewAuthGRPCServer(s *authservice.Service) *AuthGRPCServer {
 	}
 }
 
-func (g *AuthGRPCServer) GenerateTokens(ctx context.Context, req *auth.UserInfo) (*auth.LoginTokenResponse, error) {
+func (g *AuthGRPCServer) GenerateTokens(ctx context.Context, req *auth.UserInfo, opts ...grpc.CallOption) (*auth.LoginTokenResponse, error) {
 
 	resp, err := g.authService.GenerateTokens(ctx, req)
 	if err != nil {
 		return nil, err
 	}
 
+	return resp, nil
+}
+
+func (g *AuthGRPCServer) ValidateTokens(ctx context.Context, req *auth.UserInfo, opts ...grpc.CallOption) (*auth.LoginTokenResponse, error) {
+	resp, err := g.ValidateTokens(ctx, req)
+	if err != nil {
+		return nil, err
+	}
 	return resp, nil
 }

@@ -6,6 +6,7 @@ option go_package = "authservice/internal/delivery/grpc/gen;gen";
 
 service AuthService {
   rpc GenerateTokens(UserInfo) returns (LoginTokenResponse);
+  rpc VerifyToken(VerifyTokenRequest) returns (VerifyTokenResponse);
 }
 
 message UserInfo {
@@ -20,3 +21,17 @@ message LoginTokenResponse {
   string refresh_token = 2;
   int64 expires_in = 3;
 }
+
+
+message VerifyTokenRequest {
+  string token = 1;
+}
+
+message VerifyTokenResponse {
+  uint64 user_id = 1;
+  string role = 2;
+}
+
+
+
+

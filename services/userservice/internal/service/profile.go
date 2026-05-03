@@ -15,5 +15,7 @@ func (s Service) Profile(ctx context.Context, req param.ProfileRequest) (param.P
 			WithMeta(map[string]interface{}{"req": req})
 	}
 
-	return param.ProfileResponse{Name: user.Name}, nil
+	return param.ProfileResponse{ID: user.ID,
+		Name: user.Name,
+	}, nil
 }

@@ -24,9 +24,9 @@ const (
 
 type RegisterRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	PhoneNumber   string                 `protobuf:"bytes,2,opt,name=phoneNumber,proto3" json:"phoneNumber,omitempty"`
-	Password      string                 `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name"`
+	PhoneNumber   string                 `protobuf:"bytes,2,opt,name=phoneNumber,proto3" json:"phone_number"`
+	Password      string                 `protobuf:"bytes,3,opt,name=password,proto3" json:"password"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -128,8 +128,8 @@ func (x *RegisterResponse) GetUser() *UserInfo {
 
 type LoginRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	PhoneNumber   string                 `protobuf:"bytes,1,opt,name=phoneNumber,proto3" json:"phoneNumber,omitempty"`
-	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
+	PhoneNumber   string                 `protobuf:"bytes,1,opt,name=phoneNumber,proto3" json:"phone_number"`
+	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }

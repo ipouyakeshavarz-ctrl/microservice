@@ -1,47 +1,40 @@
 package main
 
 import (
+	"fmt"
+	"gatewayapp/internal/client/authclient"
+	"gatewayapp/internal/client/userclient"
+	httpserver "gatewayapp/internal/delivery/http"
 	"log"
-
-	"github.com/labstack/echo/v4"
-	"google.golang.org/grpc"
-
-	"gatewayapp/internal/client/authgrpc"
-	"gatewayapp/internal/config"
-	"gatewayapp/internal/router"
 )
 
 func main() {
 
-	cfg := config.Load()
+	//cfg := config.Load()
 
 	// gRPC connections
-	authConn, err := grpc.Dial(cfg.AuthServiceAddr, grpc.WithInsecure())
+	//authConn, err := grpc.Dial(cfg.AuthServiceAddr, grpc.WithInsecure())
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	fmt.Println("Hello world")
+	// clients.
+
+	authClient, err := authclient.New("127.0.0.1:50051")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	userConn, err := grpc.Dial(cfg.UserServiceAddr, grpc.WithInsecure())
-	if err != nil {
-		log.Fatal(err)
+	userClient, uErr := userclient.New("127.0.0.1:50052")
+	if uErr != nil {
+		log.Fatal(uErr)
 	}
-
-	productConn, err := grpc.Dial(cfg.ProductServiceAddr, grpc.WithInsecure())
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// clients
-	authClient := authgrpc.NewAuthClient(authConn)
-	userClient := grpcclient.NewUserClient(userConn)
-	productClient := grpcclient.NewProductClient(productConn)
 
 	// echo
-	e := echo.New()
+	fmt.Println("Hello world")
 
-	router.Register(e, authClient)
+	server := httpserver.New(*userClient, *authClient)
+	fmt.Println("Hello world")
+	server.Serve()
 
-	log.Println("gateway running on", cfg.Port)
-
-	e.Logger.Fatal(e.Start(cfg.Port))
 }

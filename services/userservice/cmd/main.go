@@ -6,15 +6,16 @@ import (
 	authpb "myapp/api/gen/auth"
 	"myapp/pkg/config"
 	cfg "userapp/internal/config"
-	authclient "userapp/internal/delivery/grpc"
-	httpserver "userapp/internal/delivery/http"
+	authclient "userapp/internal/delivery/grpc/auth"
 	"userapp/internal/repository/migrator"
 	"userapp/internal/repository/mysql"
 	"userapp/internal/repository/mysql/mysqluser"
-	userservice "userapp/internal/service"
 	"userapp/internal/validator"
 
-	"google.golang.org/grpc"
+	"userapp/internal/delivery/grpc"
+	"userapp/internal/service"
+
+	grpc2 "google.golang.org/grpc"
 )
 
 func main() {
@@ -24,19 +25,28 @@ func main() {
 		log.Fatal(err)
 	}
 	fmt.Printf("cfg:%v\n", cfg2)
+
 	mgr := migrator.New(cfg2.Mysql)
 	mgr.Up()
 
-	conn, _ := grpc.Dial("127.0.0.1:50051", grpc.WithInsecure())
+	MysqlRepo := mysql.New(cfg2.Mysql)
+	userRepo := mysqluser.New(MysqlRepo)
+
+	conn, dErr := grpc2.Dial(fmt.Sprintf("127.0.0.1:%v", 50051), grpc2.WithInsecure())
+	if dErr != nil {
+		log.Fatalf("cannot connect to auth service: %v", dErr)
+	}
 	authClient := authpb.NewAuthServiceClient(conn)
 	grpcAuthClient := authclient.NewGRPCAuthClient(authClient)
 
-	MysqlRepo := mysql.New(cfg2.Mysql)
-	userRepo := mysqluser.New(MysqlRepo)
 	userSvc := userservice.New(grpcAuthClient, userRepo)
 
 	userV := validator.New(userRepo)
 
-	server := httpserver.New(cfg2, userSvc, userV)
-	server.Serve()
+	grpcServer := grpc.NewServer(userV, userSvc, 50052)
+	
+	if err := grpcServer.Run(); err != nil {
+		log.Fatal(err)
+	}
+
 }
