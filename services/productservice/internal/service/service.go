@@ -3,6 +3,7 @@ package productservice
 import (
 	"context"
 	"productapp/internal/domain"
+	"productapp/internal/repository/redis/productcache"
 )
 
 type Repository interface {
@@ -13,9 +14,10 @@ type Repository interface {
 }
 
 type Service struct {
-	repo Repository
+	repo         Repository
+	productCache *productcache.ProductCache
 }
 
-func New(repo Repository) Service {
-	return Service{repo: repo}
+func New(repo Repository, productCache *productcache.ProductCache) *Service {
+	return &Service{repo: repo, productCache: productCache}
 }

@@ -43,7 +43,18 @@ services:
       MYSQL_USER: store
       MYSQL_PASSWORD: storet0lk2o20
 
+  redis:
+    image: redis:7
+    container_name: redis-cache
+    ports:
+      - "6379:6379"
+    restart: always
+    volumes:
+      - redisdata:/data
+    command: ["redis-server", "--appendonly", "yes"]
+
 volumes:
   userdbdata:
   productdbdata:
   storedbdata:
+  redisdata:

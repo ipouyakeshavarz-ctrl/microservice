@@ -29,6 +29,11 @@ func (s *Service) Delete(ctx context.Context, req param.DeleteProductRequest) (p
 			Success: false,
 		}, richerror.New(op).WithErr(dErr)
 	}
+
+	if s.productCache != nil {
+		_ = s.productCache.DeleteByID(ctx, req.ID)
+	}
+
 	return param.DeleteProductResponse{
 		Success: true,
 	}, nil

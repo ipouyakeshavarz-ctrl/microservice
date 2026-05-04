@@ -30,6 +30,10 @@ func (s *Service) DeleteStore(ctx context.Context, req param.DeleteStoreRequest)
 		}, richerror.New(op).WithErr(err)
 	}
 
+	if s.storeCache != nil {
+		_ = s.storeCache.DeleteByID(ctx, req.StoreID)
+	}
+
 	return param.DeleteStoreResponse{
 		Success: true,
 	}, nil

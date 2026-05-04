@@ -2,11 +2,12 @@ package mysqlstore
 
 import (
 	"context"
+	"fmt"
 	"myapp/pkg/errmsg"
 	"myapp/pkg/richerror"
 	"storeapp/internal/domain"
-	"storeapp/internal/param"
 	"storeapp/internal/repository/mysql"
+	"strings"
 	"time"
 )
 
@@ -78,7 +79,7 @@ func (d DB) GetStoreByID(ctx context.Context, id uint) (*domain.Store, error) {
 	return &s, nil
 }
 
-func (d DB) ListStoresByUser(ctx context.Context, userID uint) ([]param.StoreInfo, error) {
+func (d DB) ListStoresByUser(ctx context.Context, userID uint) ([]domain.Store, error) {
 	const op = "StoreRepo.ListStoresByUser"
 
 	query := `SELECT id, user_id, name, description, logo_url, street, city, province, postal_code, phone_number, is_active, created_at, updated_at FROM stores WHERE user_id=?`
@@ -88,10 +89,10 @@ func (d DB) ListStoresByUser(ctx context.Context, userID uint) ([]param.StoreInf
 			WithMessage(errmsg.ErrorMsgSomethingWentWrong).WithErr(err)
 	}
 
-	var stores []param.StoreInfo
+	var stores []domain.Store
 	for rows.Next() {
 
-		s, err := scanStore2(rows)
+		s, err := scanStore(rows)
 
 		if err != nil {
 			return nil, richerror.New(op).WithKind(richerror.KindUnexpected).
@@ -101,6 +102,75 @@ func (d DB) ListStoresByUser(ctx context.Context, userID uint) ([]param.StoreInf
 	}
 	return stores, richerror.New(op).WithKind(richerror.KindUnexpected).
 		WithMessage(errmsg.ErrorMsgSomethingWentWrong).WithErr(err)
+}
+
+func (d DB) ListStoreIDsByUser(ctx context.Context, userID uint) ([]uint, error) {
+	const op = "storeRepo.ListStoreIDsByUser"
+
+	query := `SELECT id FROM stores WHERE user_id = ?`
+
+	rows, err := d.conn.Conn().QueryContext(ctx, query, userID)
+	if err != nil {
+		return nil, richerror.New(op).WithKind(richerror.KindUnexpected).
+			WithMessage(errmsg.ErrorMsgCantScanQueryResult)
+	}
+	defer rows.Close()
+
+	var ids []uint
+	for rows.Next() {
+
+		store, err := scanStore(rows)
+		if err != nil {
+			return nil, richerror.New(op).WithKind(richerror.KindUnexpected).
+				WithMessage(errmsg.ErrorMsgSomethingWentWrong).WithErr(err)
+		}
+		ids = append(ids, store.ID)
+	}
+
+	return ids, nil
+}
+func (d DB) GetStoresByIDs(ctx context.Context, ids []uint) ([]*domain.Store, error) {
+	const op = "StoreRepo.GetStoresByIDs"
+
+	if len(ids) == 0 {
+		return []*domain.Store{}, nil
+	}
+
+	placeholders := make([]string, len(ids))
+	args := make([]interface{}, len(ids))
+	for i, id := range ids {
+		placeholders[i] = "?"
+		args[i] = id
+	}
+
+	query := fmt.Sprintf(`SELECT id, user_id, name, address FROM stores WHERE id IN (%s)`,
+		strings.Join(placeholders, ","),
+	)
+
+	rows, err := d.conn.Conn().QueryContext(ctx, query, args...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var stores []*domain.Store
+	for rows.Next() {
+		var s domain.Store
+
+		s, err := scanStore(rows)
+		if err != nil {
+			return nil, richerror.New(op).WithKind(richerror.KindUnexpected).
+				WithMessage(errmsg.ErrorMsgSomethingWentWrong).WithErr(err)
+		}
+
+		stores = append(stores, &s)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return stores, nil
 }
 
 func scanStore(scanner mysql.Scanner) (domain.Store, error) {
@@ -114,16 +184,4 @@ func scanStore(scanner mysql.Scanner) (domain.Store, error) {
 		&store.PhoneNumber, &store.IsActive, &createdAt, &updatedAt)
 
 	return store, richerror.New(op).WithErr(err).WithMessage(errmsg.ErrorMsgCantScanQueryResult)
-}
-
-func scanStore2(scanner mysql.Scanner) (param.StoreInfo, error) {
-	var createdAt time.Time
-	var updatedAt time.Time
-	var store param.StoreInfo
-
-	err := scanner.Scan(&store.ID, &store.UserID, &store.Name, &store.Description, &store.LogoURL,
-		&store.Address.Street, &store.Address.City, &store.Address.Province, &store.Address.PostalCode,
-		&store.PhoneNumber, &store.IsActive, &createdAt, &updatedAt)
-
-	return store, err
 }

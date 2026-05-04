@@ -59,6 +59,10 @@ func (s *Service) UpdateStore(ctx context.Context, req param.UpdateStoreRequest)
 		return param.UpdateStoreResponse{}, richerror.New(op).WithErr(err)
 	}
 
+	if s.storeCache != nil {
+		_ = s.storeCache.DeleteByID(ctx, store.ID)
+	}
+
 	return param.UpdateStoreResponse{Store: param.StoreInfo{
 		Name:        updatedStore.Name,
 		Description: updatedStore.Description,

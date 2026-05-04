@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"myapp/pkg/config"
@@ -9,8 +10,11 @@ import (
 	"storeapp/internal/repository/migrator"
 	"storeapp/internal/repository/mysql"
 	"storeapp/internal/repository/mysql/mysqlstore"
+	"storeapp/internal/repository/redis"
+	"storeapp/internal/repository/redis/storecache"
 	storeservice "storeapp/internal/service"
 	storevalidator "storeapp/internal/validator"
+	"time"
 )
 
 func main() {
@@ -26,7 +30,19 @@ func main() {
 
 	MysqlRepo := mysql.New(cfg2.Mysql)
 	storeRepo := mysqlstore.New(MysqlRepo)
-	storeSvc := storeservice.New(storeRepo)
+
+	redisAdapter := redis.NewAdapter(cfg2.Redis)
+	ctx := context.Background()
+
+	storeTTL := time.Duration(cfg2.Redis.StoreTTLMinutes) * time.Minute
+	storeCache := storecache.NewStoreCache(redisAdapter, storeTTL)
+
+	if err := redisAdapter.Ping(ctx); err != nil {
+		log.Printf("redis unavailable, running without cache: %v", err)
+		storeCache = nil
+	}
+
+	storeSvc := storeservice.New(storeRepo, storeCache)
 	storeV := storevalidator.New()
 
 	grpcServer := grpc.NewServer(storeV, storeSvc, cfg2.GrpcServer.StoreAddress)

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"myapp/pkg/config"
@@ -8,8 +9,11 @@ import (
 	"productapp/internal/delivery/grpc"
 	"productapp/internal/repository/migrator"
 	"productapp/internal/repository/mysql"
-	mysqlproduct "productapp/internal/repository/mysql/mysqlproduct"
+	"productapp/internal/repository/mysql/mysqlproduct"
+	"productapp/internal/repository/redis"
+	"productapp/internal/repository/redis/productcache"
 	productservice "productapp/internal/service"
+	"time"
 )
 
 func main() {
@@ -27,9 +31,20 @@ func main() {
 	MysqlRepo := mysql.New(cfg2.Mysql)
 	productRepo := mysqlproduct.New(MysqlRepo)
 
-	productSvc := productservice.New(productRepo)
+	redisAdapter := redis.NewAdapter(cfg2.Redis)
+	ctx := context.Background()
 
-	grpcServer := grpc.NewServer(productSvc, cfg2.GrpcServer.ProductAddress)
+	productTTL := time.Duration(cfg2.Redis.ProductTTLMinutes) * time.Minute
+	productCache := productcache.NewProductCache(redisAdapter, productTTL)
+
+	if err := redisAdapter.Ping(ctx); err != nil {
+		log.Printf("redis unavailable, running without cache: %v", err)
+		productCache = nil
+	}
+
+	productSvc := productservice.New(productRepo, productCache)
+
+	grpcServer := grpc.NewServer(*productSvc, cfg2.GrpcServer.ProductAddress)
 
 	if err := grpcServer.Run(); err != nil {
 		log.Fatal(err)

@@ -2,6 +2,7 @@ package config
 
 import (
 	"productapp/internal/repository/mysql"
+	"productapp/internal/repository/redis"
 	"time"
 )
 
@@ -9,6 +10,7 @@ type Config struct {
 	Application Application  `koanf:"application"`
 	GrpcServer  GrpcServer   `koanf:"grpc_server"`
 	Mysql       mysql.Config `koanf:"mysql"`
+	Redis       redis.Config `koanf:"redis"`
 }
 
 type Application struct {

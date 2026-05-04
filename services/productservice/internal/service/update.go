@@ -39,6 +39,10 @@ func (s *Service) Update(ctx context.Context, p param.UpdateProductRequest) (par
 		return param.UpdateProductResponse{}, richerror.New(op).WithErr(err)
 	}
 
+	if s.productCache != nil {
+		_ = s.productCache.DeleteByID(ctx, p.ID)
+	}
+
 	return param.UpdateProductResponse{
 		Product: param.ProductInfo{
 			ID:          updatedProduct.ID,
