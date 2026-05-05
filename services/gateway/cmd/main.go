@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"gatewayapp/internal/client/authclient"
 	"gatewayapp/internal/client/productclient"
 	"gatewayapp/internal/client/storeclient"
@@ -9,6 +10,9 @@ import (
 	httpserver "gatewayapp/internal/delivery/http"
 	"myapp/pkg/config"
 	"myapp/pkg/logger"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"go.uber.org/zap"
 )
@@ -27,7 +31,7 @@ func main() {
 
 	logger.Info("config", zap.Any("config", cfg2))
 
-	authClient, aErr := authclient.New(cfg2.GrpcClient.ProductAddress)
+	authClient, aErr := authclient.New(cfg2.GrpcClient.AuthAddress)
 	if aErr != nil {
 		logger.Fatal("failed to initialize auth client", zap.Error(aErr))
 	}
@@ -56,8 +60,24 @@ func main() {
 	defer productClient.Close()
 
 	server := httpserver.New(*userClient, *authClient, *storeClient, *productClient, cfg2)
-	logger.Info("Starting Gateway Service...", zap.String("address:", cfg2.HttpServer.Address))
 
-	server.Serve()
+	go func() {
+		logger.Info("🚀 Starting Gateway Service...", zap.String("address", cfg2.HttpServer.Address))
+		server.Serve()
+	}()
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 
+	<-quit
+	logger.Info("Received shutdown signal. Initiating graceful shutdown...")
+
+	ctxWithTimeout, cancel := context.WithTimeout(context.Background(), cfg2.Application.GracefulShutdownTimeout)
+	defer cancel()
+
+	if err := server.Router.Shutdown(ctxWithTimeout); err != nil {
+		logger.Error("graceful shutdown error", zap.Error(err))
+	}
+
+	<-ctxWithTimeout.Done()
+	logger.Info("Graceful shutdown completed successfully. 🛑")
 }

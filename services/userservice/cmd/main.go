@@ -4,6 +4,9 @@ import (
 	authpb "myapp/api/gen/auth"
 	"myapp/pkg/config"
 	"myapp/pkg/logger"
+	"os"
+	"os/signal"
+	"syscall"
 	cfg "userapp/internal/config"
 	authclient "userapp/internal/delivery/grpc/auth"
 	"userapp/internal/repository/migrator"
@@ -49,10 +52,29 @@ func main() {
 
 	grpcServer := grpc.NewServer(userV, userSvc, cfg2.GrpcServer.UserAddress)
 
-	logger.Info("🚀gRPC server started on ", zap.String("address:", cfg2.GrpcServer.UserAddress))
+	go func() {
+		logger.Info("🚀 gRPC server starting on",
+			zap.String("address", cfg2.GrpcServer.UserAddress))
+		if err := grpcServer.Run(); err != nil {
+			logger.Fatal("cannot start grpc server", zap.Error(err))
+		}
+	}()
 
-	if err := grpcServer.Run(); err != nil {
-		logger.Fatal("cannot start grpc server", zap.Error(err))
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+
+	<-quit
+	logger.Info("Received shutdown signal. Initiating graceful shutdown...")
+
+	grpcServer.GracefulStop()
+
+	if err := conn.Close(); err != nil {
+		logger.Error("failed to close auth service connection", zap.Error(err))
 	}
 
+	if err := MysqlRepo.Conn().Close(); err != nil {
+		logger.Error("failed to close mysql connection", zap.Error(err))
+	}
+
+	logger.Info("Graceful shutdown completed successfully. 🛑")
 }

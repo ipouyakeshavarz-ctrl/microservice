@@ -4,6 +4,8 @@ import (
 	"context"
 	"myapp/pkg/config"
 	"myapp/pkg/logger"
+	"os"
+	"os/signal"
 	cfg "storeapp/internal/config"
 	"storeapp/internal/delivery/grpc"
 	"storeapp/internal/repository/migrator"
@@ -13,6 +15,7 @@ import (
 	"storeapp/internal/repository/redis/storecache"
 	storeservice "storeapp/internal/service"
 	storevalidator "storeapp/internal/validator"
+	"syscall"
 	"time"
 
 	"go.uber.org/zap"
@@ -51,10 +54,30 @@ func main() {
 	storeV := storevalidator.New()
 
 	grpcServer := grpc.NewServer(storeV, storeSvc, cfg2.GrpcServer.StoreAddress)
+	go func() {
+		logger.Info("🚀gRPC server started on", zap.String("address", cfg2.GrpcServer.StoreAddress))
 
-	logger.Info("🚀gRPC server started on", zap.String("address", cfg2.GrpcServer.StoreAddress))
+		if err := grpcServer.Run(); err != nil {
+			logger.Fatal("cannot start grpc server", zap.Error(err))
+		}
+	}()
 
-	if err := grpcServer.Run(); err != nil {
-		logger.Fatal("cannot start grpc server", zap.Error(err))
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+
+	<-quit
+	logger.Info("Received shutdown signal. Initiating graceful shutdown...")
+
+	grpcServer.GracefulStop()
+
+	if err := MysqlRepo.Conn().Close(); err != nil {
+		logger.Error("failed to close MysqlRepo connection", zap.Error(err))
 	}
+
+	if err := redisAdapter.Client().Close(); err != nil {
+		logger.Error("failed to close Redis Adapter connection", zap.Error(err))
+	}
+
+	logger.Info("Graceful shutdown completed successfully. 🛑")
+
 }

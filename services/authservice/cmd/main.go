@@ -2,14 +2,15 @@ package main
 
 import (
 	cfg "authapp/internal/config"
+	"authapp/internal/delivery/grpc"
 	authservice "authapp/internal/service"
-	gen "myapp/api/gen/auth"
 	"myapp/pkg/config"
 	"myapp/pkg/logger"
-	"net"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"go.uber.org/zap"
-	"google.golang.org/grpc"
 )
 
 func main() {
@@ -23,21 +24,27 @@ func main() {
 	defer logger.Sync()
 
 	logger.Info("config", zap.Any("config", cfg2))
-	lis, lErr := net.Listen("tcp", cfg2.GrpcServer.AuthAddress)
-	if lErr != nil {
-		logger.Fatal("failed to listen:", zap.Error(lErr))
-	}
 
-	grpcServer := grpc.NewServer()
+	authSvc := authservice.New(cfg2.Auth)
 
-	authServer := authservice.New(cfg2.Auth)
+	grpcServer := grpc.NewServer(*authSvc, cfg2.GrpcServer.AuthAddress)
 
-	gen.RegisterAuthServiceServer(grpcServer, authServer)
+	go func() {
+		logger.Info("🚀gRPC server started on ",
+			zap.String("address", cfg2.GrpcServer.AuthAddress))
 
-	logger.Info("🚀 AuthService gRPC server running on ",
-		zap.String("address:", cfg2.GrpcServer.AuthAddress))
+		if err := grpcServer.Run(); err != nil {
+			logger.Fatal("cannot start grpc server", zap.Error(err))
+		}
+	}()
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 
-	if err := grpcServer.Serve(lis); err != nil {
-		logger.Fatal("failed to serve:", zap.Error(err))
-	}
+	<-quit
+	logger.Info("Received shutdown signal. Initiating graceful shutdown...")
+
+	grpcServer.GracefulStop()
+
+	logger.Info("Graceful shutdown completed successfully. 🛑")
+
 }

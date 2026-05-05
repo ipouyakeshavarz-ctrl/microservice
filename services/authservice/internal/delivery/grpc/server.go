@@ -1,38 +1,42 @@
-package grpcserver
+package grpc
 
 import (
-	"authapp/internal/service"
-	"context"
+	authhandler "authapp/internal/delivery/grpc/authhamdler"
+	authservice "authapp/internal/service"
 	"myapp/api/gen/auth"
+	"net"
 
 	"google.golang.org/grpc"
 )
 
-type AuthGRPCServer struct {
-	auth.UnimplementedAuthServiceServer
-	authService *authservice.Service
+type Server struct {
+	service authservice.Service
+	address string
+	engine  *grpc.Server
 }
 
-func NewAuthGRPCServer(s *authservice.Service) *AuthGRPCServer {
-	return &AuthGRPCServer{
-		authService: s,
+func NewServer(s authservice.Service, address string) *Server {
+	return &Server{
+		service: s,
+		address: address,
+		engine:  grpc.NewServer(),
 	}
 }
 
-func (g *AuthGRPCServer) GenerateTokens(ctx context.Context, req *auth.UserInfo, opts ...grpc.CallOption) (*auth.LoginTokenResponse, error) {
+func (s *Server) Run() error {
 
-	resp, err := g.authService.GenerateTokens(ctx, req)
+	lis, err := net.Listen("tcp", s.address)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return resp, nil
+	auth.RegisterAuthServiceServer(s.engine, authhandler.New(&s.service))
+
+	return s.engine.Serve(lis)
 }
 
-func (g *AuthGRPCServer) ValidateTokens(ctx context.Context, req *auth.UserInfo, opts ...grpc.CallOption) (*auth.LoginTokenResponse, error) {
-	resp, err := g.ValidateTokens(ctx, req)
-	if err != nil {
-		return nil, err
+func (s *Server) GracefulStop() {
+	if s.engine != nil {
+		s.engine.GracefulStop()
 	}
-	return resp, nil
 }

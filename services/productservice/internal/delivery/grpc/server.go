@@ -12,12 +12,14 @@ import (
 type Server struct {
 	service productservice.Service
 	address string
+	engine  *grpc.Server
 }
 
 func NewServer(s productservice.Service, address string) *Server {
 	return &Server{
 		service: s,
 		address: address,
+		engine:  grpc.NewServer(),
 	}
 }
 
@@ -28,9 +30,13 @@ func (s *Server) Run() error {
 		return err
 	}
 
-	grpcServer := grpc.NewServer()
+	product.RegisterProductServiceServer(s.engine, producthandler.New(s.service))
 
-	product.RegisterProductServiceServer(grpcServer, producthandler.New(s.service))
+	return s.engine.Serve(lis)
+}
 
-	return grpcServer.Serve(lis)
+func (s *Server) GracefulStop() {
+	if s.engine != nil {
+		s.engine.GracefulStop()
+	}
 }

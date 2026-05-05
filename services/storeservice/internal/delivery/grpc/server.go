@@ -15,6 +15,7 @@ type Server struct {
 	Validator storevalidator.Validator
 	service   storeservice.Service
 	address   string
+	engine    *grpc.Server
 }
 
 func NewServer(V storevalidator.Validator, s storeservice.Service, address string) *Server {
@@ -22,6 +23,7 @@ func NewServer(V storevalidator.Validator, s storeservice.Service, address strin
 		Validator: V,
 		service:   s,
 		address:   address,
+		engine:    grpc.NewServer(),
 	}
 }
 
@@ -33,9 +35,12 @@ func (s *Server) Run() error {
 		return richerror.New(op).WithErr(err).WithKind(richerror.KindUnexpected)
 	}
 
-	grpcServer := grpc.NewServer()
+	store.RegisterStoreServiceServer(s.engine, storehandler.New(s.service, s.Validator))
 
-	store.RegisterStoreServiceServer(grpcServer, storehandler.New(s.service, s.Validator))
-
-	return grpcServer.Serve(lis)
+	return s.engine.Serve(lis)
+}
+func (s *Server) GracefulStop() {
+	if s.engine != nil {
+		s.engine.GracefulStop()
+	}
 }
