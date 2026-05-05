@@ -11,6 +11,7 @@ type Config struct {
 	GrpcServer  GrpcServer   `koanf:"grpc_server"`
 	Mysql       mysql.Config `koanf:"mysql"`
 	Redis       redis.Config `koanf:"redis"`
+	Logger      Logger       `koanf:"logger"`
 }
 
 type Application struct {
@@ -18,4 +19,10 @@ type Application struct {
 }
 type GrpcServer struct {
 	ProductAddress string `koanf:"product_address"`
+}
+
+type Logger struct {
+	Development bool   `koanf:"development"`
+	ServiceName string `koanf:"service_name"`
+	FilePath    string `koanf:"file_path"`
 }

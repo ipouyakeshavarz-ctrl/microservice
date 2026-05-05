@@ -1,7 +1,6 @@
 package grpc
 
 import (
-	"log"
 	"myapp/api/gen/product"
 	"net"
 	"productapp/internal/delivery/grpc/producthandler"
@@ -32,8 +31,6 @@ func (s *Server) Run() error {
 	grpcServer := grpc.NewServer()
 
 	product.RegisterProductServiceServer(grpcServer, producthandler.New(s.service))
-
-	log.Println("🚀gRPC server started on ", s.address)
 
 	return grpcServer.Serve(lis)
 }

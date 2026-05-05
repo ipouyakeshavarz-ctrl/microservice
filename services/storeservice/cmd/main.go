@@ -2,9 +2,8 @@ package main
 
 import (
 	"context"
-	"fmt"
-	"log"
 	"myapp/pkg/config"
+	"myapp/pkg/logger"
 	cfg "storeapp/internal/config"
 	"storeapp/internal/delivery/grpc"
 	"storeapp/internal/repository/migrator"
@@ -15,15 +14,21 @@ import (
 	storeservice "storeapp/internal/service"
 	storevalidator "storeapp/internal/validator"
 	"time"
+
+	"go.uber.org/zap"
 )
 
 func main() {
 	var cfg2 cfg.Config
 	err := config.Load("config.yml", &cfg2)
 	if err != nil {
-		log.Fatal(err)
+		panic("failed to load config: " + err.Error())
 	}
-	fmt.Printf("cfg:%v\n", cfg2)
+
+	logger.InitLogger(cfg2.Logger.ServiceName, cfg2.Logger.Development, cfg2.Logger.FilePath)
+	defer logger.Sync()
+
+	logger.Info("config", zap.Any("config", cfg2))
 
 	mgr := migrator.New(cfg2.Mysql)
 	mgr.Up()
@@ -38,7 +43,7 @@ func main() {
 	storeCache := storecache.NewStoreCache(redisAdapter, storeTTL)
 
 	if err := redisAdapter.Ping(ctx); err != nil {
-		log.Printf("redis unavailable, running without cache: %v", err)
+		logger.Error("redis unavailable, running without cache: %v", zap.Error(err))
 		storeCache = nil
 	}
 
@@ -47,7 +52,9 @@ func main() {
 
 	grpcServer := grpc.NewServer(storeV, storeSvc, cfg2.GrpcServer.StoreAddress)
 
+	logger.Info("🚀gRPC server started on", zap.String("address", cfg2.GrpcServer.StoreAddress))
+
 	if err := grpcServer.Run(); err != nil {
-		log.Fatal(err)
+		logger.Fatal("cannot start grpc server", zap.Error(err))
 	}
 }

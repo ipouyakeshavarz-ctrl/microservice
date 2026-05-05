@@ -1,7 +1,6 @@
 package grpc
 
 import (
-	"log"
 	"myapp/api/gen/store"
 	"myapp/pkg/richerror"
 	"net"
@@ -37,8 +36,6 @@ func (s *Server) Run() error {
 	grpcServer := grpc.NewServer()
 
 	store.RegisterStoreServiceServer(grpcServer, storehandler.New(s.service, s.Validator))
-
-	log.Println("🚀gRPC server started on", s.address)
 
 	return grpcServer.Serve(lis)
 }

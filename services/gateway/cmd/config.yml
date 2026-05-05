@@ -10,3 +10,9 @@ grpc_client:
 
 http_server:
   address: "127.0.0.1:8887"
+
+
+logger:
+  development: true
+  service_name: "gateway"
+  file_path: "./logs/gateway.log"

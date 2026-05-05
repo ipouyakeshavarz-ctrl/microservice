@@ -17,4 +17,9 @@ redis:
   port: 6379
   password: ""
   db: 1
-  product_ttl_minutes: 10
+  store_ttl_minutes: 10
+
+logger:
+  development: true
+  service_name: "store_service"
+  file_path: "./logs/store.log"

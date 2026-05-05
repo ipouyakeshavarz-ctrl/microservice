@@ -1,10 +1,9 @@
 package main
 
 import (
-	"fmt"
-	"log"
 	authpb "myapp/api/gen/auth"
 	"myapp/pkg/config"
+	"myapp/pkg/logger"
 	cfg "userapp/internal/config"
 	authclient "userapp/internal/delivery/grpc/auth"
 	"userapp/internal/repository/migrator"
@@ -15,6 +14,7 @@ import (
 	"userapp/internal/delivery/grpc"
 	"userapp/internal/service"
 
+	"go.uber.org/zap"
 	grpc2 "google.golang.org/grpc"
 )
 
@@ -22,9 +22,13 @@ func main() {
 	var cfg2 cfg.Config
 	err := config.Load("config.yml", &cfg2)
 	if err != nil {
-		log.Fatal(err)
+		panic("failed to load config: " + err.Error())
 	}
-	fmt.Printf("cfg:%v\n", cfg2)
+
+	logger.InitLogger(cfg2.Logger.ServiceName, cfg2.Logger.Development, cfg2.Logger.FilePath)
+	defer logger.Sync()
+
+	logger.Info("config", zap.Any("config", cfg2))
 
 	mgr := migrator.New(cfg2.Mysql)
 	mgr.Up()
@@ -34,7 +38,7 @@ func main() {
 
 	conn, dErr := grpc2.Dial(cfg2.GrpcServer.AuthAddress, grpc2.WithInsecure())
 	if dErr != nil {
-		log.Fatalf("cannot connect to auth service: %v", dErr)
+		logger.Fatal("cannot connect to auth service: %v", zap.Error(dErr))
 	}
 	authClient := authpb.NewAuthServiceClient(conn)
 	grpcAuthClient := authclient.NewGRPCAuthClient(authClient)
@@ -45,8 +49,10 @@ func main() {
 
 	grpcServer := grpc.NewServer(userV, userSvc, cfg2.GrpcServer.UserAddress)
 
+	logger.Info("🚀gRPC server started on ", zap.String("address:", cfg2.GrpcServer.UserAddress))
+
 	if err := grpcServer.Run(); err != nil {
-		log.Fatal(err)
+		logger.Fatal("cannot start grpc server", zap.Error(err))
 	}
 
 }

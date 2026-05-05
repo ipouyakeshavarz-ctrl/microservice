@@ -1,7 +1,6 @@
 package httpserver
 
 import (
-	"fmt"
 	"gatewayapp/internal/client/authclient"
 	"gatewayapp/internal/client/productclient"
 	"gatewayapp/internal/client/storeclient"
@@ -10,9 +9,11 @@ import (
 	"gatewayapp/internal/delivery/http/producthandler"
 	"gatewayapp/internal/delivery/http/storehandler"
 	"gatewayapp/internal/delivery/http/userhandler"
+	"myapp/pkg/logger"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"go.uber.org/zap"
 )
 
 type Server struct {
@@ -38,8 +39,44 @@ func New(userClient userclient.Client,
 }
 
 func (s Server) Serve() {
-	s.Router.Use(middleware.RequestLogger())
 	s.Router.Use(middleware.Recover())
+
+	s.Router.Use(middleware.RequestID())
+
+	s.Router.Use(middleware.RequestLoggerWithConfig(middleware.RequestLoggerConfig{
+		LogURI:           true,
+		LogStatus:        true,
+		LogHost:          true,
+		LogRemoteIP:      true,
+		LogRequestID:     true,
+		LogMethod:        true,
+		LogContentLength: true,
+		LogResponseSize:  true,
+		LogLatency:       true,
+		LogError:         true,
+		LogProtocol:      true,
+		LogValuesFunc: func(c echo.Context, v middleware.RequestLoggerValues) error {
+			errMsg := ""
+			if v.Error != nil {
+				errMsg = v.Error.Error()
+			}
+
+			logger.Info("request",
+				zap.String("request_id", v.RequestID),
+				zap.String("host", v.Host),
+				zap.String("content-length", v.ContentLength),
+				zap.String("protocol", v.Protocol),
+				zap.String("method", v.Method),
+				zap.Duration("latency", v.Latency),
+				zap.String("error", errMsg),
+				zap.String("remote_ip", v.RemoteIP),
+				zap.Int64("response_size", v.ResponseSize),
+				zap.String("uri", v.URI),
+				zap.Int("status", v.Status),
+			)
+			return nil
+		},
+	}))
 
 	// Routes
 	s.Router.GET("/health-check", s.healthCheck)
@@ -48,7 +85,5 @@ func (s Server) Serve() {
 	s.productHandler.SetRoutes(s.Router)
 
 	// Start server
-	fmt.Printf("Listening on %s\n", s.config.HttpServer.Address)
-
 	s.Router.Logger.Fatal(s.Router.Start(s.config.HttpServer.Address))
 }

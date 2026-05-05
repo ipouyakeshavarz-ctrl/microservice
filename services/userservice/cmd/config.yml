@@ -3,7 +3,7 @@ application:
   graceful_shutdown_timeout:
 
 grpc_server:
-  auth_port: "127.0.0.1:50051"
+  auth_address: "127.0.0.1:50051"
   user_address: "127.0.0.1:50052"
 
 mysql:
@@ -12,3 +12,9 @@ mysql:
   db_name: user_db
   username: user
   password: usert0lk2o20
+
+
+logger:
+  development: true
+  service_name: "user_service"
+  file_path: "./logs/service.log"

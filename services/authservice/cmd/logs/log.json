@@ -1,0 +1,2 @@
+{"level":"info","ts":"2026-05-05T12:00:56.148+0330","caller":"cmd/main.go:25","msg":"config","service":"","config":{"Auth":{"SignKey":"jwt_secret","AccessExpirationTime":86400000000000,"RefreshExpirationTime":604800000000000,"AccessSubject":"ac","RefreshSubject":"rt"},"GrpcServer":{"AuthAddress":"127.0.0.1:50051"},"Logger":{"Development":false,"ServiceName":"","FilePath":""}}}
+{"level":"info","ts":"2026-05-05T12:00:56.149+0330","caller":"cmd/main.go:37","msg":"🚀 AuthService gRPC server running on ","service":"","address:":"127.0.0.1:50051"}

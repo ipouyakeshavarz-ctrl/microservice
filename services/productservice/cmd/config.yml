@@ -18,3 +18,9 @@ redis:
   password: ""
   db: 0
   product_ttl_minutes: 10
+
+
+logger:
+  development: true
+  service_name: "product_service"
+  file_path: "./logs/product.log"

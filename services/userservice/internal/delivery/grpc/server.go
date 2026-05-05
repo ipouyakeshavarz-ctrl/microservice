@@ -1,7 +1,6 @@
 package grpc
 
 import (
-	"log"
 	"myapp/pkg/richerror"
 	"net"
 	"userapp/internal/delivery/grpc/userhandler"
@@ -38,8 +37,6 @@ func (s *Server) Run() error {
 	grpcServer := grpc.NewServer()
 
 	user.RegisterUserServiceServer(grpcServer, userhandler.New(s.service, s.Validator))
-
-	log.Println("🚀gRPC server started on ", s.address)
 
 	return grpcServer.Serve(lis)
 }
