@@ -4,6 +4,7 @@ import (
 	"cartapp/internal/domain"
 	"cartapp/internal/param"
 	"context"
+	"fmt"
 	"myapp/pkg/errmsg"
 	"myapp/pkg/richerror"
 	"time"
@@ -41,6 +42,8 @@ func (s *Service) Checkout(ctx context.Context, req param.CheckOutRequest) (*par
 		Items:      items,
 		OccurredAt: time.Now(),
 	}
+
+	fmt.Println(event)
 
 	if err := s.publisher.PublishCartCheckedOut(ctx, event); err != nil {
 		return &param.CheckoutResponse{}, err

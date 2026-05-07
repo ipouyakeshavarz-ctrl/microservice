@@ -3,7 +3,7 @@ package migrator
 import (
 	"database/sql"
 	"fmt"
-	"storeapp/internal/repository/mysql"
+	"orderapp/internal/repository/mysql"
 
 	_ "github.com/go-sql-driver/mysql"
 	migrate "github.com/rubenv/sql-migrate"

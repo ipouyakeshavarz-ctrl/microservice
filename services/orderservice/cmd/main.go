@@ -5,6 +5,7 @@ import (
 	"myapp/pkg/logger"
 	cfg "orderapp/internal/config"
 	"orderapp/internal/delivery/broker/rabbitmq"
+	"orderapp/internal/repository/migrator"
 	"orderapp/internal/repository/mysql"
 	"orderapp/internal/repository/mysql/mysqlorder"
 	orderservice "orderapp/internal/service"
@@ -26,6 +27,9 @@ func main() {
 
 	logger.Info("config loaded", zap.Any("config", cfg2))
 
+	mgr := migrator.New(cfg2.Mysql)
+	mgr.Up()
+
 	mysqlRepo := mysql.New(cfg2.Mysql)
 	orderRepo := mysqlorder.New(mysqlRepo)
 
@@ -43,6 +47,19 @@ func main() {
 	}
 	defer ch.Close()
 
+	err = ch.ExchangeDeclare(
+		cfg2.RabbitMQ.Exchange,
+		"direct",
+		true,
+		false,
+		false,
+		false,
+		nil,
+	)
+	if err != nil {
+		logger.Fatal("exchange declare failed", zap.Error(err))
+	}
+
 	queue, err := ch.QueueDeclare(
 		"cart.checkout",
 		true,
@@ -53,6 +70,17 @@ func main() {
 	)
 	if err != nil {
 		logger.Fatal("queue declare failed", zap.Error(err))
+	}
+
+	err = ch.QueueBind(
+		queue.Name,
+		cfg2.RabbitMQ.CheckoutQueue,
+		cfg2.RabbitMQ.Exchange,
+		false,
+		nil,
+	)
+	if err != nil {
+		logger.Fatal("queue bind failed", zap.Error(err))
 	}
 
 	consumer := rabbitmq.New(ch, queue.Name, orderSvc)
