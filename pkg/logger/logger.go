@@ -84,3 +84,10 @@ func Sync() error {
 	}
 	return globalLogger.Sync()
 }
+
+func GetLogger() *zap.Logger {
+	if globalLogger == nil {
+		return zap.NewNop()
+	}
+	return globalLogger
+}

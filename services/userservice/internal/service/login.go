@@ -5,6 +5,8 @@ import (
 	"myapp/pkg/errmsg"
 	"myapp/pkg/richerror"
 	"userapp/internal/param"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 func (s Service) Login(ctx context.Context, req param.LoginRequest) (param.LoginResponse, error) {
@@ -17,9 +19,13 @@ func (s Service) Login(ctx context.Context, req param.LoginRequest) (param.Login
 			WithMeta(map[string]interface{}{"phone_number": req.PhoneNumber})
 	}
 
-	if user.Password != getMD5Hash(req.Password) {
+	if !CheckPasswordHash(req.Password, user.Password) {
 		return param.LoginResponse{}, richerror.New(op).
-			WithKind(richerror.KindInvalid).WithMessage(errmsg.ErrorMsgUserNameOrPasswordNotCorrect)
+			WithKind(richerror.KindInvalid).
+			WithMessage(errmsg.ErrorMsgInvalidInput).
+			WithFields(map[string]string{
+				"password": errmsg.ErrorMsgInvalidPassword,
+			})
 	}
 
 	accessToken, refreshToken, gErr := s.authClient.GenerateTokens(ctx, user)
@@ -38,4 +44,8 @@ func (s Service) Login(ctx context.Context, req param.LoginRequest) (param.Login
 			AccessToken:  accessToken,
 			RefreshToken: refreshToken},
 	}, nil
+}
+func CheckPasswordHash(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
 }

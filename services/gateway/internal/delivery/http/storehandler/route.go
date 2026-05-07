@@ -9,7 +9,8 @@ import (
 func (h Handler) SetRoutes(e *echo.Echo) {
 	storeGroup := e.Group("/store")
 
-	storeGroup.POST("/create", h.createStore)
+	storeGroup.POST("/create", h.createStore,
+		middleware.AuthMiddleware(&h.authClient))
 	storeGroup.POST("/delete", h.deleteStore,
 		middleware.AuthMiddleware(&h.authClient))
 	storeGroup.POST("/update", h.updateStore,

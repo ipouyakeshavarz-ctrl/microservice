@@ -13,6 +13,18 @@ func (s *Service) Create(ctx context.Context, p param.CreateProductRequest) (par
 	if !p.Category.IsValid() {
 		return param.CreateProductResponse{}, richerror.New(op).WithKind(richerror.KindInvalid).WithMessage(errmsg.ErrorMsgCategoryIsNotValid)
 	}
+
+	exists, err := s.repo.SKUExists(ctx, p.SKU)
+	if err != nil {
+		return param.CreateProductResponse{}, err
+	}
+
+	if exists {
+		return param.CreateProductResponse{}, richerror.New(op).
+			WithKind(richerror.KindInvalid).
+			WithMessage(errmsg.ErrorMsgSkuAlreadyExists)
+	}
+
 	createdProduct, err := s.repo.Create(ctx, domain.Product{
 		StoreID:     p.StoreID,
 		Name:        p.Name,
@@ -26,10 +38,14 @@ func (s *Service) Create(ctx context.Context, p param.CreateProductRequest) (par
 	})
 
 	if err != nil {
-		return param.CreateProductResponse{}, richerror.New(op).WithErr(err)
+		return param.CreateProductResponse{}, richerror.New(op).
+			WithKind(richerror.KindUnexpected).
+			WithMessage(errmsg.ErrorMsgFailedToCreateProductInDB).
+			WithErr(err)
 	}
 
 	return param.CreateProductResponse{Product: param.ProductInfo{
+		StoreID:     createdProduct.StoreID,
 		ID:          createdProduct.ID,
 		Name:        createdProduct.Name,
 		Description: createdProduct.Description,

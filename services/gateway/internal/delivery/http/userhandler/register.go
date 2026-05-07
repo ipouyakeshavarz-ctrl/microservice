@@ -2,6 +2,7 @@ package userhandler
 
 import (
 	"myapp/api/gen/user"
+	"myapp/pkg/httpmsg"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -16,7 +17,8 @@ func (h Handler) userRegister(c echo.Context) error {
 
 	res, err := h.userClient.Register(c.Request().Context(), &req)
 	if err != nil {
-		return err
+		resp, code := httpmsg.Error(err)
+		return c.JSON(code, resp)
 	}
 
 	return c.JSON(http.StatusCreated, res)

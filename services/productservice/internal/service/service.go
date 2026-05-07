@@ -7,6 +7,7 @@ import (
 )
 
 type Repository interface {
+	SKUExists(ctx context.Context, sku string) (bool, error)
 	Create(ctx context.Context, p domain.Product) (*domain.Product, error)
 	Update(ctx context.Context, p domain.Product) (*domain.Product, error)
 	Delete(ctx context.Context, id uint) error

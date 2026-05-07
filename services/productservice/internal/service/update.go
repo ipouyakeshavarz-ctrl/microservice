@@ -13,10 +13,27 @@ func (s *Service) Update(ctx context.Context, p param.UpdateProductRequest) (par
 	if !p.Category.IsValid() {
 		return param.UpdateProductResponse{}, richerror.New(op).WithKind(richerror.KindInvalid).WithMessage(errmsg.ErrorMsgCategoryIsNotValid)
 	}
+	exists, err := s.repo.SKUExists(ctx, p.SKU)
+	if err != nil {
+		return param.UpdateProductResponse{}, err
+	}
+
+	if exists {
+		return param.UpdateProductResponse{}, richerror.New(op).
+			WithKind(richerror.KindInvalid).
+			WithMessage(errmsg.ErrorMsgSkuAlreadyExists)
+	}
 
 	existing, err := s.repo.GetByID(ctx, p.ID)
 	if err != nil {
-		return param.UpdateProductResponse{}, richerror.New(op).WithErr(err)
+
+		if re, ok := err.(*richerror.RichError); ok {
+			return param.UpdateProductResponse{}, re
+		}
+
+		return param.UpdateProductResponse{}, richerror.New(op).
+			WithKind(richerror.KindUnexpected).
+			WithErr(err)
 	}
 
 	if existing.StoreID != p.StoreID {
@@ -36,7 +53,14 @@ func (s *Service) Update(ctx context.Context, p param.UpdateProductRequest) (par
 	})
 
 	if err != nil {
-		return param.UpdateProductResponse{}, richerror.New(op).WithErr(err)
+
+		if re, ok := err.(*richerror.RichError); ok {
+			return param.UpdateProductResponse{}, re
+		}
+
+		return param.UpdateProductResponse{}, richerror.New(op).
+			WithKind(richerror.KindUnexpected).
+			WithErr(err)
 	}
 
 	if s.productCache != nil {

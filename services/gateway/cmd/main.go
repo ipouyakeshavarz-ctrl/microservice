@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"gatewayapp/internal/client/authclient"
+	"gatewayapp/internal/client/cartclient"
 	"gatewayapp/internal/client/productclient"
 	"gatewayapp/internal/client/storeclient"
 	"gatewayapp/internal/client/userclient"
@@ -59,7 +60,14 @@ func main() {
 
 	defer productClient.Close()
 
-	server := httpserver.New(*userClient, *authClient, *storeClient, *productClient, cfg2)
+	cartClient, pErr := cartclient.New(cfg2.GrpcClient.CartAddress)
+	if pErr != nil {
+		logger.Fatal("failed to initialize product client", zap.Error(pErr))
+	}
+
+	defer cartClient.Close()
+
+	server := httpserver.New(*userClient, *authClient, *storeClient, *productClient, *cartClient, cfg2)
 
 	go func() {
 		logger.Info("🚀 Starting Gateway Service...", zap.String("address", cfg2.HttpServer.Address))

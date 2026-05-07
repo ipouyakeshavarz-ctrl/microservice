@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package cart;
+
+option go_package = "microservice/api/gen/cart";
+
+
+service CartService {
+
+  rpc AddItem(AddItemRequest) returns (AddItemResponse);
+
+  rpc GetCart(GetCartRequest) returns (GetCartResponse);
+
+  rpc RemoveItem(RemoveItemRequest) returns (RemoveItemResponse);
+
+  rpc Checkout(CheckoutRequest) returns (CheckoutResponse);
+}
+
+
+message CartItem {
+  uint64 product_id = 1;
+  int32 quantity = 2;
+}
+
+message Cart {
+  uint64 user_id = 1;
+  repeated CartItem items = 2;
+}
+
+
+message AddItemRequest {
+  uint64 user_id = 1;
+  uint64 product_id = 2;
+  int32 quantity = 3;
+}
+
+message AddItemResponse {
+
+}
+
+message GetCartRequest {
+  uint64 user_id = 1;
+}
+
+message GetCartResponse {
+  Cart cart = 1;
+}
+
+message RemoveItemRequest {
+  uint64 user_id = 1;
+  int64 product_id = 2;
+}
+
+message RemoveItemResponse{
+
+}
+
+message CheckoutRequest {
+  uint64 user_id = 1;
+}
+
+message CheckoutResponse {
+  string checkout_id = 1;
+}

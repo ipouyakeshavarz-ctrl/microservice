@@ -2,6 +2,7 @@ package storeservice
 
 import (
 	"context"
+	"myapp/pkg/errmsg"
 	"myapp/pkg/richerror"
 	"storeapp/internal/domain"
 	"storeapp/internal/param"
@@ -9,12 +10,16 @@ import (
 
 func (s *Service) ListStoresByUser(ctx context.Context,
 	req param.ListStoresByUserRequest) (param.ListStoresByUserResponse, error) {
+
 	const op = "StoreService.ListStoresByUser"
 
 	storeIDs, err := s.repo.ListStoreIDsByUser(ctx, req.UserID)
 	if err != nil {
 		return param.ListStoresByUserResponse{},
-			richerror.New(op).WithErr(err)
+			richerror.New(op).
+				WithKind(richerror.KindUnexpected).
+				WithMessage(errmsg.ErrorMsgFailedToListStoreIDs).
+				WithErr(err)
 	}
 
 	if len(storeIDs) == 0 {
@@ -24,7 +29,10 @@ func (s *Service) ListStoresByUser(ctx context.Context,
 	cachedMap, err := s.storeCache.GetManyByIDs(ctx, storeIDs)
 	if err != nil {
 		return param.ListStoresByUserResponse{},
-			richerror.New(op).WithErr(err)
+			richerror.New(op).
+				WithKind(richerror.KindUnexpected).
+				WithMessage(errmsg.ErrorMsgFailedToCachedStore).
+				WithErr(err)
 	}
 
 	var missedIDs []uint
@@ -39,15 +47,18 @@ func (s *Service) ListStoresByUser(ctx context.Context,
 		freshStores, err = s.repo.GetStoresByIDs(ctx, missedIDs)
 		if err != nil {
 			return param.ListStoresByUserResponse{},
-				richerror.New(op).WithErr(err)
+				richerror.New(op).
+					WithKind(richerror.KindUnexpected).
+					WithMessage(errmsg.ErrorMsgFailedToFetchFreshStoreFromDB).
+					WithErr(err)
 		}
 
 		for _, st := range freshStores {
 			_ = s.storeCache.SetByID(ctx, st.ID, st)
 		}
 	}
-	out := make([]*domain.Store, 0, len(storeIDs))
 
+	out := make([]*domain.Store, 0, len(storeIDs))
 	for _, id := range storeIDs {
 		if st, ok := cachedMap[id]; ok {
 			out = append(out, st)

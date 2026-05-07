@@ -34,9 +34,11 @@ func (v Validator) ValidateLoginRequest(req param.LoginRequest) (map[string]stri
 			}
 		}
 
-		return fieldErrors, richerror.New(op).WithMessage(errmsg.ErrorMsgInvalidInput).
+		return fieldErrors, richerror.New(op).
+			WithMessage(errmsg.ErrorMsgInvalidInput).
 			WithKind(richerror.KindInvalid).
-			WithMeta(map[string]interface{}{"req": req}).WithErr(err)
+			WithFields(fieldErrors).
+			WithErr(err)
 	}
 
 	return nil, nil

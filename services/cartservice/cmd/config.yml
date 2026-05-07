@@ -1,0 +1,25 @@
+application:
+  graceful_shutdown_timeout:
+
+grpc_server:
+  cart_address: "127.0.0.1:50060"
+
+
+
+redis:
+  host: localhost
+  port: 6379
+  password: ""
+  db: 2
+  cart_ttl_minutes: 10
+
+
+logger:
+  development: true
+  service_name: "cart_service"
+  file_path: "./logs/cart.log"
+
+rabbitmq:
+  url: "amqp://user:password@127.0.0.1:5672/"
+  exchange: "shop_exchange"
+  checkout_routing_key: "order.checkout"

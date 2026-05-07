@@ -21,7 +21,9 @@ func (h *Handler) GetProfile(ctx context.Context,
 			UserID: uint(userid),
 		})
 	if err != nil {
-		return nil, richerror.New(op).WithErr(err)
+		return nil, richerror.New(op).WithErr(err).WithFields(map[string]string{
+			"massage": err.Error(),
+		})
 	}
 
 	return &user.ProfileResponse{

@@ -2,6 +2,7 @@ package grpc
 
 import (
 	"myapp/api/gen/product"
+	"myapp/pkg/interceptor"
 	"net"
 	"productapp/internal/delivery/grpc/producthandler"
 	productservice "productapp/internal/service"
@@ -19,7 +20,7 @@ func NewServer(s productservice.Service, address string) *Server {
 	return &Server{
 		service: s,
 		address: address,
-		engine:  grpc.NewServer(),
+		engine:  grpc.NewServer(grpc.UnaryInterceptor(interceptor.UnaryErrorInterceptor())),
 	}
 }
 

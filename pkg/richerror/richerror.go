@@ -15,47 +15,50 @@ type Op string
 
 type RichError struct {
 	operation    Op
-	wrappedError error
 	message      string
 	kind         Kind
+	wrappedError error
 	meta         map[string]interface{}
+	fields       map[string]string
 }
 
-func New(op Op) RichError {
-	return RichError{operation: op}
+func New(op Op) *RichError {
+	return &RichError{
+		operation: op,
+		meta:      make(map[string]interface{}),
+	}
 }
-
-func (r RichError) WithOp(op Op) RichError {
+func (r *RichError) WithOp(op Op) *RichError {
 	r.operation = op
 
 	return r
 }
 
-func (r RichError) WithErr(err error) RichError {
+func (r *RichError) WithErr(err error) *RichError {
 	r.wrappedError = err
 
 	return r
 }
 
-func (r RichError) WithMessage(message string) RichError {
+func (r *RichError) WithMessage(message string) *RichError {
 	r.message = message
 
 	return r
 }
 
-func (r RichError) WithKind(kind Kind) RichError {
+func (r *RichError) WithKind(kind Kind) *RichError {
 	r.kind = kind
 
 	return r
 }
 
-func (r RichError) WithMeta(meta map[string]interface{}) RichError {
+func (r *RichError) WithMeta(meta map[string]interface{}) *RichError {
 	r.meta = meta
 
 	return r
 }
 
-func (r RichError) Error() string {
+func (r *RichError) Error() string {
 	if r.message == "" {
 		return r.wrappedError.Error()
 	}
@@ -63,12 +66,12 @@ func (r RichError) Error() string {
 	return r.message
 }
 
-func (r RichError) Kind() Kind {
+func (r *RichError) Kind() Kind {
 	if r.kind != 0 {
 		return r.kind
 	}
 
-	var re RichError
+	var re *RichError
 	if !errors.As(r.wrappedError, &re) {
 		return 0
 	}
@@ -76,15 +79,30 @@ func (r RichError) Kind() Kind {
 	return re.Kind()
 }
 
-func (r RichError) Message() string {
+func (r *RichError) Message() string {
 	if r.message != "" {
 		return r.message
 	}
 
-	var re RichError
+	var re *RichError
 	if !errors.As(r.wrappedError, &re) {
 		return r.wrappedError.Error()
 	}
 
 	return re.Message()
+}
+func (r *RichError) WithFields(f map[string]string) *RichError {
+	if r.fields == nil {
+		r.fields = make(map[string]string)
+	}
+
+	for k, v := range f {
+		r.fields[k] = v
+	}
+
+	return r
+}
+
+func (r *RichError) Meta() map[string]interface{} {
+	return r.meta
 }

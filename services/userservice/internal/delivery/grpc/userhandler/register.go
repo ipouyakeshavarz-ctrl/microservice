@@ -3,6 +3,7 @@ package userhandler
 import (
 	"context"
 	"myapp/api/gen/user"
+	"myapp/pkg/errmsg"
 	"myapp/pkg/richerror"
 	"userapp/internal/param"
 )
@@ -18,14 +19,17 @@ func (h *Handler) Register(ctx context.Context,
 	}
 
 	if fieldErrors, err := h.userValidator.ValidateRegisterRequest(input); err != nil {
-		return &user.RegisterResponse{}, richerror.New(op).WithMeta(map[string]interface{}{
-			"validationErrors": fieldErrors,
-		}).WithErr(err)
+		return nil, richerror.New(op).
+			WithKind(richerror.KindInvalid).
+			WithMessage(errmsg.ErrorMsgInvalidInput).
+			WithFields(fieldErrors)
 	}
 
 	resp, err := h.userSvc.Register(ctx, input)
 	if err != nil {
-		return nil, richerror.New(op).WithErr(err)
+		return nil, richerror.New(op).WithErr(err).WithFields(map[string]string{
+			"massage": err.Error(),
+		})
 	}
 
 	return &user.RegisterResponse{User: &user.UserInfo{

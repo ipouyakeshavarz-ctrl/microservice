@@ -2,6 +2,7 @@ package grpc
 
 import (
 	"myapp/api/gen/store"
+	"myapp/pkg/interceptor"
 	"myapp/pkg/richerror"
 	"net"
 	"storeapp/internal/delivery/grpc/storehandler"
@@ -23,7 +24,8 @@ func NewServer(V storevalidator.Validator, s storeservice.Service, address strin
 		Validator: V,
 		service:   s,
 		address:   address,
-		engine:    grpc.NewServer(),
+		engine: grpc.NewServer(
+			grpc.UnaryInterceptor(interceptor.UnaryErrorInterceptor())),
 	}
 }
 

@@ -14,9 +14,8 @@ func (h Handler) listStore(c echo.Context) error {
 	resp, err := h.storeClient.ListStoresByUser(c.Request().Context(),
 		&store.ListStoresByUserRequest{UserId: userID})
 	if err != nil {
-		msg, code := httpmsg.Error(err)
-		return echo.NewHTTPError(code, msg)
+		resp, code := httpmsg.Error(err)
+		return c.JSON(code, resp)
 	}
-
 	return c.JSON(http.StatusOK, resp)
 }

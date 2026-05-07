@@ -19,6 +19,7 @@ type GrpcClient struct {
 	UserAddress    string `koanf:"user_address"`
 	StoreAddress   string `koanf:"store_address"`
 	AuthAddress    string `koanf:"auth_address"`
+	CartAddress    string `koanf:"cart_address"`
 }
 
 type Httpserver struct {

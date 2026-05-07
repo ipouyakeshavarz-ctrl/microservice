@@ -3,6 +3,7 @@ package userhandler
 import (
 	"context"
 	"myapp/api/gen/user"
+	"myapp/pkg/errmsg"
 	"myapp/pkg/richerror"
 
 	"userapp/internal/param"
@@ -16,14 +17,17 @@ func (h *Handler) Login(ctx context.Context, req *user.LoginRequest) (*user.Logi
 	}
 
 	if fieldErrors, err := h.userValidator.ValidateLoginRequest(input); err != nil {
-		return &user.LoginResponse{}, richerror.New(op).WithMeta(map[string]interface{}{
-			"validationErrors": fieldErrors,
-		}).WithErr(err)
+		return nil, richerror.New(op).
+			WithKind(richerror.KindInvalid).
+			WithMessage(errmsg.ErrorMsgInvalidInput).
+			WithFields(fieldErrors)
 	}
 
 	resp, err := h.userSvc.Login(ctx, input)
 	if err != nil {
-		return nil, richerror.New(op).WithErr(err)
+		return nil, richerror.New(op).WithErr(err).WithFields(map[string]string{
+			"massage": err.Error(),
+		})
 	}
 
 	return &user.LoginResponse{

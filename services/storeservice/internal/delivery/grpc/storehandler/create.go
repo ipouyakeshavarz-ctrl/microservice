@@ -3,6 +3,7 @@ package storehandler
 import (
 	"context"
 	"myapp/api/gen/store"
+	"myapp/pkg/errmsg"
 	"myapp/pkg/richerror"
 	"storeapp/internal/domain"
 
@@ -28,14 +29,17 @@ func (h *Handler) CreateStore(ctx context.Context, req *store.CreateStoreRequest
 	}
 
 	if fieldErrors, err := h.storeValidator.ValidateCreateRequest(input); err != nil {
-		return &store.CreateStoreResponse{}, richerror.New(op).WithMeta(map[string]interface{}{
-			"validationErrors": fieldErrors,
-		}).WithErr(err)
+		return nil, richerror.New(op).
+			WithKind(richerror.KindInvalid).
+			WithMessage(errmsg.ErrorMsgInvalidInput).
+			WithFields(fieldErrors)
 	}
 
 	resp, err := h.storeSvc.CreateStore(ctx, input)
 	if err != nil {
-		return nil, richerror.New(op).WithErr(err)
+		return nil, richerror.New(op).WithErr(err).WithFields(map[string]string{
+			"massage": err.Error(),
+		})
 	}
 
 	return &store.CreateStoreResponse{Store: &store.StoreInfo{

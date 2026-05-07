@@ -11,7 +11,6 @@ type Repository interface {
 	UpdateStore(ctx context.Context, s domain.Store) (*domain.Store, error)
 	DeleteStore(ctx context.Context, id uint) error
 	GetStoreByID(ctx context.Context, id uint) (*domain.Store, error)
-	ListStoresByUser(ctx context.Context, userID uint) ([]domain.Store, error)
 	ListStoreIDsByUser(ctx context.Context, userID uint) ([]uint, error)
 	GetStoresByIDs(ctx context.Context, ids []uint) ([]*domain.Store, error)
 }

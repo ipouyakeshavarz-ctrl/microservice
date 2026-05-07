@@ -52,6 +52,9 @@ func main() {
 
 	grpcServer := grpc.NewServer(userV, userSvc, cfg2.GrpcServer.UserAddress)
 
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+
 	go func() {
 		logger.Info("🚀 gRPC server starting on",
 			zap.String("address", cfg2.GrpcServer.UserAddress))
@@ -59,9 +62,6 @@ func main() {
 			logger.Fatal("cannot start grpc server", zap.Error(err))
 		}
 	}()
-
-	quit := make(chan os.Signal, 1)
-	signal.Notify(quit, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 
 	<-quit
 	logger.Info("Received shutdown signal. Initiating graceful shutdown...")

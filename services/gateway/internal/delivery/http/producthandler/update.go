@@ -2,6 +2,7 @@ package producthandler
 
 import (
 	"myapp/api/gen/product"
+	"myapp/pkg/httpmsg"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -15,8 +16,8 @@ func (h Handler) updateProduct(c echo.Context) error {
 
 	resp, err := h.productClient.UpdateProduct(c.Request().Context(), &req)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+		resp, code := httpmsg.Error(err)
+		return c.JSON(code, resp)
 	}
-
 	return c.JSON(http.StatusCreated, resp)
 }

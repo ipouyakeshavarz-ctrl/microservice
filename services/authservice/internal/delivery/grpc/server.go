@@ -15,9 +15,9 @@ type Server struct {
 	engine  *grpc.Server
 }
 
-func NewServer(s authservice.Service, address string) *Server {
+func NewServer(s *authservice.Service, address string) *Server {
 	return &Server{
-		service: s,
+		service: *s,
 		address: address,
 		engine:  grpc.NewServer(),
 	}

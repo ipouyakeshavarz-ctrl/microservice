@@ -1,5 +1,5 @@
 auth:
-  sign_key: jwt_secret
+  sign_key: jwt.New
   refresh_expiration_time: "168h"
   access_expiration_time: "24h"
   access_subject: "ac"

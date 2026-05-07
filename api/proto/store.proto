@@ -13,7 +13,6 @@ service StoreService {
 }
 
 message CreateStoreRequest {
-  uint64 user_id = 1;
   string name = 2;
   string description = 3;
   string logo_url=4;

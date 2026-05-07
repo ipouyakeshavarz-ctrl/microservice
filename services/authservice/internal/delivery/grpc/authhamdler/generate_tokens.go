@@ -6,7 +6,6 @@ import (
 )
 
 func (h *Handler) GenerateTokens(ctx context.Context, req *auth.UserInfo) (*auth.LoginTokenResponse, error) {
-
 	resp, err := h.authService.GenerateTokens(ctx, req)
 	if err != nil {
 		return nil, err

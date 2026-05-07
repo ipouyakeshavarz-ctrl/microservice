@@ -1,0 +1,23 @@
+application:
+  graceful_shutdown_timeout:
+
+grpc_server:
+  order_address: "127.0.0.1:50062"
+
+logger:
+  development: true
+  service_name: "order_service"
+  file_path: "./logs/order.log"
+
+rabbitmq:
+  url: "amqp://user:password@127.0.0.1:5672/"
+  exchange: "shop_exchange"
+  checkout_queue: "order.checkout"
+
+
+mysql:
+  port: 3314
+  host: localhost
+  db_name: order_db
+  username: user
+  password: usert0lk2o20

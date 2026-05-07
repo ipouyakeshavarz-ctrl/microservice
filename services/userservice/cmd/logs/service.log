@@ -12,3 +12,276 @@
 {"level":"info","ts":"2026-05-05T14:27:27.952+0330","caller":"cmd/main.go:56","msg":"🚀 gRPC server starting on","service":"user_service","address":"127.0.0.1:50052"}
 {"level":"info","ts":"2026-05-05T14:27:46.458+0330","caller":"cmd/main.go:67","msg":"Received shutdown signal. Initiating graceful shutdown...","service":"user_service"}
 {"level":"info","ts":"2026-05-05T14:27:46.459+0330","caller":"cmd/main.go:74","msg":"Graceful shutdown completed successfully. Server exiting.","service":"user_service"}
+{"level":"info","ts":"2026-05-05T19:10:30.491+0330","caller":"cmd/main.go:36","msg":"config","service":"user_service","config":{"Application":{"GracefulShutdownTimeout":0},"GrpcServer":{"AuthAddress":"127.0.0.1:50051","UserAddress":"127.0.0.1:50052"},"Mysql":{"Username":"user","Password":"usert0lk2o20","Port":3311,"Host":"localhost","DBName":"user_db"},"Logger":{"Development":true,"ServiceName":"user_service","FilePath":"./logs/service.log"}}}
+{"level":"info","ts":"2026-05-05T19:10:30.533+0330","caller":"cmd/main.go:61","msg":"Starting worker pool...","service":"user_service","workers":10}
+{"level":"info","ts":"2026-05-05T19:10:30.534+0330","caller":"cmd/main.go:67","msg":"🚀 gRPC server starting on","service":"user_service","address":"127.0.0.1:50052"}
+{"level":"info","ts":"2026-05-05T19:10:39.707+0330","caller":"cmd/main.go:75","msg":"Received shutdown signal. Initiating graceful shutdown...","service":"user_service"}
+{"level":"info","ts":"2026-05-05T19:10:39.707+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":5}
+{"level":"info","ts":"2026-05-05T19:10:39.707+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":10}
+{"level":"info","ts":"2026-05-05T19:10:39.707+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":9}
+{"level":"info","ts":"2026-05-05T19:10:39.707+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":2}
+{"level":"info","ts":"2026-05-05T19:10:39.707+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":4}
+{"level":"info","ts":"2026-05-05T19:10:39.707+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":3}
+{"level":"info","ts":"2026-05-05T19:10:39.707+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":6}
+{"level":"info","ts":"2026-05-05T19:10:39.707+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":7}
+{"level":"info","ts":"2026-05-05T19:10:39.707+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":8}
+{"level":"info","ts":"2026-05-05T19:10:39.707+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":1}
+{"level":"info","ts":"2026-05-05T19:10:39.707+0330","caller":"cmd/main.go:80","msg":"Worker pool stopped completely.","service":"user_service"}
+{"level":"info","ts":"2026-05-05T19:10:39.707+0330","caller":"cmd/main.go:90","msg":"Graceful shutdown completed successfully. 🛑","service":"user_service"}
+{"level":"info","ts":"2026-05-05T19:16:56.611+0330","caller":"cmd/main.go:36","msg":"config","service":"user_service","config":{"Application":{"GracefulShutdownTimeout":0},"GrpcServer":{"AuthAddress":"127.0.0.1:50051","UserAddress":"127.0.0.1:50052"},"Mysql":{"Username":"user","Password":"usert0lk2o20","Port":3311,"Host":"localhost","DBName":"user_db"},"Logger":{"Development":true,"ServiceName":"user_service","FilePath":"./logs/service.log"},"Worker":{"WorkersCount":10,"BufferSize":1000}}}
+{"level":"info","ts":"2026-05-05T19:16:56.616+0330","caller":"cmd/main.go:61","msg":"Starting worker pool...","service":"user_service","workers":10}
+{"level":"info","ts":"2026-05-05T19:16:56.616+0330","caller":"cmd/main.go:67","msg":"🚀 gRPC server starting on","service":"user_service","address":"127.0.0.1:50052"}
+{"level":"info","ts":"2026-05-05T19:16:58.389+0330","caller":"cmd/main.go:75","msg":"Received shutdown signal. Initiating graceful shutdown...","service":"user_service"}
+{"level":"info","ts":"2026-05-05T19:16:58.390+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":5}
+{"level":"info","ts":"2026-05-05T19:16:58.390+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":6}
+{"level":"info","ts":"2026-05-05T19:16:58.390+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":1}
+{"level":"info","ts":"2026-05-05T19:16:58.390+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":4}
+{"level":"info","ts":"2026-05-05T19:16:58.390+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":2}
+{"level":"info","ts":"2026-05-05T19:16:58.390+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":10}
+{"level":"info","ts":"2026-05-05T19:16:58.390+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":3}
+{"level":"info","ts":"2026-05-05T19:16:58.390+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":9}
+{"level":"info","ts":"2026-05-05T19:16:58.390+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":7}
+{"level":"info","ts":"2026-05-05T19:16:58.390+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":8}
+{"level":"info","ts":"2026-05-05T19:16:58.390+0330","caller":"cmd/main.go:80","msg":"Worker pool stopped completely.","service":"user_service"}
+{"level":"info","ts":"2026-05-05T19:16:58.390+0330","caller":"cmd/main.go:90","msg":"Graceful shutdown completed successfully. 🛑","service":"user_service"}
+{"level":"info","ts":"2026-05-06T21:04:51.964+0330","caller":"cmd/main.go:36","msg":"config","service":"user_service","config":{"Application":{"GracefulShutdownTimeout":0},"GrpcServer":{"AuthAddress":"127.0.0.1:50051","UserAddress":"127.0.0.1:50052"},"Mysql":{"Username":"user","Password":"usert0lk2o20","Port":3311,"Host":"localhost","DBName":"user_db"},"Logger":{"Development":true,"ServiceName":"user_service","FilePath":"./logs/service.log"},"Worker":{"WorkersCount":10,"BufferSize":1000}}}
+{"level":"info","ts":"2026-05-06T21:04:52.002+0330","caller":"cmd/main.go:61","msg":"Starting worker pool...","service":"user_service","workers":10}
+{"level":"info","ts":"2026-05-06T21:04:52.003+0330","caller":"cmd/main.go:67","msg":"🚀 gRPC server starting on","service":"user_service","address":"127.0.0.1:50052"}
+{"level":"info","ts":"2026-05-06T23:34:03.107+0330","caller":"cmd/main.go:36","msg":"config","service":"user_service","config":{"Application":{"GracefulShutdownTimeout":0},"GrpcServer":{"AuthAddress":"127.0.0.1:50051","UserAddress":"127.0.0.1:50052"},"Mysql":{"Username":"user","Password":"usert0lk2o20","Port":3311,"Host":"localhost","DBName":"user_db"},"Logger":{"Development":true,"ServiceName":"user_service","FilePath":"./logs/service.log"},"Worker":{"WorkersCount":10,"BufferSize":1000}}}
+{"level":"info","ts":"2026-05-06T23:34:03.118+0330","caller":"cmd/main.go:61","msg":"Starting worker pool...","service":"user_service","workers":10}
+{"level":"info","ts":"2026-05-06T23:34:03.119+0330","caller":"cmd/main.go:67","msg":"🚀 gRPC server starting on","service":"user_service","address":"127.0.0.1:50052"}
+{"level":"info","ts":"2026-05-07T00:28:11.614+0330","caller":"cmd/main.go:36","msg":"config","service":"user_service","config":{"Application":{"GracefulShutdownTimeout":0},"GrpcServer":{"AuthAddress":"127.0.0.1:50051","UserAddress":"127.0.0.1:50052"},"Mysql":{"Username":"user","Password":"usert0lk2o20","Port":3311,"Host":"localhost","DBName":"user_db"},"Logger":{"Development":true,"ServiceName":"user_service","FilePath":"./logs/service.log"},"Worker":{"WorkersCount":10,"BufferSize":1000}}}
+{"level":"info","ts":"2026-05-07T00:28:11.625+0330","caller":"cmd/main.go:61","msg":"Starting worker pool...","service":"user_service","workers":10}
+{"level":"info","ts":"2026-05-07T00:28:11.625+0330","caller":"cmd/main.go:67","msg":"🚀 gRPC server starting on","service":"user_service","address":"127.0.0.1:50052"}
+{"level":"fatal","ts":"2026-05-07T00:28:11.626+0330","caller":"cmd/main.go:70","msg":"cannot start grpc server","service":"user_service","error":"listen tcp 127.0.0.1:50052: bind: address already in use","stacktrace":"main.main.func1\n\t/home/pouya/Documents/golang/product-microservice/services/userservice/cmd/main.go:70"}
+{"level":"info","ts":"2026-05-07T00:29:15.630+0330","caller":"cmd/main.go:36","msg":"config","service":"user_service","config":{"Application":{"GracefulShutdownTimeout":0},"GrpcServer":{"AuthAddress":"127.0.0.1:50051","UserAddress":"127.0.0.1:50052"},"Mysql":{"Username":"user","Password":"usert0lk2o20","Port":3311,"Host":"localhost","DBName":"user_db"},"Logger":{"Development":true,"ServiceName":"user_service","FilePath":"./logs/service.log"},"Worker":{"WorkersCount":10,"BufferSize":1000}}}
+{"level":"info","ts":"2026-05-07T00:29:15.641+0330","caller":"cmd/main.go:61","msg":"Starting worker pool...","service":"user_service","workers":10}
+{"level":"info","ts":"2026-05-07T00:29:15.641+0330","caller":"cmd/main.go:67","msg":"🚀 gRPC server starting on","service":"user_service","address":"127.0.0.1:50052"}
+{"level":"fatal","ts":"2026-05-07T00:29:15.641+0330","caller":"cmd/main.go:70","msg":"cannot start grpc server","service":"user_service","error":"listen tcp 127.0.0.1:50052: bind: address already in use","stacktrace":"main.main.func1\n\t/home/pouya/Documents/golang/product-microservice/services/userservice/cmd/main.go:70"}
+{"level":"info","ts":"2026-05-07T00:31:02.578+0330","caller":"cmd/main.go:36","msg":"config","service":"user_service","config":{"Application":{"GracefulShutdownTimeout":0},"GrpcServer":{"AuthAddress":"127.0.0.1:50051","UserAddress":"127.0.0.1:50052"},"Mysql":{"Username":"user","Password":"usert0lk2o20","Port":3311,"Host":"localhost","DBName":"user_db"},"Logger":{"Development":true,"ServiceName":"user_service","FilePath":"./logs/service.log"},"Worker":{"WorkersCount":10,"BufferSize":1000}}}
+{"level":"info","ts":"2026-05-07T00:31:02.589+0330","caller":"cmd/main.go:61","msg":"Starting worker pool...","service":"user_service","workers":10}
+{"level":"info","ts":"2026-05-07T00:31:02.589+0330","caller":"cmd/main.go:67","msg":"🚀 gRPC server starting on","service":"user_service","address":"127.0.0.1:50052"}
+{"level":"info","ts":"2026-05-07T00:34:42.827+0330","caller":"cmd/main.go:36","msg":"config","service":"user_service","config":{"Application":{"GracefulShutdownTimeout":0},"GrpcServer":{"AuthAddress":"127.0.0.1:50051","UserAddress":"127.0.0.1:50052"},"Mysql":{"Username":"user","Password":"usert0lk2o20","Port":3311,"Host":"localhost","DBName":"user_db"},"Logger":{"Development":true,"ServiceName":"user_service","FilePath":"./logs/service.log"},"Worker":{"WorkersCount":10,"BufferSize":1000}}}
+{"level":"info","ts":"2026-05-07T00:34:42.838+0330","caller":"cmd/main.go:61","msg":"Starting worker pool...","service":"user_service","workers":10}
+{"level":"info","ts":"2026-05-07T00:34:42.838+0330","caller":"cmd/main.go:67","msg":"🚀 gRPC server starting on","service":"user_service","address":"127.0.0.1:50052"}
+{"level":"info","ts":"2026-05-07T13:25:05.519+0330","caller":"cmd/main.go:36","msg":"config","service":"user_service","config":{"Application":{"GracefulShutdownTimeout":0},"GrpcServer":{"AuthAddress":"127.0.0.1:50051","UserAddress":"127.0.0.1:50052"},"Mysql":{"Username":"user","Password":"usert0lk2o20","Port":3311,"Host":"localhost","DBName":"user_db"},"Logger":{"Development":true,"ServiceName":"user_service","FilePath":"./logs/service.log"},"Worker":{"WorkersCount":10,"BufferSize":1000}}}
+{"level":"info","ts":"2026-05-07T13:25:05.537+0330","caller":"cmd/main.go:61","msg":"Starting worker pool...","service":"user_service","workers":10}
+{"level":"info","ts":"2026-05-07T13:25:05.537+0330","caller":"cmd/main.go:67","msg":"🚀 gRPC server starting on","service":"user_service","address":"127.0.0.1:50052"}
+{"level":"info","ts":"2026-05-07T13:27:12.646+0330","caller":"cmd/main.go:36","msg":"config","service":"user_service","config":{"Application":{"GracefulShutdownTimeout":0},"GrpcServer":{"AuthAddress":"127.0.0.1:50051","UserAddress":"127.0.0.1:50052"},"Mysql":{"Username":"user","Password":"usert0lk2o20","Port":3311,"Host":"localhost","DBName":"user_db"},"Logger":{"Development":true,"ServiceName":"user_service","FilePath":"./logs/service.log"},"Worker":{"WorkersCount":10,"BufferSize":1000}}}
+{"level":"info","ts":"2026-05-07T13:27:12.650+0330","caller":"cmd/main.go:61","msg":"Starting worker pool...","service":"user_service","workers":10}
+{"level":"info","ts":"2026-05-07T13:27:12.650+0330","caller":"cmd/main.go:67","msg":"🚀 gRPC server starting on","service":"user_service","address":"127.0.0.1:50052"}
+{"level":"info","ts":"2026-05-07T14:07:15.842+0330","caller":"cmd/main.go:75","msg":"Received shutdown signal. Initiating graceful shutdown...","service":"user_service"}
+{"level":"info","ts":"2026-05-07T14:07:15.842+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":5}
+{"level":"info","ts":"2026-05-07T14:07:15.842+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":8}
+{"level":"info","ts":"2026-05-07T14:07:15.842+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":6}
+{"level":"info","ts":"2026-05-07T14:07:15.842+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":3}
+{"level":"info","ts":"2026-05-07T14:07:15.842+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":10}
+{"level":"info","ts":"2026-05-07T14:07:15.842+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":1}
+{"level":"info","ts":"2026-05-07T14:07:15.842+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":9}
+{"level":"info","ts":"2026-05-07T14:07:15.842+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":7}
+{"level":"info","ts":"2026-05-07T14:07:15.842+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":2}
+{"level":"info","ts":"2026-05-07T14:07:15.842+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":4}
+{"level":"info","ts":"2026-05-07T14:07:15.842+0330","caller":"cmd/main.go:80","msg":"Worker pool stopped completely.","service":"user_service"}
+{"level":"info","ts":"2026-05-07T14:07:15.843+0330","caller":"cmd/main.go:90","msg":"Graceful shutdown completed successfully. 🛑","service":"user_service"}
+{"level":"info","ts":"2026-05-07T14:07:16.843+0330","caller":"cmd/main.go:36","msg":"config","service":"user_service","config":{"Application":{"GracefulShutdownTimeout":0},"GrpcServer":{"AuthAddress":"127.0.0.1:50051","UserAddress":"127.0.0.1:50052"},"Mysql":{"Username":"user","Password":"usert0lk2o20","Port":3311,"Host":"localhost","DBName":"user_db"},"Logger":{"Development":true,"ServiceName":"user_service","FilePath":"./logs/service.log"},"Worker":{"WorkersCount":10,"BufferSize":1000}}}
+{"level":"info","ts":"2026-05-07T14:07:16.855+0330","caller":"cmd/main.go:61","msg":"Starting worker pool...","service":"user_service","workers":10}
+{"level":"info","ts":"2026-05-07T14:07:16.855+0330","caller":"cmd/main.go:67","msg":"🚀 gRPC server starting on","service":"user_service","address":"127.0.0.1:50052"}
+{"level":"info","ts":"2026-05-07T14:08:56.072+0330","caller":"cmd/main.go:75","msg":"Received shutdown signal. Initiating graceful shutdown...","service":"user_service"}
+{"level":"info","ts":"2026-05-07T14:08:56.072+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":2}
+{"level":"info","ts":"2026-05-07T14:08:56.072+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":10}
+{"level":"info","ts":"2026-05-07T14:08:56.072+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":7}
+{"level":"info","ts":"2026-05-07T14:08:56.072+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":5}
+{"level":"info","ts":"2026-05-07T14:08:56.072+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":6}
+{"level":"info","ts":"2026-05-07T14:08:56.072+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":3}
+{"level":"info","ts":"2026-05-07T14:08:56.072+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":1}
+{"level":"info","ts":"2026-05-07T14:08:56.072+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":9}
+{"level":"info","ts":"2026-05-07T14:08:56.072+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":8}
+{"level":"info","ts":"2026-05-07T14:08:56.072+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":4}
+{"level":"info","ts":"2026-05-07T14:08:56.072+0330","caller":"cmd/main.go:80","msg":"Worker pool stopped completely.","service":"user_service"}
+{"level":"info","ts":"2026-05-07T14:08:56.072+0330","caller":"cmd/main.go:90","msg":"Graceful shutdown completed successfully. 🛑","service":"user_service"}
+{"level":"info","ts":"2026-05-07T14:08:56.931+0330","caller":"cmd/main.go:36","msg":"config","service":"user_service","config":{"Application":{"GracefulShutdownTimeout":0},"GrpcServer":{"AuthAddress":"127.0.0.1:50051","UserAddress":"127.0.0.1:50052"},"Mysql":{"Username":"user","Password":"usert0lk2o20","Port":3311,"Host":"localhost","DBName":"user_db"},"Logger":{"Development":true,"ServiceName":"user_service","FilePath":"./logs/service.log"},"Worker":{"WorkersCount":10,"BufferSize":1000}}}
+{"level":"info","ts":"2026-05-07T14:08:56.956+0330","caller":"cmd/main.go:61","msg":"Starting worker pool...","service":"user_service","workers":10}
+{"level":"info","ts":"2026-05-07T14:08:56.956+0330","caller":"cmd/main.go:67","msg":"🚀 gRPC server starting on","service":"user_service","address":"127.0.0.1:50052"}
+{"level":"info","ts":"2026-05-07T14:11:50.495+0330","caller":"cmd/main.go:75","msg":"Received shutdown signal. Initiating graceful shutdown...","service":"user_service"}
+{"level":"info","ts":"2026-05-07T14:11:50.495+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":5}
+{"level":"info","ts":"2026-05-07T14:11:50.496+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":2}
+{"level":"info","ts":"2026-05-07T14:11:50.496+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":6}
+{"level":"info","ts":"2026-05-07T14:11:50.496+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":1}
+{"level":"info","ts":"2026-05-07T14:11:50.496+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":10}
+{"level":"info","ts":"2026-05-07T14:11:50.496+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":9}
+{"level":"info","ts":"2026-05-07T14:11:50.496+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":7}
+{"level":"info","ts":"2026-05-07T14:11:50.496+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":3}
+{"level":"info","ts":"2026-05-07T14:11:50.496+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":8}
+{"level":"info","ts":"2026-05-07T14:11:50.496+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":4}
+{"level":"info","ts":"2026-05-07T14:11:50.496+0330","caller":"cmd/main.go:80","msg":"Worker pool stopped completely.","service":"user_service"}
+{"level":"info","ts":"2026-05-07T14:11:50.496+0330","caller":"cmd/main.go:90","msg":"Graceful shutdown completed successfully. 🛑","service":"user_service"}
+{"level":"info","ts":"2026-05-07T14:11:52.185+0330","caller":"cmd/main.go:36","msg":"config","service":"user_service","config":{"Application":{"GracefulShutdownTimeout":0},"GrpcServer":{"AuthAddress":"127.0.0.1:50051","UserAddress":"127.0.0.1:50052"},"Mysql":{"Username":"user","Password":"usert0lk2o20","Port":3311,"Host":"localhost","DBName":"user_db"},"Logger":{"Development":true,"ServiceName":"user_service","FilePath":"./logs/service.log"},"Worker":{"WorkersCount":10,"BufferSize":1000}}}
+{"level":"info","ts":"2026-05-07T14:11:52.196+0330","caller":"cmd/main.go:61","msg":"Starting worker pool...","service":"user_service","workers":10}
+{"level":"info","ts":"2026-05-07T14:11:52.196+0330","caller":"cmd/main.go:67","msg":"🚀 gRPC server starting on","service":"user_service","address":"127.0.0.1:50052"}
+{"level":"info","ts":"2026-05-07T14:12:33.925+0330","caller":"cmd/main.go:75","msg":"Received shutdown signal. Initiating graceful shutdown...","service":"user_service"}
+{"level":"info","ts":"2026-05-07T14:12:33.925+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":2}
+{"level":"info","ts":"2026-05-07T14:12:33.925+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":5}
+{"level":"info","ts":"2026-05-07T14:12:33.925+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":3}
+{"level":"info","ts":"2026-05-07T14:12:33.925+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":7}
+{"level":"info","ts":"2026-05-07T14:12:33.925+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":4}
+{"level":"info","ts":"2026-05-07T14:12:33.925+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":8}
+{"level":"info","ts":"2026-05-07T14:12:33.925+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":10}
+{"level":"info","ts":"2026-05-07T14:12:33.925+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":6}
+{"level":"info","ts":"2026-05-07T14:12:33.925+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":9}
+{"level":"info","ts":"2026-05-07T14:12:33.925+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":1}
+{"level":"info","ts":"2026-05-07T14:12:33.925+0330","caller":"cmd/main.go:80","msg":"Worker pool stopped completely.","service":"user_service"}
+{"level":"info","ts":"2026-05-07T14:12:33.926+0330","caller":"cmd/main.go:90","msg":"Graceful shutdown completed successfully. 🛑","service":"user_service"}
+{"level":"info","ts":"2026-05-07T14:12:34.829+0330","caller":"cmd/main.go:36","msg":"config","service":"user_service","config":{"Application":{"GracefulShutdownTimeout":0},"GrpcServer":{"AuthAddress":"127.0.0.1:50051","UserAddress":"127.0.0.1:50052"},"Mysql":{"Username":"user","Password":"usert0lk2o20","Port":3311,"Host":"localhost","DBName":"user_db"},"Logger":{"Development":true,"ServiceName":"user_service","FilePath":"./logs/service.log"},"Worker":{"WorkersCount":10,"BufferSize":1000}}}
+{"level":"info","ts":"2026-05-07T14:12:34.841+0330","caller":"cmd/main.go:61","msg":"Starting worker pool...","service":"user_service","workers":10}
+{"level":"info","ts":"2026-05-07T14:12:34.841+0330","caller":"cmd/main.go:67","msg":"🚀 gRPC server starting on","service":"user_service","address":"127.0.0.1:50052"}
+{"level":"info","ts":"2026-05-07T14:19:08.686+0330","caller":"cmd/main.go:75","msg":"Received shutdown signal. Initiating graceful shutdown...","service":"user_service"}
+{"level":"info","ts":"2026-05-07T14:19:08.687+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":8}
+{"level":"info","ts":"2026-05-07T14:19:08.687+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":4}
+{"level":"info","ts":"2026-05-07T14:19:08.687+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":5}
+{"level":"info","ts":"2026-05-07T14:19:08.687+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":3}
+{"level":"info","ts":"2026-05-07T14:19:08.687+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":9}
+{"level":"info","ts":"2026-05-07T14:19:08.687+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":1}
+{"level":"info","ts":"2026-05-07T14:19:08.687+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":2}
+{"level":"info","ts":"2026-05-07T14:19:08.687+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":7}
+{"level":"info","ts":"2026-05-07T14:19:08.687+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":6}
+{"level":"info","ts":"2026-05-07T14:19:08.687+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":10}
+{"level":"info","ts":"2026-05-07T14:19:08.687+0330","caller":"cmd/main.go:80","msg":"Worker pool stopped completely.","service":"user_service"}
+{"level":"info","ts":"2026-05-07T14:19:08.687+0330","caller":"cmd/main.go:90","msg":"Graceful shutdown completed successfully. 🛑","service":"user_service"}
+{"level":"info","ts":"2026-05-07T14:19:09.822+0330","caller":"cmd/main.go:36","msg":"config","service":"user_service","config":{"Application":{"GracefulShutdownTimeout":0},"GrpcServer":{"AuthAddress":"127.0.0.1:50051","UserAddress":"127.0.0.1:50052"},"Mysql":{"Username":"user","Password":"usert0lk2o20","Port":3311,"Host":"localhost","DBName":"user_db"},"Logger":{"Development":true,"ServiceName":"user_service","FilePath":"./logs/service.log"},"Worker":{"WorkersCount":10,"BufferSize":1000}}}
+{"level":"info","ts":"2026-05-07T14:19:09.833+0330","caller":"cmd/main.go:61","msg":"Starting worker pool...","service":"user_service","workers":10}
+{"level":"info","ts":"2026-05-07T14:19:09.833+0330","caller":"cmd/main.go:67","msg":"🚀 gRPC server starting on","service":"user_service","address":"127.0.0.1:50052"}
+{"level":"info","ts":"2026-05-07T14:24:59.265+0330","caller":"cmd/main.go:75","msg":"Received shutdown signal. Initiating graceful shutdown...","service":"user_service"}
+{"level":"info","ts":"2026-05-07T14:24:59.266+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":5}
+{"level":"info","ts":"2026-05-07T14:24:59.266+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":2}
+{"level":"info","ts":"2026-05-07T14:24:59.266+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":8}
+{"level":"info","ts":"2026-05-07T14:24:59.266+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":6}
+{"level":"info","ts":"2026-05-07T14:24:59.266+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":7}
+{"level":"info","ts":"2026-05-07T14:24:59.266+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":3}
+{"level":"info","ts":"2026-05-07T14:24:59.266+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":1}
+{"level":"info","ts":"2026-05-07T14:24:59.266+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":10}
+{"level":"info","ts":"2026-05-07T14:24:59.266+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":4}
+{"level":"info","ts":"2026-05-07T14:24:59.266+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":9}
+{"level":"info","ts":"2026-05-07T14:24:59.266+0330","caller":"cmd/main.go:80","msg":"Worker pool stopped completely.","service":"user_service"}
+{"level":"info","ts":"2026-05-07T14:24:59.266+0330","caller":"cmd/main.go:90","msg":"Graceful shutdown completed successfully. 🛑","service":"user_service"}
+{"level":"info","ts":"2026-05-07T14:24:59.904+0330","caller":"cmd/main.go:36","msg":"config","service":"user_service","config":{"Application":{"GracefulShutdownTimeout":0},"GrpcServer":{"AuthAddress":"127.0.0.1:50051","UserAddress":"127.0.0.1:50052"},"Mysql":{"Username":"user","Password":"usert0lk2o20","Port":3311,"Host":"localhost","DBName":"user_db"},"Logger":{"Development":true,"ServiceName":"user_service","FilePath":"./logs/service.log"},"Worker":{"WorkersCount":10,"BufferSize":1000}}}
+{"level":"info","ts":"2026-05-07T14:24:59.917+0330","caller":"cmd/main.go:61","msg":"Starting worker pool...","service":"user_service","workers":10}
+{"level":"info","ts":"2026-05-07T14:24:59.917+0330","caller":"cmd/main.go:67","msg":"🚀 gRPC server starting on","service":"user_service","address":"127.0.0.1:50052"}
+{"level":"info","ts":"2026-05-07T14:31:43.072+0330","caller":"cmd/main.go:75","msg":"Received shutdown signal. Initiating graceful shutdown...","service":"user_service"}
+{"level":"info","ts":"2026-05-07T14:31:43.072+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":8}
+{"level":"info","ts":"2026-05-07T14:31:43.072+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":5}
+{"level":"info","ts":"2026-05-07T14:31:43.072+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":3}
+{"level":"info","ts":"2026-05-07T14:31:43.072+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":4}
+{"level":"info","ts":"2026-05-07T14:31:43.072+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":9}
+{"level":"info","ts":"2026-05-07T14:31:43.072+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":2}
+{"level":"info","ts":"2026-05-07T14:31:43.072+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":10}
+{"level":"info","ts":"2026-05-07T14:31:43.072+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":6}
+{"level":"info","ts":"2026-05-07T14:31:43.072+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":1}
+{"level":"info","ts":"2026-05-07T14:31:43.072+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":7}
+{"level":"info","ts":"2026-05-07T14:31:43.072+0330","caller":"cmd/main.go:80","msg":"Worker pool stopped completely.","service":"user_service"}
+{"level":"info","ts":"2026-05-07T14:31:43.072+0330","caller":"cmd/main.go:90","msg":"Graceful shutdown completed successfully. 🛑","service":"user_service"}
+{"level":"info","ts":"2026-05-07T14:31:44.405+0330","caller":"cmd/main.go:36","msg":"config","service":"user_service","config":{"Application":{"GracefulShutdownTimeout":0},"GrpcServer":{"AuthAddress":"127.0.0.1:50051","UserAddress":"127.0.0.1:50052"},"Mysql":{"Username":"user","Password":"usert0lk2o20","Port":3311,"Host":"localhost","DBName":"user_db"},"Logger":{"Development":true,"ServiceName":"user_service","FilePath":"./logs/service.log"},"Worker":{"WorkersCount":10,"BufferSize":1000}}}
+{"level":"info","ts":"2026-05-07T14:31:44.416+0330","caller":"cmd/main.go:61","msg":"Starting worker pool...","service":"user_service","workers":10}
+{"level":"info","ts":"2026-05-07T14:31:44.417+0330","caller":"cmd/main.go:67","msg":"🚀 gRPC server starting on","service":"user_service","address":"127.0.0.1:50052"}
+{"level":"info","ts":"2026-05-07T14:53:56.881+0330","caller":"cmd/main.go:75","msg":"Received shutdown signal. Initiating graceful shutdown...","service":"user_service"}
+{"level":"info","ts":"2026-05-07T14:53:56.881+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":2}
+{"level":"info","ts":"2026-05-07T14:53:56.881+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":4}
+{"level":"info","ts":"2026-05-07T14:53:56.882+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":1}
+{"level":"info","ts":"2026-05-07T14:53:56.881+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":3}
+{"level":"info","ts":"2026-05-07T14:53:56.881+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":5}
+{"level":"info","ts":"2026-05-07T14:53:56.882+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":7}
+{"level":"info","ts":"2026-05-07T14:53:56.882+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":6}
+{"level":"info","ts":"2026-05-07T14:53:56.882+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":10}
+{"level":"info","ts":"2026-05-07T14:53:56.882+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":9}
+{"level":"info","ts":"2026-05-07T14:53:56.882+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":8}
+{"level":"info","ts":"2026-05-07T14:53:56.882+0330","caller":"cmd/main.go:80","msg":"Worker pool stopped completely.","service":"user_service"}
+{"level":"info","ts":"2026-05-07T14:53:56.882+0330","caller":"cmd/main.go:90","msg":"Graceful shutdown completed successfully. 🛑","service":"user_service"}
+{"level":"info","ts":"2026-05-07T14:53:57.876+0330","caller":"cmd/main.go:36","msg":"config","service":"user_service","config":{"Application":{"GracefulShutdownTimeout":0},"GrpcServer":{"AuthAddress":"127.0.0.1:50051","UserAddress":"127.0.0.1:50052"},"Mysql":{"Username":"user","Password":"usert0lk2o20","Port":3311,"Host":"localhost","DBName":"user_db"},"Logger":{"Development":true,"ServiceName":"user_service","FilePath":"./logs/service.log"},"Worker":{"WorkersCount":10,"BufferSize":1000}}}
+{"level":"info","ts":"2026-05-07T14:53:57.890+0330","caller":"cmd/main.go:61","msg":"Starting worker pool...","service":"user_service","workers":10}
+{"level":"info","ts":"2026-05-07T14:53:57.890+0330","caller":"cmd/main.go:67","msg":"🚀 gRPC server starting on","service":"user_service","address":"127.0.0.1:50052"}
+{"level":"info","ts":"2026-05-07T15:08:07.957+0330","caller":"cmd/main.go:75","msg":"Received shutdown signal. Initiating graceful shutdown...","service":"user_service"}
+{"level":"info","ts":"2026-05-07T15:08:07.958+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":6}
+{"level":"info","ts":"2026-05-07T15:08:07.958+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":8}
+{"level":"info","ts":"2026-05-07T15:08:07.958+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":5}
+{"level":"info","ts":"2026-05-07T15:08:07.958+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":1}
+{"level":"info","ts":"2026-05-07T15:08:07.958+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":2}
+{"level":"info","ts":"2026-05-07T15:08:07.958+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":7}
+{"level":"info","ts":"2026-05-07T15:08:07.958+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":4}
+{"level":"info","ts":"2026-05-07T15:08:07.958+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":9}
+{"level":"info","ts":"2026-05-07T15:08:07.958+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":10}
+{"level":"info","ts":"2026-05-07T15:08:07.958+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":3}
+{"level":"info","ts":"2026-05-07T15:08:07.958+0330","caller":"cmd/main.go:80","msg":"Worker pool stopped completely.","service":"user_service"}
+{"level":"info","ts":"2026-05-07T15:08:07.958+0330","caller":"cmd/main.go:90","msg":"Graceful shutdown completed successfully. 🛑","service":"user_service"}
+{"level":"info","ts":"2026-05-07T15:08:09.047+0330","caller":"cmd/main.go:36","msg":"config","service":"user_service","config":{"Application":{"GracefulShutdownTimeout":0},"GrpcServer":{"AuthAddress":"127.0.0.1:50051","UserAddress":"127.0.0.1:50052"},"Mysql":{"Username":"user","Password":"usert0lk2o20","Port":3311,"Host":"localhost","DBName":"user_db"},"Logger":{"Development":true,"ServiceName":"user_service","FilePath":"./logs/service.log"},"Worker":{"WorkersCount":10,"BufferSize":1000}}}
+{"level":"info","ts":"2026-05-07T15:08:09.059+0330","caller":"cmd/main.go:61","msg":"Starting worker pool...","service":"user_service","workers":10}
+{"level":"info","ts":"2026-05-07T15:08:09.059+0330","caller":"cmd/main.go:67","msg":"🚀 gRPC server starting on","service":"user_service","address":"127.0.0.1:50052"}
+{"level":"info","ts":"2026-05-07T15:13:08.075+0330","caller":"cmd/main.go:75","msg":"Received shutdown signal. Initiating graceful shutdown...","service":"user_service"}
+{"level":"info","ts":"2026-05-07T15:13:08.075+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":5}
+{"level":"info","ts":"2026-05-07T15:13:08.075+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":10}
+{"level":"info","ts":"2026-05-07T15:13:08.075+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":4}
+{"level":"info","ts":"2026-05-07T15:13:08.075+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":1}
+{"level":"info","ts":"2026-05-07T15:13:08.075+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":7}
+{"level":"info","ts":"2026-05-07T15:13:08.075+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":6}
+{"level":"info","ts":"2026-05-07T15:13:08.075+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":2}
+{"level":"info","ts":"2026-05-07T15:13:08.075+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":9}
+{"level":"info","ts":"2026-05-07T15:13:08.075+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":8}
+{"level":"info","ts":"2026-05-07T15:13:08.075+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":3}
+{"level":"info","ts":"2026-05-07T15:13:08.075+0330","caller":"cmd/main.go:80","msg":"Worker pool stopped completely.","service":"user_service"}
+{"level":"info","ts":"2026-05-07T15:13:08.076+0330","caller":"cmd/main.go:90","msg":"Graceful shutdown completed successfully. 🛑","service":"user_service"}
+{"level":"info","ts":"2026-05-07T15:13:09.140+0330","caller":"cmd/main.go:36","msg":"config","service":"user_service","config":{"Application":{"GracefulShutdownTimeout":0},"GrpcServer":{"AuthAddress":"127.0.0.1:50051","UserAddress":"127.0.0.1:50052"},"Mysql":{"Username":"user","Password":"usert0lk2o20","Port":3311,"Host":"localhost","DBName":"user_db"},"Logger":{"Development":true,"ServiceName":"user_service","FilePath":"./logs/service.log"},"Worker":{"WorkersCount":10,"BufferSize":1000}}}
+{"level":"info","ts":"2026-05-07T15:13:09.152+0330","caller":"cmd/main.go:61","msg":"Starting worker pool...","service":"user_service","workers":10}
+{"level":"info","ts":"2026-05-07T15:13:09.152+0330","caller":"cmd/main.go:67","msg":"🚀 gRPC server starting on","service":"user_service","address":"127.0.0.1:50052"}
+{"level":"info","ts":"2026-05-07T15:23:09.636+0330","caller":"cmd/main.go:75","msg":"Received shutdown signal. Initiating graceful shutdown...","service":"user_service"}
+{"level":"info","ts":"2026-05-07T15:23:09.637+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":8}
+{"level":"info","ts":"2026-05-07T15:23:09.637+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":5}
+{"level":"info","ts":"2026-05-07T15:23:09.637+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":10}
+{"level":"info","ts":"2026-05-07T15:23:09.637+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":4}
+{"level":"info","ts":"2026-05-07T15:23:09.637+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":6}
+{"level":"info","ts":"2026-05-07T15:23:09.637+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":9}
+{"level":"info","ts":"2026-05-07T15:23:09.637+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":2}
+{"level":"info","ts":"2026-05-07T15:23:09.637+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":7}
+{"level":"info","ts":"2026-05-07T15:23:09.637+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":1}
+{"level":"info","ts":"2026-05-07T15:23:09.637+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":3}
+{"level":"info","ts":"2026-05-07T15:23:09.637+0330","caller":"cmd/main.go:80","msg":"Worker pool stopped completely.","service":"user_service"}
+{"level":"info","ts":"2026-05-07T15:23:09.637+0330","caller":"cmd/main.go:90","msg":"Graceful shutdown completed successfully. 🛑","service":"user_service"}
+{"level":"info","ts":"2026-05-07T15:23:10.700+0330","caller":"cmd/main.go:36","msg":"config","service":"user_service","config":{"Application":{"GracefulShutdownTimeout":0},"GrpcServer":{"AuthAddress":"127.0.0.1:50051","UserAddress":"127.0.0.1:50052"},"Mysql":{"Username":"user","Password":"usert0lk2o20","Port":3311,"Host":"localhost","DBName":"user_db"},"Logger":{"Development":true,"ServiceName":"user_service","FilePath":"./logs/service.log"},"Worker":{"WorkersCount":10,"BufferSize":1000}}}
+{"level":"info","ts":"2026-05-07T15:23:10.712+0330","caller":"cmd/main.go:61","msg":"Starting worker pool...","service":"user_service","workers":10}
+{"level":"info","ts":"2026-05-07T15:23:10.712+0330","caller":"cmd/main.go:67","msg":"🚀 gRPC server starting on","service":"user_service","address":"127.0.0.1:50052"}
+{"level":"info","ts":"2026-05-07T15:38:29.165+0330","caller":"cmd/main.go:75","msg":"Received shutdown signal. Initiating graceful shutdown...","service":"user_service"}
+{"level":"info","ts":"2026-05-07T15:38:29.165+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":1}
+{"level":"info","ts":"2026-05-07T15:38:29.165+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":5}
+{"level":"info","ts":"2026-05-07T15:38:29.165+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":2}
+{"level":"info","ts":"2026-05-07T15:38:29.165+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":6}
+{"level":"info","ts":"2026-05-07T15:38:29.165+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":4}
+{"level":"info","ts":"2026-05-07T15:38:29.165+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":9}
+{"level":"info","ts":"2026-05-07T15:38:29.165+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":8}
+{"level":"info","ts":"2026-05-07T15:38:29.165+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":7}
+{"level":"info","ts":"2026-05-07T15:38:29.165+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":3}
+{"level":"info","ts":"2026-05-07T15:38:29.165+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":10}
+{"level":"info","ts":"2026-05-07T15:38:29.165+0330","caller":"cmd/main.go:80","msg":"Worker pool stopped completely.","service":"user_service"}
+{"level":"info","ts":"2026-05-07T15:38:29.166+0330","caller":"cmd/main.go:90","msg":"Graceful shutdown completed successfully. 🛑","service":"user_service"}
+{"level":"info","ts":"2026-05-07T15:38:30.238+0330","caller":"cmd/main.go:36","msg":"config","service":"user_service","config":{"Application":{"GracefulShutdownTimeout":0},"GrpcServer":{"AuthAddress":"127.0.0.1:50051","UserAddress":"127.0.0.1:50052"},"Mysql":{"Username":"user","Password":"usert0lk2o20","Port":3311,"Host":"localhost","DBName":"user_db"},"Logger":{"Development":true,"ServiceName":"user_service","FilePath":"./logs/service.log"},"Worker":{"WorkersCount":10,"BufferSize":1000}}}
+{"level":"info","ts":"2026-05-07T15:38:30.252+0330","caller":"cmd/main.go:61","msg":"Starting worker pool...","service":"user_service","workers":10}
+{"level":"info","ts":"2026-05-07T15:38:30.252+0330","caller":"cmd/main.go:67","msg":"🚀 gRPC server starting on","service":"user_service","address":"127.0.0.1:50052"}
+{"level":"info","ts":"2026-05-07T15:41:39.736+0330","caller":"cmd/main.go:75","msg":"Received shutdown signal. Initiating graceful shutdown...","service":"user_service"}
+{"level":"info","ts":"2026-05-07T15:41:39.737+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":2}
+{"level":"info","ts":"2026-05-07T15:41:39.737+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":10}
+{"level":"info","ts":"2026-05-07T15:41:39.737+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":4}
+{"level":"info","ts":"2026-05-07T15:41:39.737+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":3}
+{"level":"info","ts":"2026-05-07T15:41:39.737+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":5}
+{"level":"info","ts":"2026-05-07T15:41:39.737+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":6}
+{"level":"info","ts":"2026-05-07T15:41:39.737+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":9}
+{"level":"info","ts":"2026-05-07T15:41:39.737+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":7}
+{"level":"info","ts":"2026-05-07T15:41:39.737+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":8}
+{"level":"info","ts":"2026-05-07T15:41:39.737+0330","caller":"runtime/asm_amd64.s:1771","msg":"Worker shutting down...","service":"user_service","worker_id":1}
+{"level":"info","ts":"2026-05-07T15:41:39.737+0330","caller":"cmd/main.go:80","msg":"Worker pool stopped completely.","service":"user_service"}
+{"level":"info","ts":"2026-05-07T15:41:39.737+0330","caller":"cmd/main.go:90","msg":"Graceful shutdown completed successfully. 🛑","service":"user_service"}
+{"level":"info","ts":"2026-05-07T15:42:39.033+0330","caller":"cmd/main.go:34","msg":"config","service":"user_service","config":{"Application":{"GracefulShutdownTimeout":0},"GrpcServer":{"AuthAddress":"127.0.0.1:50051","UserAddress":"127.0.0.1:50052"},"Mysql":{"Username":"user","Password":"usert0lk2o20","Port":3311,"Host":"localhost","DBName":"user_db"},"Logger":{"Development":true,"ServiceName":"user_service","FilePath":"./logs/service.log"}}}
+{"level":"info","ts":"2026-05-07T15:42:39.045+0330","caller":"cmd/main.go:59","msg":"🚀 gRPC server starting on","service":"user_service","address":"127.0.0.1:50052"}
+{"level":"info","ts":"2026-05-07T15:42:41.002+0330","caller":"cmd/main.go:67","msg":"Received shutdown signal. Initiating graceful shutdown...","service":"user_service"}
+{"level":"info","ts":"2026-05-07T15:42:41.002+0330","caller":"cmd/main.go:79","msg":"Graceful shutdown completed successfully. 🛑","service":"user_service"}
+{"level":"info","ts":"2026-05-07T15:51:46.460+0330","caller":"cmd/main.go:34","msg":"config","service":"user_service","config":{"Application":{"GracefulShutdownTimeout":0},"GrpcServer":{"AuthAddress":"127.0.0.1:50051","UserAddress":"127.0.0.1:50052"},"Mysql":{"Username":"user","Password":"usert0lk2o20","Port":3311,"Host":"localhost","DBName":"user_db"},"Logger":{"Development":true,"ServiceName":"user_service","FilePath":"./logs/service.log"}}}
+{"level":"info","ts":"2026-05-07T15:51:46.472+0330","caller":"cmd/main.go:59","msg":"🚀 gRPC server starting on","service":"user_service","address":"127.0.0.1:50052"}
+{"level":"info","ts":"2026-05-07T15:52:46.105+0330","caller":"cmd/main.go:67","msg":"Received shutdown signal. Initiating graceful shutdown...","service":"user_service"}
+{"level":"info","ts":"2026-05-07T15:52:46.106+0330","caller":"cmd/main.go:79","msg":"Graceful shutdown completed successfully. 🛑","service":"user_service"}
+{"level":"info","ts":"2026-05-07T15:52:46.903+0330","caller":"cmd/main.go:34","msg":"config","service":"user_service","config":{"Application":{"GracefulShutdownTimeout":0},"GrpcServer":{"AuthAddress":"127.0.0.1:50051","UserAddress":"127.0.0.1:50052"},"Mysql":{"Username":"user","Password":"usert0lk2o20","Port":3311,"Host":"localhost","DBName":"user_db"},"Logger":{"Development":true,"ServiceName":"user_service","FilePath":"./logs/service.log"}}}
+{"level":"info","ts":"2026-05-07T15:52:46.915+0330","caller":"cmd/main.go:59","msg":"🚀 gRPC server starting on","service":"user_service","address":"127.0.0.1:50052"}

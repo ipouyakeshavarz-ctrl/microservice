@@ -42,6 +42,20 @@ services:
       MYSQL_DATABASE: store_db
       MYSQL_USER: store
       MYSQL_PASSWORD: storet0lk2o20
+  order-database:
+    image: mysql:8.0
+    ports:
+      - "3314:3306"
+    container_name: order-database
+    volumes:
+      - orderdbdata:/var/lib/mysql
+    restart: always
+    command: [ 'mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci' ]
+    environment:
+      MYSQL_ROOT_PASSWORD: Mp13831383
+      MYSQL_DATABASE: order_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: usert0lk2o20
 
   redis:
     image: redis:7
@@ -53,8 +67,25 @@ services:
       - redisdata:/data
     command: ["redis-server", "--appendonly", "yes"]
 
+
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: rabbitmq-broker
+    ports:
+      - "5672:5672"    # Port for application connection
+      - "15672:15672"  # Port for management UI
+    volumes:
+      - rabbitmqdata:/var/lib/rabbitmq
+    restart: always
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+
 volumes:
   userdbdata:
   productdbdata:
   storedbdata:
   redisdata:
+  rabbitmqdata:
+  orderdbdata:
+

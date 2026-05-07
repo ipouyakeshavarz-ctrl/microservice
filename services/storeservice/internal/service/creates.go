@@ -2,6 +2,7 @@ package storeservice
 
 import (
 	"context"
+	"myapp/pkg/errmsg"
 	"myapp/pkg/richerror"
 	"storeapp/internal/domain"
 	"storeapp/internal/param"
@@ -27,7 +28,10 @@ func (s *Service) CreateStore(ctx context.Context, req param.CreateStoreRequest)
 	finalStore, err := s.repo.CreateStore(ctx, *store)
 
 	if err != nil {
-		return param.CreateStoreResponse{}, richerror.New(op).WithErr(err)
+		return param.CreateStoreResponse{}, richerror.New(op).
+			WithKind(richerror.KindUnexpected).
+			WithMessage(errmsg.ErrorMsgFailedToCreateStoreInDB).
+			WithErr(err)
 	}
 
 	return param.CreateStoreResponse{Store: param.StoreInfo{

@@ -2,6 +2,7 @@ package userservice
 
 import (
 	"context"
+	"myapp/pkg/errmsg"
 	"myapp/pkg/richerror"
 	"userapp/internal/domain"
 	"userapp/internal/param"
@@ -10,12 +11,17 @@ import (
 func (s Service) Register(ctx context.Context, req param.RegisterRequest) (param.RegisterResponse, error) {
 	const op = "userservice.Register"
 	// TODO - we should verify phone number by verification code
-	// TODO - replace md5 with bcrypt
+	hashed, err := HashPassword(req.Password)
+	if err != nil {
+		return param.RegisterResponse{}, richerror.New(op).
+			WithKind(richerror.KindUnexpected).
+			WithMessage(errmsg.ErrorMsgFailedToHashPassword)
+	}
 	user := domain.User{
 		ID:          0,
 		PhoneNumber: req.PhoneNumber,
 		Name:        req.Name,
-		Password:    getMD5Hash(req.Password),
+		Password:    hashed,
 		Role:        domain.UserRole,
 	}
 
@@ -26,7 +32,7 @@ func (s Service) Register(ctx context.Context, req param.RegisterRequest) (param
 
 	return param.RegisterResponse{User: param.UserInfo{
 		ID:          createdUser.ID,
-		PhoneNumber: createdUser.Name,
-		Name:        createdUser.PhoneNumber,
+		PhoneNumber: createdUser.PhoneNumber,
+		Name:        createdUser.Name,
 	}}, nil
 }

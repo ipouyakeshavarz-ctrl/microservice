@@ -13,8 +13,11 @@ func (s *Service) Delete(ctx context.Context, req param.DeleteProductRequest) (p
 	p, err := s.repo.GetByID(ctx, req.ID)
 	if err != nil {
 		return param.DeleteProductResponse{
-			Success: false,
-		}, richerror.New(op).WithErr(err)
+				Success: false,
+			}, richerror.New(op).
+				WithKind(richerror.KindUnexpected).
+				WithMessage(errmsg.ErrorMsgFailedToGetProductInDB).
+				WithErr(err)
 	}
 
 	if p.StoreID != req.StoreID {
@@ -24,10 +27,19 @@ func (s *Service) Delete(ctx context.Context, req param.DeleteProductRequest) (p
 	}
 
 	dErr := s.repo.Delete(ctx, req.ID)
-	if dErr != nil {
+	if err != nil {
+
+		if re, ok := dErr.(*richerror.RichError); ok {
+			return param.DeleteProductResponse{
+				Success: false,
+			}, re
+		}
+
 		return param.DeleteProductResponse{
-			Success: false,
-		}, richerror.New(op).WithErr(dErr)
+				Success: false,
+			}, richerror.New(op).
+				WithKind(richerror.KindUnexpected).
+				WithErr(dErr)
 	}
 
 	if s.productCache != nil {

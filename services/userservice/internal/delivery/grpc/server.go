@@ -1,6 +1,7 @@
 package grpc
 
 import (
+	"myapp/pkg/interceptor"
 	"myapp/pkg/richerror"
 	"net"
 	"userapp/internal/delivery/grpc/userhandler"
@@ -24,7 +25,9 @@ func NewServer(V validator.Validator, s userservice.Service, address string) *Se
 		Validator: V,
 		service:   s,
 		address:   address,
-		engine:    grpc.NewServer(),
+		engine: grpc.NewServer(
+			grpc.UnaryInterceptor(interceptor.UnaryErrorInterceptor()),
+		),
 	}
 }
 

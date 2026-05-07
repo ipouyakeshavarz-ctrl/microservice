@@ -10,8 +10,7 @@ import (
 	"productapp/internal/param"
 )
 
-func (h *Handler) CreateProduct(ctx context.Context,
-	req *product.CreateProductRequest) (*product.CreateProductResponse, error) {
+func (h *Handler) CreateProduct(ctx context.Context, req *product.CreateProductRequest) (*product.CreateProductResponse, error) {
 	const op = "productHandler.CreateProduct"
 	category := domain.Category(req.GetCategory())
 	ok := category.IsValid()
@@ -34,9 +33,10 @@ func (h *Handler) CreateProduct(ctx context.Context,
 
 	resp, err := h.productSvc.Create(ctx, input)
 	if err != nil {
-		return nil, richerror.New(op).WithErr(err)
+		return nil, richerror.New(op).WithErr(err).WithFields(map[string]string{
+			"massage": err.Error(),
+		})
 	}
-
 	return &product.CreateProductResponse{
 		Product: &product.ProductInfo{
 			Id:          uint64(resp.Product.ID),

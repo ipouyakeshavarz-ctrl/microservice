@@ -4,6 +4,8 @@ import (
 	"context"
 	"myapp/api/gen/product"
 	"myapp/pkg/richerror"
+
+	"google.golang.org/grpc/status"
 )
 
 func (c *Client) GetProductByID(ctx context.Context, req *product.GetProductByIDRequest) (*product.GetProductResponse, error) {
@@ -11,8 +13,13 @@ func (c *Client) GetProductByID(ctx context.Context, req *product.GetProductByID
 
 	res, err := c.client.GetProductByID(ctx, req)
 	if err != nil {
-		return nil, richerror.New(op).WithErr(err)
-	}
+		if _, ok := status.FromError(err); ok {
+			return nil, err
+		}
 
+		return nil, richerror.New(op).
+			WithErr(err).
+			WithKind(richerror.KindUnexpected)
+	}
 	return res, nil
 }

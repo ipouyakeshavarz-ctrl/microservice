@@ -31,7 +31,14 @@ func (s *Service) GetByID(ctx context.Context, req param.GetProductByIDRequest) 
 
 	p, err := s.repo.GetByID(ctx, req.ID)
 	if err != nil {
-		return param.GetProductResponse{}, richerror.New(op).WithErr(err)
+
+		if re, ok := err.(*richerror.RichError); ok {
+			return param.GetProductResponse{}, re
+		}
+
+		return param.GetProductResponse{}, richerror.New(op).
+			WithKind(richerror.KindUnexpected).
+			WithErr(err)
 	}
 
 	if s.productCache != nil && p != nil {

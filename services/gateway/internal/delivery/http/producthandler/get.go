@@ -17,8 +17,8 @@ func (h Handler) GetProduct(c echo.Context) error {
 
 	resp, err := h.productClient.GetProductByID(c.Request().Context(), &req)
 	if err != nil {
-		msg, code := httpmsg.Error(err)
-		return echo.NewHTTPError(code, msg)
+		resp, code := httpmsg.Error(err)
+		return c.JSON(code, resp)
 	}
 
 	return c.JSON(http.StatusOK, resp)

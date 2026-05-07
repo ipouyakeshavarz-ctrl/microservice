@@ -2,9 +2,10 @@ package userservice
 
 import (
 	"context"
-	"crypto/md5"
-	"encoding/hex"
+
 	"userapp/internal/domain"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type Repository interface {
@@ -26,7 +27,7 @@ func New(authClient AuthClient, repo Repository) Service {
 	return Service{authClient: authClient, repo: repo}
 }
 
-func getMD5Hash(text string) string {
-	hash := md5.Sum([]byte(text))
-	return hex.EncodeToString(hash[:])
+func HashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	return string(bytes), err
 }

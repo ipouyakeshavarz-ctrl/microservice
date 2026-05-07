@@ -1,41 +1,35 @@
 package httpmsg
 
-import (
-	"myapp/pkg/errmsg"
-	"myapp/pkg/richerror"
-	"net/http"
-)
+import "myapp/pkg/grpcerror"
 
-func Error(err error) (message string, code int) {
-	switch err.(type) {
-	case richerror.RichError:
-		re := err.(richerror.RichError)
-		msg := re.Message()
+func Error(err error) (map[string]interface{}, int) {
 
-		code := mapKindToHTTPStatusCode(re.Kind())
+	msg, fields := grpcerror.Extract(err)
 
-		// we should not expose unexpected error messages
-		if code >= 500 {
-			msg = errmsg.ErrorMsgSomethingWentWrong
-		}
+	if len(fields) > 0 {
 
-		return msg, code
-	default:
-		return err.Error(), http.StatusBadRequest
+		return map[string]interface{}{
+			"message": msg,
+			"errors":  fields,
+		}, 400
 	}
+
+	return map[string]interface{}{
+		"message": msg,
+	}, 400
 }
 
-func mapKindToHTTPStatusCode(kind richerror.Kind) int {
-	switch kind {
-	case richerror.KindInvalid:
-		return http.StatusUnprocessableEntity
-	case richerror.KindNotFound:
-		return http.StatusNotFound
-	case richerror.KindForbidden:
-		return http.StatusForbidden
-	case richerror.KindUnexpected:
-		return http.StatusInternalServerError
-	default:
-		return http.StatusBadRequest
-	}
-}
+//func mapKindToHTTPStatusCode(kind richerror.Kind) int {
+//	switch kind {
+//	case richerror.KindInvalid:
+//		return http.StatusUnprocessableEntity // 422
+//	case richerror.KindNotFound:
+//		return http.StatusNotFound // 404
+//	case richerror.KindForbidden:
+//		return http.StatusForbidden // 403
+//	case richerror.KindUnexpected:
+//		return http.StatusInternalServerError
+//	default:
+//		return http.StatusBadRequest
+//	}
+//}

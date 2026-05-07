@@ -30,7 +30,7 @@ func New(cfg Config) *Service {
 	}
 }
 
-// todo complate that
+// VerifyToken todo complate that
 func (s *Service) VerifyToken(ctx context.Context,
 	in *auth.VerifyTokenRequest) (*auth.VerifyTokenResponse, error) {
 	const op = "Authservice.VerifyToken"
@@ -92,15 +92,15 @@ func (s *Service) GenerateTokens(ctx context.Context, u *auth.UserInfo) (*auth.L
 	}, nil
 }
 
-func (s Service) CreateAccessToken(user domain.User) (string, error) {
+func (s *Service) CreateAccessToken(user domain.User) (string, error) {
 	return s.createToken(user.ID, user.Role, s.config.AccessSubject, s.config.AccessExpirationTime)
 }
 
-func (s Service) CreateRefreshToken(user domain.User) (string, error) {
+func (s *Service) CreateRefreshToken(user domain.User) (string, error) {
 	return s.createToken(user.ID, user.Role, s.config.RefreshSubject, s.config.RefreshExpirationTime)
 }
 
-func (s Service) ParseToken(tokenStr string) (*Claims, error) {
+func (s *Service) ParseToken(tokenStr string) (*Claims, error) {
 
 	token, err := jwt.ParseWithClaims(tokenStr, &Claims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(s.config.SignKey), nil
@@ -111,13 +111,13 @@ func (s Service) ParseToken(tokenStr string) (*Claims, error) {
 	}
 	if claims, ok := token.Claims.(*Claims); ok && token.Valid {
 		return claims, nil
-	} else {
-		return nil, err
 	}
+
+	return nil, err
 
 }
 
-func (s Service) createToken(userID uint, role domain.Role, subject string, expireDuration time.Duration) (string, error) {
+func (s *Service) createToken(userID uint, role domain.Role, subject string, expireDuration time.Duration) (string, error) {
 	// create a signer for rsa 256
 	// TODO - replace with rsa 256 RS256 - https://github.com/golang-jwt/jwt/blob/main/http_example_test.go
 

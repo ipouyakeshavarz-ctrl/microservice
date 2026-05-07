@@ -1,5 +1,7 @@
 package domain
 
+import "time"
+
 type Store struct {
 	ID          uint
 	UserID      uint
@@ -9,6 +11,8 @@ type Store struct {
 	Address     Address
 	PhoneNumber string
 	IsActive    bool
+	CreatedAt   time.Time
+	UpdatedAt   *time.Time
 }
 
 type Address struct {

@@ -2,24 +2,41 @@ package mysqlstore
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"myapp/pkg/errmsg"
 	"myapp/pkg/richerror"
 	"storeapp/internal/domain"
 	"storeapp/internal/repository/mysql"
 	"strings"
-	"time"
 )
+
+const storeColumns = `
+id,
+user_id,
+name,
+description,
+logo_url,
+street,
+city,
+province,
+postal_code,
+address_description,
+phone_number,
+is_active,
+created_at,
+updated_at
+`
 
 func (d DB) CreateStore(ctx context.Context, s domain.Store) (*domain.Store, error) {
 	const op = "StoreRepo.CreateStore"
 	query := `
-		INSERT INTO stores (user_id, name, description, logo_url, street, city, province, postal_code, phone_number, is_active, created_at, updated_at)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+		INSERT INTO stores (user_id, name, description, logo_url, street, city, province, postal_code,address_description, phone_number, is_active, created_at, updated_at)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
 	`
 	result, err := d.conn.Conn().ExecContext(ctx, query,
 		s.UserID, s.Name, s.Description, s.LogoURL, s.Address.Street, s.Address.City,
-		s.Address.Province, s.Address.PostalCode, s.PhoneNumber, s.IsActive)
+		s.Address.Province, s.Address.PostalCode, s.Address.Description, s.PhoneNumber, s.IsActive)
 
 	if err != nil {
 		return nil, richerror.New(op).WithKind(richerror.KindUnexpected).
@@ -58,50 +75,53 @@ func (d DB) DeleteStore(ctx context.Context, id uint) error {
 	const op = "StoreRepo.DeleteStore"
 	query := `DELETE FROM stores WHERE id=?`
 
-	_, err := d.conn.Conn().ExecContext(ctx, query, id)
+	res, err := d.conn.Conn().ExecContext(ctx, query, id)
+	if err != nil {
+		return richerror.New(op).
+			WithKind(richerror.KindUnexpected).
+			WithMessage(errmsg.ErrorMsgFailedToDeleteStoreInDB).
+			WithErr(err)
+	}
 
-	return richerror.New(op).WithKind(richerror.KindUnexpected).
-		WithMessage(errmsg.ErrorMsgSomethingWentWrong).WithErr(err)
+	rows, err := res.RowsAffected()
+	if err != nil {
+		return richerror.New(op).
+			WithKind(richerror.KindUnexpected).
+			WithMessage(errmsg.ErrorMsgSomethingWentWrong).
+			WithErr(err)
+	}
 
+	if rows == 0 {
+		return richerror.New(op).
+			WithKind(richerror.KindNotFound).
+			WithMessage(errmsg.ErrorMsgStoreNotFound)
+	}
+
+	return nil
 }
-
 func (d DB) GetStoreByID(ctx context.Context, id uint) (*domain.Store, error) {
 	const op = "StoreRepo.GetStoreByID"
-	query := `SELECT id, user_id, name, description, logo_url, street, city, province, postal_code, phone_number, is_active, created_at, updated_at FROM stores WHERE id=?`
+
+	query := fmt.Sprintf(`SELECT %s FROM stores WHERE id=?`, storeColumns)
+
 	row := d.conn.Conn().QueryRowContext(ctx, query, id)
 
 	s, err := scanStore(row)
-
 	if err != nil {
-		return nil, richerror.New(op).WithKind(richerror.KindUnexpected).
-			WithMessage(errmsg.ErrorMsgSomethingWentWrong).WithErr(err)
-	}
-	return &s, nil
-}
-
-func (d DB) ListStoresByUser(ctx context.Context, userID uint) ([]domain.Store, error) {
-	const op = "StoreRepo.ListStoresByUser"
-
-	query := `SELECT id, user_id, name, description, logo_url, street, city, province, postal_code, phone_number, is_active, created_at, updated_at FROM stores WHERE user_id=?`
-	rows, err := d.conn.Conn().QueryContext(ctx, query, userID)
-	if err != nil {
-		return nil, richerror.New(op).WithKind(richerror.KindUnexpected).
-			WithMessage(errmsg.ErrorMsgSomethingWentWrong).WithErr(err)
-	}
-
-	var stores []domain.Store
-	for rows.Next() {
-
-		s, err := scanStore(rows)
-
-		if err != nil {
-			return nil, richerror.New(op).WithKind(richerror.KindUnexpected).
-				WithMessage(errmsg.ErrorMsgSomethingWentWrong).WithErr(err)
+		if err == sql.ErrNoRows {
+			return nil, richerror.New(op).
+				WithKind(richerror.KindNotFound).
+				WithMessage(errmsg.ErrorMsgStoreNotFound).
+				WithErr(err)
 		}
-		stores = append(stores, s)
+
+		return nil, richerror.New(op).
+			WithKind(richerror.KindUnexpected).
+			WithMessage(errmsg.ErrorMsgFailedToGetStoreInDB).
+			WithErr(err)
 	}
-	return stores, richerror.New(op).WithKind(richerror.KindUnexpected).
-		WithMessage(errmsg.ErrorMsgSomethingWentWrong).WithErr(err)
+
+	return &s, nil
 }
 
 func (d DB) ListStoreIDsByUser(ctx context.Context, userID uint) ([]uint, error) {
@@ -111,24 +131,36 @@ func (d DB) ListStoreIDsByUser(ctx context.Context, userID uint) ([]uint, error)
 
 	rows, err := d.conn.Conn().QueryContext(ctx, query, userID)
 	if err != nil {
-		return nil, richerror.New(op).WithKind(richerror.KindUnexpected).
-			WithMessage(errmsg.ErrorMsgCantScanQueryResult)
+		return nil, richerror.New(op).
+			WithKind(richerror.KindUnexpected).
+			WithMessage(errmsg.ErrorMsgCantScanQueryResult).
+			WithErr(err)
 	}
 	defer rows.Close()
 
 	var ids []uint
-	for rows.Next() {
 
-		store, err := scanStore(rows)
-		if err != nil {
-			return nil, richerror.New(op).WithKind(richerror.KindUnexpected).
-				WithMessage(errmsg.ErrorMsgSomethingWentWrong).WithErr(err)
+	for rows.Next() {
+		var id uint
+		if err := rows.Scan(&id); err != nil {
+			return nil, richerror.New(op).
+				WithKind(richerror.KindUnexpected).
+				WithMessage(errmsg.ErrorMsgCantScanQueryResult).
+				WithErr(err)
 		}
-		ids = append(ids, store.ID)
+		ids = append(ids, id)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, richerror.New(op).
+			WithKind(richerror.KindUnexpected).
+			WithMessage(errmsg.ErrorMsgCantScanQueryResult).
+			WithErr(err)
 	}
 
 	return ids, nil
 }
+
 func (d DB) GetStoresByIDs(ctx context.Context, ids []uint) ([]*domain.Store, error) {
 	const op = "StoreRepo.GetStoresByIDs"
 
@@ -143,31 +175,38 @@ func (d DB) GetStoresByIDs(ctx context.Context, ids []uint) ([]*domain.Store, er
 		args[i] = id
 	}
 
-	query := fmt.Sprintf(`SELECT id, user_id, name, address FROM stores WHERE id IN (%s)`,
-		strings.Join(placeholders, ","),
-	)
+	query := fmt.Sprintf(`
+        SELECT %s FROM stores
+        WHERE id IN (%s)
+    `, storeColumns, strings.Join(placeholders, ","))
 
 	rows, err := d.conn.Conn().QueryContext(ctx, query, args...)
 	if err != nil {
-		return nil, err
+		return nil, richerror.New(op).
+			WithKind(richerror.KindUnexpected).
+			WithMessage(errmsg.ErrorMsgCantScanQueryResult).
+			WithErr(err)
 	}
 	defer rows.Close()
 
 	var stores []*domain.Store
+
 	for rows.Next() {
-		var s domain.Store
-
-		s, err := scanStore(rows)
+		store, err := scanStore(rows)
 		if err != nil {
-			return nil, richerror.New(op).WithKind(richerror.KindUnexpected).
-				WithMessage(errmsg.ErrorMsgSomethingWentWrong).WithErr(err)
+			return nil, richerror.New(op).
+				WithKind(richerror.KindUnexpected).
+				WithMessage(errmsg.ErrorMsgCantScanQueryResult).
+				WithErr(err)
 		}
-
-		stores = append(stores, &s)
+		stores = append(stores, &store)
 	}
 
 	if err := rows.Err(); err != nil {
-		return nil, err
+		return nil, richerror.New(op).
+			WithKind(richerror.KindUnexpected).
+			WithMessage(errmsg.ErrorMsgCantScanQueryResult).
+			WithErr(err)
 	}
 
 	return stores, nil
@@ -175,13 +214,32 @@ func (d DB) GetStoresByIDs(ctx context.Context, ids []uint) ([]*domain.Store, er
 
 func scanStore(scanner mysql.Scanner) (domain.Store, error) {
 	const op = "storeRepo.scanStore"
-	var createdAt time.Time
-	var updatedAt time.Time
+
 	var store domain.Store
 
-	err := scanner.Scan(&store.ID, &store.UserID, &store.Name, &store.Description, &store.LogoURL,
-		&store.Address.Street, &store.Address.City, &store.Address.Province, &store.Address.PostalCode,
-		&store.PhoneNumber, &store.IsActive, &createdAt, &updatedAt)
+	err := scanner.Scan(
+		&store.ID,
+		&store.UserID,
+		&store.Name,
+		&store.Description,
+		&store.LogoURL,
+		&store.Address.Street,
+		&store.Address.City,
+		&store.Address.Province,
+		&store.Address.PostalCode,
+		&store.Address.Description,
+		&store.PhoneNumber,
+		&store.IsActive,
+		&store.CreatedAt,
+		&store.UpdatedAt,
+	)
 
-	return store, richerror.New(op).WithErr(err).WithMessage(errmsg.ErrorMsgCantScanQueryResult)
+	if err != nil {
+		return store, richerror.New(op).
+			WithKind(richerror.KindUnexpected).
+			WithMessage(errmsg.ErrorMsgCantScanQueryResult).
+			WithErr(err)
+	}
+
+	return store, nil
 }
