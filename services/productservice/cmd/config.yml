@@ -2,19 +2,19 @@ application:
   graceful_shutdown_timeout:
 
 grpc_server:
-  product_address: "127.0.0.1:50054"
+  product_address: "0.0.0.0:50054"
 
 
 mysql:
-  port: 3311
-  host: localhost
+  port: 3306
+  host: app-database
   db_name: app_db
   username: app
   password: app0lk2o20
 
 
 redis:
-  host: localhost
+  host: redis
   port: 6379
   password: ""
   db: 0

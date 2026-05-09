@@ -1,72 +1,32 @@
-services:
-  userservice:
-   dns:
-      - 1.1.1.1
-      - 8.8.8.8
-   build:
-    context: .
-    dockerfile: services/userservice/Dockerfile
-    args:
-      SERVICE_PATH: ./services/userservice/cmd/main.go
+# ============================================================
+#  Docker Compose — Go Microservices Platform
+#  Services : gateway | authservice | userservice | cartservice
+#             orderservice | productservice | storeservice
+#  Infra     : MySQL 8 | Redis 7 | RabbitMQ 3.13 | Prometheus | Grafana
+#
+#  Key fixes vs original:
+#  • Image names match actual built images (no go-platform/ prefix)
+#  • depends_on is per-service — only the infra each service actually uses
+#  • GOPROXY passed as build arg for modules behind firewalls
+#  • prometheus also on backend-net so it can scrape service metric ports
+# ============================================================
 
-  app-database:
-    image: mysql:8.0
-    ports:
-      - "3311:3306"
-    container_name: app-database
-    volumes:
-      - appdbdata:/var/lib/mysql
-    restart: always
-    command: [ 'mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci' ]
-    environment:
-      MYSQL_ROOT_PASSWORD: Mp13831383
-      MYSQL_DATABASE: app_db
-      MYSQL_USER: app
-      MYSQL_PASSWORD: app0lk2o20
+name: go-platform
 
-  redis:
-    image: redis:7
-    container_name: redis-cache
-    ports:
-      - "6379:6379"
-    restart: always
-    volumes:
-      - redisdata:/data
-    command: ["redis-server", "--appendonly", "yes"]
+# ─────────────────────────────────────────
+#  NETWORKS
+# ─────────────────────────────────────────
+networks:
+  frontend-net:
+    driver: bridge
+  backend-net:
+    driver: bridge
+  observability-net:
+    driver: bridge
 
-
-  rabbitmq:
-    image: rabbitmq:3.13-management-alpine
-    container_name: rabbitmq-broker
-    ports:
-      - "5672:5672"    # Port for application connection
-      - "15672:15672"  # Port for management UI
-    volumes:
-      - rabbitmqdata:/var/lib/rabbitmq
-    restart: always
-    environment:
-      RABBITMQ_DEFAULT_USER: user
-      RABBITMQ_DEFAULT_PASS: password
-
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: prometheus
-    restart: always
-    volumes:
-      - prometheusdata:/prometheus
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
-    ports:
-      - "9090:9090"
-
-  grafana:
-    image: grafana/grafana:latest
-    container_name: grafana
-    restart: always
-    volumes:
-      - grafanadata:/var/lib/grafana
-    ports:
-      - "3000:3000"
-
+# ─────────────────────────────────────────
+#  VOLUMES
+# ─────────────────────────────────────────
 volumes:
   appdbdata:
   redisdata:
@@ -74,3 +34,302 @@ volumes:
   prometheusdata:
   grafanadata:
 
+# ─────────────────────────────────────────
+#  REUSABLE FRAGMENTS
+# ─────────────────────────────────────────
+x-build-defaults: &build-defaults
+  args:
+    # Pass GOPROXY so `go mod download` works inside the build container.
+    # Override on the CLI if you have a corporate proxy:
+    #   GOPROXY=https://goproxy.cn,direct docker compose build
+    GOPROXY: "${GOPROXY:-https://proxy.golang.org,direct}"
+
+# ─────────────────────────────────────────
+#  SERVICES
+# ─────────────────────────────────────────
+services:
+
+  # ── MySQL ──────────────────────────────
+  app-database:
+    image: mysql:8.0
+    container_name: app-database
+    restart: unless-stopped
+    networks:
+      - backend-net
+    ports:
+      - "3311:3306"   # 3311 is host-side only; inside Docker always use port 3306
+    volumes:
+      - appdbdata:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: Mp13831383
+      MYSQL_DATABASE: app_db
+      MYSQL_USER: app
+      MYSQL_PASSWORD: app0lk2o20
+    command:
+      - mysqld
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-pMp13831383"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  # ── Redis ──────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: redis-cache
+    restart: unless-stopped
+    networks:
+      - backend-net
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    command:
+      - redis-server
+      - --appendonly yes
+      - --maxmemory 256mb
+      - --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+
+  # ── RabbitMQ ───────────────────────────
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: rabbitmq-broker
+    restart: unless-stopped
+    networks:
+      - backend-net
+    ports:
+      - "5672:5672"
+      - "15672:15672"   # management UI → http://localhost:15672  (user/password)
+    volumes:
+      - rabbitmqdata:/var/lib/rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_running"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+
+  # ── Auth Service ───────────────────────
+  # No infra dependencies — pure JWT signer / gRPC server
+  authservice:
+    container_name: authservice
+    image: authservice:latest
+    build:
+      context: .
+      dockerfile: services/authservice/Dockerfile
+      <<: *build-defaults
+    restart: unless-stopped
+    networks:
+      - backend-net
+      - observability-net
+    volumes:
+      - ./services/authservice/cmd/config.yml:/app/config.yml:ro
+    expose:
+      - "50051"   # gRPC
+      - "9100"    # Prometheus metrics
+
+  # ── User Service ───────────────────────
+  # Needs: MySQL (accounts), authservice (token validation)
+  userservice:
+    container_name: userservice
+    image: userservice:latest
+    build:
+      context: .
+      dockerfile: services/userservice/Dockerfile
+      <<: *build-defaults
+    restart: unless-stopped
+    networks:
+      - backend-net
+      - observability-net
+    volumes:
+      - ./services/userservice/cmd/config.yml:/app/config.yml:ro
+    expose:
+      - "50052"   # gRPC
+      - "9100"
+    depends_on:
+      app-database:
+        condition: service_healthy
+      authservice:
+        condition: service_started
+
+  # ── Product Service ────────────────────
+  # Needs: MySQL (catalog), Redis (cache)
+  productservice:
+    container_name: productservice
+    image: productservice:latest
+    build:
+      context: .
+      dockerfile: services/productservice/Dockerfile
+      <<: *build-defaults
+    restart: unless-stopped
+    networks:
+      - backend-net
+      - observability-net
+    volumes:
+      - ./services/productservice/cmd/config.yml:/app/config.yml:ro
+    expose:
+      - "50054"   # gRPC
+      - "9100"
+    depends_on:
+      app-database:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # ── Store Service ──────────────────────
+  # Needs: MySQL (store data), Redis (cache)
+  storeservice:
+    container_name: storeservice
+    image: storeservice:latest
+    build:
+      context: .
+      dockerfile: services/storeservice/Dockerfile
+      <<: *build-defaults
+    restart: unless-stopped
+    networks:
+      - backend-net
+      - observability-net
+    volumes:
+      - ./services/storeservice/cmd/config.yml:/app/config.yml:ro
+    expose:
+      - "50053"   # gRPC
+      - "9100"
+    depends_on:
+      app-database:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # ── Cart Service ───────────────────────
+  # Needs: Redis (cart state), RabbitMQ (publish checkout events)
+  cartservice:
+    container_name: cartservice
+    image: cartservice:latest
+    build:
+      context: .
+      dockerfile: services/cartservice/Dockerfile
+      <<: *build-defaults
+    restart: unless-stopped
+    networks:
+      - backend-net
+      - observability-net
+    volumes:
+      - ./services/cartservice/cmd/config.yml:/app/config.yml:ro
+    expose:
+      - "50060"   # gRPC
+      - "9100"
+    depends_on:
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  # ── Order Service ──────────────────────
+  # Needs: MySQL (orders), RabbitMQ (consume checkout events)
+  orderservice:
+    container_name: orderservice
+    image: orderservice:latest
+    build:
+      context: .
+      dockerfile: services/orderservice/Dockerfile
+      <<: *build-defaults
+    restart: unless-stopped
+    networks:
+      - backend-net
+      - observability-net
+    volumes:
+      - ./services/orderservice/cmd/config.yml:/app/config.yml:ro
+    expose:
+      - "50062"   # gRPC
+      - "9100"
+    depends_on:
+      app-database:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  # ── API Gateway ────────────────────────
+  # The only service on frontend-net; all public HTTP traffic enters here.
+  # Image is named gateway-app to match your existing docker image list.
+  gateway:
+    container_name: gateway
+    image: gateway:latest
+    build:
+      context: .
+      dockerfile: services/gateway/Dockerfile
+      <<: *build-defaults
+    restart: unless-stopped
+    networks:
+      - frontend-net
+      - backend-net
+      - observability-net
+    ports:
+      - "8080:8080"   # public HTTP endpoint
+    volumes:
+      - ./services/gateway/cmd/config.yml:/app/config.yml:ro
+    expose:
+      - "9100"
+    depends_on:
+      authservice:
+        condition: service_started
+      userservice:
+        condition: service_started
+      productservice:
+        condition: service_started
+      storeservice:
+        condition: service_started
+      cartservice:
+        condition: service_started
+      orderservice:
+        condition: service_started
+
+  # ─────────────────────────────────────────
+  #  OBSERVABILITY
+  # ─────────────────────────────────────────
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: unless-stopped
+    networks:
+      - backend-net        # must be here to reach service :9100 metric ports
+      - observability-net
+    volumes:
+      - prometheusdata:/prometheus
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --web.console.libraries=/usr/share/prometheus/console_libraries
+      - --web.console.templates=/usr/share/prometheus/consoles
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: unless-stopped
+    networks:
+      - observability-net
+    volumes:
+      - grafanadata:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    depends_on:
+      - prometheus

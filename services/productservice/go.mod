@@ -6,6 +6,7 @@ require (
 	github.com/go-sql-driver/mysql v1.10.0
 	github.com/redis/go-redis/v9 v9.19.0
 	github.com/rubenv/sql-migrate v1.8.1
+	go.uber.org/zap v1.28.0
 	google.golang.org/grpc v1.81.0
 )
 
@@ -15,6 +16,7 @@ require (
 	github.com/go-gorp/gorp/v3 v3.1.0 // indirect
 	github.com/stretchr/testify v1.11.1 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
+	go.uber.org/multierr v1.10.0 // indirect
 	golang.org/x/net v0.51.0 // indirect
 	golang.org/x/sys v0.42.0 // indirect
 	golang.org/x/text v0.34.0 // indirect

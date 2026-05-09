@@ -19,7 +19,7 @@ type Migrator struct {
 func New(dbConfig mysql.Config) Migrator {
 	migrations := &migrate.FileMigrationSource{
 
-		Dir: "../internal/repository/mysql/migrations",
+		Dir: "./migrations",
 	}
 
 	return Migrator{dialect: "mysql",

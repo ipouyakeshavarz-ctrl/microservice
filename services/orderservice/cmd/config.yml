@@ -2,7 +2,7 @@ application:
   graceful_shutdown_timeout:
 
 grpc_server:
-  order_address: "127.0.0.1:50062"
+  order_address: "0.0.0.0:50062"
 
 logger:
   development: true
@@ -10,13 +10,13 @@ logger:
   file_path: "./logs/order.log"
 
 rabbitmq:
-  url: "amqp://user:password@127.0.0.1:5672/"
+  url: "amqp://user:password@rabbitmq:5672/"
   exchange: "shop_exchange"
   checkout_queue: "order.checkout"
 
 mysql:
-  port: 3311
-  host: localhost
+  port: 3306
+  host: app-database
   db_name: app_db
   username: app
   password: app0lk2o20

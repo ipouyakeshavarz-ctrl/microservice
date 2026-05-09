@@ -1,20 +1,41 @@
-FROM golang:1.26-alpine AS builder
+# syntax=docker/dockerfile:1
+
+ARG GO_VERSION=1.26.3
+ARG ALPINE_VERSION=3.23
+
+FROM golang:${GO_VERSION}-alpine${ALPINE_VERSION} AS builder
+
+ARG GOPROXY=https://go.devneeds.ir/,https://go.devneeds.ir/
+ENV GOPROXY=$GOPROXY
+ENV CGO_ENABLED=0
+ENV GOOS=linux
+ENV GOARCH=amd64
+
+WORKDIR /src
+
+#RUN #apk add --no-cache git
+
+# Copy the whole monorepo so api/ and pkg/ from the root are available
+COPY . .
+
+# Build your gateway binary
+# Adjust this path if your main package lives somewhere else
+RUN go build -mod=vendor -o /out/userservice ./services/userservice/cmd
+
+
+FROM alpine:3.23
+
+#RUN #apk add --no-cache ca-certificates
 
 WORKDIR /app
 
-COPY services/userservice/go.mod .
-COPY services/userservice/go.sum .
-COPY services/userservice/vendor ./vendor
+COPY --from=builder /out/userservice /app/userservice
 
-COPY services/userservice/cmd ./cmd
-COPY services/userservice/internal ./internal
-COPY pkg ./pkg
+COPY --from=builder /src/services/userservice/internal/repository/mysql/migrations /app/migrations
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
-    go build -mod=vendor -o app ./cmd
+COPY ./services/userservice/cmd/config.yml /app/cmd/config.yml
 
-FROM alpine:3.19
-WORKDIR /app
-COPY --from=builder /app/app .
-CMD ["./app"]
+EXPOSE 50052
+
+ENTRYPOINT ["/app/userservice"]
 

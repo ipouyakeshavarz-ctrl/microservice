@@ -1,0 +1,72 @@
+.
+├── cmd
+│   ├── config.yml
+│   ├── logs
+│   │   └── gateway.log
+│   └── main.go
+├── Dockerfile
+├── go.mod
+├── go.sum
+├── internal
+│   ├── client
+│   │   ├── authclient
+│   │   │   └── grpc-auth-client.go
+│   │   ├── cartclient
+│   │   │   ├── add_item.go
+│   │   │   ├── checkout.go
+│   │   │   ├── get_cart.go
+│   │   │   └── grpc-cart-client.go
+│   │   ├── productclient
+│   │   │   ├── creat.go
+│   │   │   ├── delete.go
+│   │   │   ├── get.go
+│   │   │   ├── grpc-product-client.go
+│   │   │   └── update.go
+│   │   ├── storeclient
+│   │   │   ├── creat.go
+│   │   │   ├── delete.go
+│   │   │   ├── grpc-store-client.go
+│   │   │   ├── list.go
+│   │   │   └── update.go
+│   │   └── userclient
+│   │       ├── grpc-user-client.go
+│   │       ├── login.go
+│   │       ├── profile.go
+│   │       └── register.go
+│   ├── config
+│   │   └── config.go
+│   └── delivery
+│       └── http
+│           ├── carthanler
+│           │   ├── add_item.go
+│           │   ├── checkout.go
+│           │   ├── get_cart.go
+│           │   ├── handler.go
+│           │   └── route.go
+│           ├── health_check.go
+│           ├── middleware
+│           │   └── auth.go
+│           ├── producthandler
+│           │   ├── create.go
+│           │   ├── delete.go
+│           │   ├── get.go
+│           │   ├── handler.go
+│           │   ├── route.go
+│           │   └── update.go
+│           ├── server.go
+│           ├── storehandler
+│           │   ├── create.go
+│           │   ├── delete.go
+│           │   ├── handler.go
+│           │   ├── list.go
+│           │   ├── route.go
+│           │   └── update.go
+│           └── userhandler
+│               ├── handler.go
+│               ├── login.go
+│               ├── profile.go
+│               ├── register.go
+│               └── route.go
+└── logs
+
+19 directories, 51 files

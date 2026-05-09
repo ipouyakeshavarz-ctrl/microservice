@@ -3,8 +3,8 @@ application:
   graceful_shutdown_timeout:
 
 grpc_server:
-  auth_address: "127.0.0.1:50051"
-  user_address: "userservice:8080"
+  auth_address: "authservice:50051"
+  user_address: "0.0.0.0:50052"
 
 mysql:
   port: 3306

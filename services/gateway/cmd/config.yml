@@ -3,14 +3,14 @@ application:
 
 
 grpc_client:
-  product_address: "127.0.0.1:50054"
-  user_address: "127.0.0.1:50052"
-  store_address: "127.0.0.1:50053"
-  auth_address: "127.0.0.1:50051"
-  cart_address: "127.0.0.1:50060"
+  auth_address: "authservice:50051"
+  user_address: "userservice:50052"
+  store_address: "storeservice:50053"
+  product_address: "productservice:50054"
+  cart_address: "cartservice:50060"
 
 http_server:
-  address: "127.0.0.1:8887"
+  address: "0.0.0.0:8080"
 
 
 logger:

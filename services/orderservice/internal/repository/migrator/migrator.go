@@ -20,7 +20,7 @@ func New(dbConfig mysql.Config) Migrator {
 	// OR: Read migrations from a folder:
 	migrations := &migrate.FileMigrationSource{
 
-		Dir: "../internal/repository/mysql/migrations",
+		Dir: "./migrations",
 	}
 
 	return Migrator{dialect: "mysql", dbConfig: dbConfig, migrations: migrations, tableNames: "orderapp_migrations"}

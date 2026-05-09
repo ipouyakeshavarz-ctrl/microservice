@@ -3,6 +3,7 @@ module gatewayapp
 go 1.26.1
 
 require (
+	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0
 	github.com/labstack/echo-contrib v0.50.1
 	github.com/labstack/echo/v4 v4.15.2
 	go.uber.org/zap v1.28.0
