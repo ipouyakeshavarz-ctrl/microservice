@@ -6,11 +6,12 @@ grpc_server:
 
 
 mysql:
-  port: 3310
+  port: 3311
   host: localhost
-  db_name: product_db
-  username: product
-  password: productt0lk2o20
+  db_name: app_db
+  username: app
+  password: app0lk2o20
+
 
 redis:
   host: localhost

@@ -10,6 +10,7 @@ import (
 
 	"myapp/api/gen/user"
 
+	grpcprometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
 	"google.golang.org/grpc"
 )
 
@@ -21,13 +22,21 @@ type Server struct {
 }
 
 func NewServer(V validator.Validator, s userservice.Service, address string) *Server {
+
+	engine := grpc.NewServer(
+		grpc.ChainUnaryInterceptor(
+			grpcprometheus.UnaryServerInterceptor,
+			interceptor.UnaryErrorInterceptor(),
+		),
+	)
+
+	grpcprometheus.Register(engine)
+
 	return &Server{
 		Validator: V,
 		service:   s,
 		address:   address,
-		engine: grpc.NewServer(
-			grpc.UnaryInterceptor(interceptor.UnaryErrorInterceptor()),
-		),
+		engine:    engine,
 	}
 }
 

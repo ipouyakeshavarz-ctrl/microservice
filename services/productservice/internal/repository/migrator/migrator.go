@@ -13,16 +13,19 @@ type Migrator struct {
 	dialect    string
 	dbConfig   mysql.Config
 	migrations *migrate.FileMigrationSource
+	tableNames string
 }
 
 func New(dbConfig mysql.Config) Migrator {
-	// OR: Read migrations from a folder:
 	migrations := &migrate.FileMigrationSource{
 
 		Dir: "../internal/repository/mysql/migrations",
 	}
 
-	return Migrator{dialect: "mysql", dbConfig: dbConfig, migrations: migrations}
+	return Migrator{dialect: "mysql",
+		dbConfig:   dbConfig,
+		migrations: migrations,
+		tableNames: "productapp_migrations"}
 }
 
 func (m Migrator) Up() {
@@ -32,6 +35,8 @@ func (m Migrator) Up() {
 	if err != nil {
 		panic(fmt.Errorf("can't open mysql db: %v", err))
 	}
+
+	migrate.SetTable(m.tableNames)
 
 	n, err := migrate.Exec(db, m.dialect, m.migrations, migrate.Up)
 	if err != nil {
@@ -47,6 +52,8 @@ func (m Migrator) Down() {
 	if err != nil {
 		panic(fmt.Errorf("can't open mysql db: %v", err))
 	}
+
+	migrate.SetTable(m.tableNames)
 
 	n, err := migrate.Exec(db, m.dialect, m.migrations, migrate.Down)
 	if err != nil {

@@ -5,11 +5,12 @@ grpc_server:
   store_address: "127.0.0.1:50053"
 
 mysql:
-  port: 3312
+  port: 3311
   host: localhost
-  db_name: store_db
-  username: store
-  password: storet0lk2o20
+  db_name: app_db
+  username: app
+  password: app0lk2o20
+
 
 
 redis:

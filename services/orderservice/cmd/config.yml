@@ -14,10 +14,10 @@ rabbitmq:
   exchange: "shop_exchange"
   checkout_queue: "order.checkout"
 
-
 mysql:
-  port: 3314
+  port: 3311
   host: localhost
-  db_name: order_db
-  username: user
-  password: usert0lk2o20
+  db_name: app_db
+  username: app
+  password: app0lk2o20
+

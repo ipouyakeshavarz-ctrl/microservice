@@ -1,61 +1,28 @@
 services:
-  user-database:
+  userservice:
+   dns:
+      - 1.1.1.1
+      - 8.8.8.8
+   build:
+    context: .
+    dockerfile: services/userservice/Dockerfile
+    args:
+      SERVICE_PATH: ./services/userservice/cmd/main.go
+
+  app-database:
     image: mysql:8.0
     ports:
       - "3311:3306"
-    container_name: user-database
+    container_name: app-database
     volumes:
-      - userdbdata:/var/lib/mysql
+      - appdbdata:/var/lib/mysql
     restart: always
     command: [ 'mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci' ]
     environment:
       MYSQL_ROOT_PASSWORD: Mp13831383
-      MYSQL_DATABASE: user_db
-      MYSQL_USER: user
-      MYSQL_PASSWORD: usert0lk2o20
-
-  product-database:
-    image: mysql:8.0
-    ports:
-      - "3310:3306"
-    container_name: product-database
-    volumes:
-      - productdbdata:/var/lib/mysql
-    restart: always
-    command: [ 'mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci' ]
-    environment:
-      MYSQL_ROOT_PASSWORD: Mp13831383
-      MYSQL_DATABASE: product_db
-      MYSQL_USER: product
-      MYSQL_PASSWORD: productt0lk2o20
-  store-database:
-    image: mysql:8.0
-    ports:
-      - "3312:3306"
-    container_name: store-database
-    volumes:
-      - storedbdata:/var/lib/mysql
-    restart: always
-    command: [ 'mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci' ]
-    environment:
-      MYSQL_ROOT_PASSWORD: Mp13831383
-      MYSQL_DATABASE: store_db
-      MYSQL_USER: store
-      MYSQL_PASSWORD: storet0lk2o20
-  order-database:
-    image: mysql:8.0
-    ports:
-      - "3314:3306"
-    container_name: order-database
-    volumes:
-      - orderdbdata:/var/lib/mysql
-    restart: always
-    command: [ 'mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci' ]
-    environment:
-      MYSQL_ROOT_PASSWORD: Mp13831383
-      MYSQL_DATABASE: order_db
-      MYSQL_USER: user
-      MYSQL_PASSWORD: usert0lk2o20
+      MYSQL_DATABASE: app_db
+      MYSQL_USER: app
+      MYSQL_PASSWORD: app0lk2o20
 
   redis:
     image: redis:7
@@ -81,11 +48,29 @@ services:
       RABBITMQ_DEFAULT_USER: user
       RABBITMQ_DEFAULT_PASS: password
 
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: always
+    volumes:
+      - prometheusdata:/prometheus
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: always
+    volumes:
+      - grafanadata:/var/lib/grafana
+    ports:
+      - "3000:3000"
+
 volumes:
-  userdbdata:
-  productdbdata:
-  storedbdata:
+  appdbdata:
   redisdata:
   rabbitmqdata:
-  orderdbdata:
+  prometheusdata:
+  grafanadata:
 

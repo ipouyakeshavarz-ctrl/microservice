@@ -13,6 +13,8 @@ import (
 	"gatewayapp/internal/delivery/http/userhandler"
 	"myapp/pkg/logger"
 
+	echoprom "github.com/labstack/echo-contrib/prometheus"
+
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"go.uber.org/zap"
@@ -82,6 +84,8 @@ func (s Server) Serve() {
 			return nil
 		},
 	}))
+	p := echoprom.NewPrometheus("gateway", nil)
+	p.Use(s.Router)
 
 	// Routes
 	s.Router.GET("/health-check", s.healthCheck)

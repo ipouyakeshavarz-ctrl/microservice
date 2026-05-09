@@ -4,14 +4,14 @@ application:
 
 grpc_server:
   auth_address: "127.0.0.1:50051"
-  user_address: "127.0.0.1:50052"
+  user_address: "userservice:8080"
 
 mysql:
-  port: 3311
-  host: localhost
-  db_name: user_db
-  username: user
-  password: usert0lk2o20
+  port: 3306
+  host: app-database
+  db_name: app_db
+  username: app
+  password: app0lk2o20
 
 
 logger:

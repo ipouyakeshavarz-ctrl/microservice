@@ -5,6 +5,7 @@ import (
 	"myapp/api/gen/auth"
 	"myapp/pkg/richerror"
 
+	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
 	"google.golang.org/grpc"
 )
 
@@ -16,7 +17,10 @@ type Client struct {
 func New(addr string) (*Client, error) {
 	const op = "authclient.New"
 
-	conn, err := grpc.Dial(addr, grpc.WithInsecure())
+	conn, err := grpc.Dial(addr, grpc.WithInsecure(),
+		grpc.WithUnaryInterceptor(grpc_prometheus.UnaryClientInterceptor),
+		grpc.WithStreamInterceptor(grpc_prometheus.StreamClientInterceptor))
+
 	if err != nil {
 		return nil, richerror.New(op).WithErr(err)
 	}

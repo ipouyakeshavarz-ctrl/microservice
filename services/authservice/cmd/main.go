@@ -27,7 +27,7 @@ func main() {
 
 	authSvc := authservice.New(cfg2.Auth)
 
-	grpcServer := grpc.NewServer(authSvc, cfg2.GrpcServer.AuthAddress)
+	grpcServer := grpc.NewServer(authSvc, cfg2.GrpcServer.AuthAddress, cfg2.Metrics.Port)
 
 	go func() {
 		logger.Info("🚀gRPC server started on ",

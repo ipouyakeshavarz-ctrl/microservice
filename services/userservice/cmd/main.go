@@ -4,6 +4,7 @@ import (
 	authpb "myapp/api/gen/auth"
 	"myapp/pkg/config"
 	"myapp/pkg/logger"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
@@ -17,6 +18,7 @@ import (
 	"userapp/internal/delivery/grpc"
 	"userapp/internal/service"
 
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.uber.org/zap"
 	grpc2 "google.golang.org/grpc"
 )
@@ -54,6 +56,11 @@ func main() {
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+
+	go func() {
+		http.Handle("/metrics", promhttp.Handler())
+		http.ListenAndServe(":9091", nil)
+	}()
 
 	go func() {
 		logger.Info("🚀 gRPC server starting on",
