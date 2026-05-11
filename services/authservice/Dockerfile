@@ -33,5 +33,6 @@ COPY --from=builder /out/authservice /app/authservice
 COPY ./services/authservice/cmd/config.yml /app/cmd/config.yml
 
 EXPOSE 50051
+EXPOSE 9100
 
 ENTRYPOINT ["/app/authservice"]

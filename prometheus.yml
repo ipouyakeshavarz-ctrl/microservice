@@ -1,36 +1,32 @@
 global:
-  scrape_interval: 15s
-  evaluation_interval: 15s
+  scrape_interval: 5s
 
 scrape_configs:
-  - job_name: "prometheus"
-    static_configs:
-      - targets: ["localhost:9090"]
 
-  - job_name: "gateway"
+  - job_name: gateway
     static_configs:
       - targets: ["gateway:8080"]
 
-  - job_name: "authservice"
+  - job_name: authservice
     static_configs:
       - targets: ["authservice:9100"]
 
-  - job_name: "userservice"
+  - job_name: userservice
     static_configs:
       - targets: ["userservice:9100"]
 
-  - job_name: "productservice"
+  - job_name: productservice
     static_configs:
       - targets: ["productservice:9100"]
 
-  - job_name: "storeservice"
+  - job_name: storeservice
     static_configs:
       - targets: ["storeservice:9100"]
 
-  - job_name: "cartservice"
+  - job_name: cartservice
     static_configs:
       - targets: ["cartservice:9100"]
 
-  - job_name: "orderservice"
+  - job_name: orderservice
     static_configs:
       - targets: ["orderservice:9100"]

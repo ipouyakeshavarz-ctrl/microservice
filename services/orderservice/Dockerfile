@@ -36,5 +36,6 @@ COPY --from=builder /src/services/orderservice/internal/repository/mysql/migrati
 COPY ./services/orderservice/cmd/config.yml /app/cmd/config.yml
 
 EXPOSE 50062
+EXPOSE 9100
 
 ENTRYPOINT ["/app/orderservice"]

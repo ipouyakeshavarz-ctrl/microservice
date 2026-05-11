@@ -33,5 +33,6 @@ COPY --from=builder /out/cartservice /app/cartservice
 COPY ./services/cartservice/cmd/config.yml /app/cmd/config.yml
 
 EXPOSE 50060
+EXPOSE 9100
 
 ENTRYPOINT ["/app/cartservice"]

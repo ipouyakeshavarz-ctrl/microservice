@@ -159,8 +159,12 @@ services:
     volumes:
       - ./services/userservice/cmd/config.yml:/app/config.yml:ro
     expose:
-      - "50052"   # gRPC
+      - "50052"
       - "9100"
+    ports:
+      - "50052:50052"
+      - "9101:9100"
+
     depends_on:
       app-database:
         condition: service_healthy
@@ -186,6 +190,9 @@ services:
     expose:
       - "50054"   # gRPC
       - "9100"     # Metrics
+    ports:
+      - "50054:50054"
+      - "9102:9100"
     depends_on:
       app-database:
         condition: service_healthy
@@ -210,6 +217,9 @@ services:
     expose:
       - "50053"   # gRPC
       - "9100"
+    ports:
+      - "5005:50053"
+      - "9103:9100"
     depends_on:
       app-database:
         condition: service_healthy
@@ -234,6 +244,9 @@ services:
     expose:
       - "50060"   # gRPC
       - "9100"
+    ports:
+      - "50060:50060"
+      - "9160:9100"
     depends_on:
       redis:
         condition: service_healthy
@@ -258,6 +271,9 @@ services:
     expose:
       - "50062"   # gRPC
       - "9100"
+    ports:
+      - "50062:50062"
+      - "9162:9100"
     depends_on:
       app-database:
         condition: service_healthy
@@ -307,21 +323,37 @@ services:
     image: prom/prometheus:latest
     container_name: prometheus
     restart: unless-stopped
+
     networks:
-      - backend-net        # must be here to reach service :9100 metric ports
+      - backend-net
       - observability-net
       - monitoring
+
     volumes:
       - prometheusdata:/prometheus
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+
     ports:
       - "9090:9090"
 
     depends_on:
-      - productservice  
+      authservice:
+        condition: service_started
+      userservice:
+        condition: service_started
+      productservice:
+        condition: service_started
+      storeservice:
+        condition: service_started
+      cartservice:
+        condition: service_started
+      orderservice:
+        condition: service_started
+
     command:
       - --config.file=/etc/prometheus/prometheus.yml
       - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=15d
       - --web.console.libraries=/usr/share/prometheus/console_libraries
       - --web.console.templates=/usr/share/prometheus/consoles
 

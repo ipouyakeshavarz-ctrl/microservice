@@ -35,5 +35,6 @@ COPY --from=builder /src/services/storeservice/internal/repository/mysql/migrati
 COPY ./services/storeservice/cmd/config.yml /app/cmd/config.yml
 
 EXPOSE 50053
+EXPOSE 9100
 
 ENTRYPOINT ["/app/storeservice"]

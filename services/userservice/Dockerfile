@@ -35,6 +35,7 @@ COPY --from=builder /src/services/userservice/internal/repository/mysql/migratio
 COPY ./services/userservice/cmd/config.yml /app/cmd/config.yml
 
 EXPOSE 50052
+EXPOSE 9100
 
 ENTRYPOINT ["/app/userservice"]
 

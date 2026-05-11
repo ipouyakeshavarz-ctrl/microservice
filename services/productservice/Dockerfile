@@ -36,5 +36,6 @@ COPY --from=builder /src/services/productservice/internal/repository/mysql/migra
 COPY ./services/productservice/cmd/config.yml /app/cmd/config.yml
 
 EXPOSE 50054
+EXPOSE 9100
 
 ENTRYPOINT ["/app/productservice"]
