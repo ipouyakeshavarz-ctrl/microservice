@@ -19,7 +19,9 @@ func (h *Handler) ListStoresByUser(ctx context.Context,
 	}
 
 	resp, err := h.storeSvc.ListStoresByUser(ctx, input)
+
 	if err != nil {
+
 		return nil, richerror.New(op).WithErr(err).WithFields(map[string]string{
 			"massage": err.Error(),
 		})

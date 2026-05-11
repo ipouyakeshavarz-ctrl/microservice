@@ -37,7 +37,9 @@ func (h *Handler) UpdateStore(ctx context.Context, req *store.UpdateStoreRequest
 	}
 
 	resp, err := h.storeSvc.UpdateStore(ctx, input)
+
 	if err != nil {
+
 		return nil, richerror.New(op).WithErr(err).WithFields(map[string]string{
 			"massage": err.Error(),
 		})

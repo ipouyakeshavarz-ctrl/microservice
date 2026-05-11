@@ -52,7 +52,7 @@ func main() {
 
 	productSvc := productservice.New(productRepo, productCache)
 
-	grpcServer := grpc.NewServer(*productSvc, cfg2.GrpcServer.ProductAddress)
+	grpcServer := grpc.NewServer(*productSvc, cfg2.GrpcServer.ProductAddress, cfg2.Metrics.Port)
 
 	go func() {
 		logger.Info("🚀gRPC server started on ",

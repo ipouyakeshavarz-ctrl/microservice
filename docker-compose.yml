@@ -17,6 +17,8 @@ name: go-platform
 #  NETWORKS
 # ─────────────────────────────────────────
 networks:
+  monitoring:
+    driver: bridge
   frontend-net:
     driver: bridge
   backend-net:
@@ -180,9 +182,10 @@ services:
       - observability-net
     volumes:
       - ./services/productservice/cmd/config.yml:/app/config.yml:ro
+ 
     expose:
       - "50054"   # gRPC
-      - "9100"
+      - "9100"     # Metrics
     depends_on:
       app-database:
         condition: service_healthy
@@ -307,11 +310,15 @@ services:
     networks:
       - backend-net        # must be here to reach service :9100 metric ports
       - observability-net
+      - monitoring
     volumes:
       - prometheusdata:/prometheus
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
     ports:
       - "9090:9090"
+
+    depends_on:
+      - productservice  
     command:
       - --config.file=/etc/prometheus/prometheus.yml
       - --storage.tsdb.path=/prometheus
@@ -323,6 +330,7 @@ services:
     container_name: grafana
     restart: unless-stopped
     networks:
+      - monitoring
       - observability-net
     volumes:
       - grafanadata:/var/lib/grafana

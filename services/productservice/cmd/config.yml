@@ -25,3 +25,6 @@ logger:
   development: true
   service_name: "product_service"
   file_path: "./logs/product.log"
+
+metrics:
+  Port: 9100

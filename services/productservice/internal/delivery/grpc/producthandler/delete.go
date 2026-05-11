@@ -18,11 +18,14 @@ func (h *Handler) DeleteProduct(ctx context.Context,
 	}
 
 	resp, err := h.productSvc.Delete(ctx, input)
+
 	if err != nil {
+
 		return nil, richerror.New(op).WithErr(err).WithFields(map[string]string{
 			"massage": err.Error(),
 		})
 	}
+
 	return &product.DeleteProductResponse{
 		Success: resp.Success,
 	}, nil

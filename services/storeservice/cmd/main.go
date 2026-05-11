@@ -4,6 +4,7 @@ import (
 	"context"
 	"myapp/pkg/config"
 	"myapp/pkg/logger"
+
 	"os"
 	"os/signal"
 	cfg "storeapp/internal/config"
@@ -53,7 +54,7 @@ func main() {
 	storeSvc := storeservice.New(storeRepo, storeCache)
 	storeV := storevalidator.New()
 
-	grpcServer := grpc.NewServer(storeV, storeSvc, cfg2.GrpcServer.StoreAddress)
+	grpcServer := grpc.NewServer(storeV, storeSvc, cfg2.GrpcServer.StoreAddress, cfg2.Metrics.Port)
 	go func() {
 		logger.Info("🚀gRPC server started on", zap.String("address", cfg2.GrpcServer.StoreAddress))
 

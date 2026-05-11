@@ -14,6 +14,7 @@ func (s *Service) ListStoresByUser(ctx context.Context,
 	const op = "StoreService.ListStoresByUser"
 
 	storeIDs, err := s.repo.ListStoreIDsByUser(ctx, req.UserID)
+
 	if err != nil {
 		return param.ListStoresByUserResponse{},
 			richerror.New(op).
@@ -28,11 +29,16 @@ func (s *Service) ListStoresByUser(ctx context.Context,
 
 	cachedMap, err := s.storeCache.GetManyByIDs(ctx, storeIDs)
 	if err != nil {
+
 		return param.ListStoresByUserResponse{},
 			richerror.New(op).
 				WithKind(richerror.KindUnexpected).
 				WithMessage(errmsg.ErrorMsgFailedToCachedStore).
 				WithErr(err)
+	}
+
+	if len(cachedMap) != 0 {
+
 	}
 
 	var missedIDs []uint
@@ -44,7 +50,9 @@ func (s *Service) ListStoresByUser(ctx context.Context,
 
 	var freshStores []*domain.Store
 	if len(missedIDs) > 0 {
+
 		freshStores, err = s.repo.GetStoresByIDs(ctx, missedIDs)
+
 		if err != nil {
 			return param.ListStoresByUserResponse{},
 				richerror.New(op).

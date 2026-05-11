@@ -3,6 +3,7 @@ package userservice
 import (
 	"context"
 	"myapp/pkg/errmsg"
+	"myapp/pkg/metrics"
 	"myapp/pkg/richerror"
 	"userapp/internal/domain"
 	"userapp/internal/param"
@@ -25,10 +26,12 @@ func (s Service) Register(ctx context.Context, req param.RegisterRequest) (param
 		Role:        domain.UserRole,
 	}
 
-	createdUser, err := s.repo.Register(ctx, user)
-	if err != nil {
+	createdUser, cErr := s.repo.Register(ctx, user)
+	if cErr != nil {
 		return param.RegisterResponse{}, richerror.New(op).WithErr(err)
 	}
+
+	metrics.UserRegistrations.Inc()
 
 	return param.RegisterResponse{User: param.UserInfo{
 		ID:          createdUser.ID,

@@ -17,11 +17,15 @@ func (h *Handler) GetProductByID(ctx context.Context,
 	}
 
 	resp, err := h.productSvc.GetByID(ctx, input)
+
 	if err != nil {
+
 		return nil, richerror.New(op).WithErr(err).WithFields(map[string]string{
 			"massage": err.Error(),
 		})
+
 	}
+
 	return &product.GetProductResponse{
 		Product: &product.ProductInfo{
 			Id:          uint64(resp.Product.ID),

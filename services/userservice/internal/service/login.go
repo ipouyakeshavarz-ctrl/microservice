@@ -3,6 +3,7 @@ package userservice
 import (
 	"context"
 	"myapp/pkg/errmsg"
+	"myapp/pkg/metrics"
 	"myapp/pkg/richerror"
 	"userapp/internal/param"
 
@@ -33,6 +34,8 @@ func (s Service) Login(ctx context.Context, req param.LoginRequest) (param.Login
 	if gErr != nil {
 		return param.LoginResponse{}, richerror.New(op).WithErr(gErr)
 	}
+
+	metrics.UserLogins.Inc()
 
 	return param.LoginResponse{
 		User: param.UserInfo{

@@ -10,6 +10,7 @@ func (s *Service) UpdateStore(ctx context.Context, req param.UpdateStoreRequest)
 	const op = "StoreService.UpdateStore"
 
 	store, err := s.repo.GetStoreByID(ctx, req.ID)
+
 	if err != nil {
 		return param.UpdateStoreResponse{}, richerror.New(op).WithErr(err)
 	}
@@ -55,6 +56,7 @@ func (s *Service) UpdateStore(ctx context.Context, req param.UpdateStoreRequest)
 	}
 
 	updatedStore, err := s.repo.UpdateStore(ctx, *store)
+
 	if err != nil {
 		return param.UpdateStoreResponse{}, richerror.New(op).WithErr(err)
 	}

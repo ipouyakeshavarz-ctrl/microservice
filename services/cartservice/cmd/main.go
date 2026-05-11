@@ -65,7 +65,7 @@ func main() {
 
 	cartService := cartservice.New(cartRepo, publisher)
 
-	grpcServer := grpc.NewServer(*cartService, cfg2.GrpcServer.CartAddress)
+	grpcServer := grpc.NewServer(*cartService, cfg2.GrpcServer.CartAddress, cfg2.Metrics.Port)
 
 	go func() {
 		logger.Info("🚀gRPC server started on ",

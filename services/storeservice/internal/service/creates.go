@@ -3,8 +3,10 @@ package storeservice
 import (
 	"context"
 	"myapp/pkg/errmsg"
+	"myapp/pkg/metrics"
 	"myapp/pkg/richerror"
 	"storeapp/internal/domain"
+
 	"storeapp/internal/param"
 )
 
@@ -33,6 +35,8 @@ func (s *Service) CreateStore(ctx context.Context, req param.CreateStoreRequest)
 			WithMessage(errmsg.ErrorMsgFailedToCreateStoreInDB).
 			WithErr(err)
 	}
+
+	metrics.StoresCreated.Inc()
 
 	return param.CreateStoreResponse{Store: param.StoreInfo{
 		ID:          finalStore.ID,

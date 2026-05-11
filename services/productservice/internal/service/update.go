@@ -5,6 +5,7 @@ import (
 	"myapp/pkg/errmsg"
 	"myapp/pkg/richerror"
 	"productapp/internal/domain"
+
 	"productapp/internal/param"
 )
 
@@ -25,6 +26,7 @@ func (s *Service) Update(ctx context.Context, p param.UpdateProductRequest) (par
 	}
 
 	existing, err := s.repo.GetByID(ctx, p.ID)
+
 	if err != nil {
 
 		if re, ok := err.(*richerror.RichError); ok {
@@ -40,7 +42,7 @@ func (s *Service) Update(ctx context.Context, p param.UpdateProductRequest) (par
 		return param.UpdateProductResponse{}, richerror.New(op).WithKind(richerror.KindUnexpected).WithMessage(errmsg.ErrorMsgUserNotAllowed)
 	}
 
-	updatedProduct, err := s.repo.Update(ctx, domain.Product{
+	updatedProduct, uErr := s.repo.Update(ctx, domain.Product{
 		StoreID:     p.StoreID,
 		Name:        p.Name,
 		Description: p.Description,
@@ -52,7 +54,7 @@ func (s *Service) Update(ctx context.Context, p param.UpdateProductRequest) (par
 		IsActive:    p.IsActive,
 	})
 
-	if err != nil {
+	if uErr != nil {
 
 		if re, ok := err.(*richerror.RichError); ok {
 			return param.UpdateProductResponse{}, re

@@ -37,11 +37,14 @@ func (h *Handler) UpdateProduct(ctx context.Context, req *product.UpdateProductR
 	}
 
 	resp, err := h.productSvc.Update(ctx, input)
+
 	if err != nil {
+
 		return nil, richerror.New(op).WithErr(err).WithFields(map[string]string{
 			"massage": err.Error(),
 		})
 	}
+
 	return &product.UpdateProductResponse{
 		Product: &product.ProductInfo{
 			Id:          uint64(resp.Product.ID),

@@ -18,3 +18,7 @@ logger:
   development: true
   service_name: "user_service"
   file_path: "./logs/service.log"
+
+
+metrics:
+  Port: 9100

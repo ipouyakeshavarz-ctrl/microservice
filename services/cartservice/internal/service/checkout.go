@@ -4,8 +4,8 @@ import (
 	"cartapp/internal/domain"
 	"cartapp/internal/param"
 	"context"
-	"fmt"
 	"myapp/pkg/errmsg"
+	"myapp/pkg/metrics"
 	"myapp/pkg/richerror"
 	"time"
 )
@@ -43,8 +43,6 @@ func (s *Service) Checkout(ctx context.Context, req param.CheckOutRequest) (*par
 		OccurredAt: time.Now(),
 	}
 
-	fmt.Println(event)
-
 	if err := s.publisher.PublishCartCheckedOut(ctx, event); err != nil {
 		return &param.CheckoutResponse{}, err
 	}
@@ -53,6 +51,8 @@ func (s *Service) Checkout(ctx context.Context, req param.CheckOutRequest) (*par
 		return &param.CheckoutResponse{}, err
 	}
 
+	metrics.CartCheckouts.Inc()
+	
 	return &param.CheckoutResponse{
 		CheckoutID: checkoutID,
 	}, nil

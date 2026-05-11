@@ -11,6 +11,7 @@ func (s *Service) Delete(ctx context.Context, req param.DeleteProductRequest) (p
 	const op = "ProductService.Delete"
 
 	p, err := s.repo.GetByID(ctx, req.ID)
+
 	if err != nil {
 		return param.DeleteProductResponse{
 				Success: false,
@@ -27,7 +28,8 @@ func (s *Service) Delete(ctx context.Context, req param.DeleteProductRequest) (p
 	}
 
 	dErr := s.repo.Delete(ctx, req.ID)
-	if err != nil {
+
+	if dErr != nil {
 
 		if re, ok := dErr.(*richerror.RichError); ok {
 			return param.DeleteProductResponse{

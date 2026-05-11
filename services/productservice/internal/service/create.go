@@ -3,6 +3,7 @@ package productservice
 import (
 	"context"
 	"myapp/pkg/errmsg"
+	"myapp/pkg/metrics"
 	"myapp/pkg/richerror"
 	"productapp/internal/domain"
 	"productapp/internal/param"
@@ -44,6 +45,8 @@ func (s *Service) Create(ctx context.Context, p param.CreateProductRequest) (par
 			WithErr(err)
 	}
 
+	metrics.ProductsCreated.Inc()
+	
 	return param.CreateProductResponse{Product: param.ProductInfo{
 		StoreID:     createdProduct.StoreID,
 		ID:          createdProduct.ID,

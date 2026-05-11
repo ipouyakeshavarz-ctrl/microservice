@@ -23,3 +23,6 @@ rabbitmq:
   url: "amqp://user:password@rabbitmq:5672/"
   exchange: "shop_exchange"
   checkout_routing_key: "order.checkout"
+
+metrics:
+  Port: 9100

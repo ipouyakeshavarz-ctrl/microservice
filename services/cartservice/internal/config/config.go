@@ -11,6 +11,7 @@ type Config struct {
 	Redis       redis.Config `koanf:"redis"`
 	Logger      Logger       `koanf:"logger"`
 	RabbitMQ    RabbitMQ     `koanf:"rabbitmq"`
+	Metrics     Metrics      `koanf:"metrics"`
 }
 
 type Application struct {
@@ -30,4 +31,8 @@ type RabbitMQ struct {
 	URL                string `koanf:"url"`
 	Exchange           string `koanf:"exchange"`
 	CheckoutRoutingKey string `koanf:"checkout_routing_key"`
+}
+
+type Metrics struct {
+	Port int `koanf:"port"`
 }

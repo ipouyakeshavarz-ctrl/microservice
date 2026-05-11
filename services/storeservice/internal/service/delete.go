@@ -4,6 +4,7 @@ import (
 	"context"
 	"myapp/pkg/errmsg"
 	"myapp/pkg/richerror"
+
 	"storeapp/internal/param"
 )
 
@@ -11,6 +12,7 @@ func (s *Service) DeleteStore(ctx context.Context, req param.DeleteStoreRequest)
 	const op = "StoreService.DeleteStore"
 
 	store, err := s.repo.GetStoreByID(ctx, req.StoreID)
+
 	if err != nil {
 
 		if re, ok := err.(*richerror.RichError); ok {
@@ -32,6 +34,7 @@ func (s *Service) DeleteStore(ctx context.Context, req param.DeleteStoreRequest)
 	}
 
 	err = s.repo.DeleteStore(ctx, req.StoreID)
+
 	if err != nil {
 
 		if re, ok := err.(*richerror.RichError); ok {

@@ -2,16 +2,19 @@ package orderservice
 
 import (
 	"context"
+	"myapp/pkg/metrics"
+	"myapp/pkg/richerror"
 	"orderapp/internal/domain"
 	"orderapp/internal/param"
 	"time"
 )
 
 func (s *Service) CreateFromCheckout(ctx context.Context, req param.CreateFromCheckoutRequest) error {
+	const op = "orderservice.CreateFromCheckout"
 
 	exists, err := s.repo.ExistsByCheckoutID(ctx, req.Event.CheckoutID)
 	if err != nil {
-		return err
+		return richerror.New(op).WithErr(err)
 	}
 
 	if exists {
@@ -35,5 +38,11 @@ func (s *Service) CreateFromCheckout(ctx context.Context, req param.CreateFromCh
 		CreatedAt:  time.Now(),
 	}
 
-	return s.repo.Create(ctx, order)
+	if err := s.repo.Create(ctx, order); err != nil {
+		return richerror.New(op).WithErr(err)
+	}
+
+	metrics.OrdersCreated.Inc()
+
+	return nil
 }
