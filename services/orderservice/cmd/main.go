@@ -5,10 +5,14 @@ import (
 	"myapp/pkg/logger"
 	cfg "orderapp/internal/config"
 	"orderapp/internal/delivery/broker/rabbitmq"
+	"orderapp/internal/delivery/grpc"
 	"orderapp/internal/repository/migrator"
 	"orderapp/internal/repository/mysql"
 	"orderapp/internal/repository/mysql/mysqlorder"
 	orderservice "orderapp/internal/service"
+	"os"
+	"os/signal"
+	"syscall"
 
 	amqp "github.com/rabbitmq/amqp091-go"
 	"go.uber.org/zap"
@@ -85,12 +89,40 @@ func main() {
 
 	consumer := rabbitmq.New(ch, queue.Name, orderSvc)
 
-	err = consumer.Start()
+	go func() {
+		if err := consumer.Start(); err != nil {
+			logger.Fatal("consumer start failed", zap.Error(err))
+		}
+	}()
+
 	if err != nil {
 		logger.Fatal("consumer start failed", zap.Error(err))
 	}
 
 	logger.Info("order service started and waiting for events")
 
-	select {}
+	grpcServer := grpc.NewServer(orderSvc, cfg2.GrpcServer.OrderAddress, cfg2.Metrics.Port)
+
+	go func() {
+		logger.Info("🚀gRPC server started on ",
+			zap.String("address", cfg2.GrpcServer.OrderAddress))
+
+		if err := grpcServer.Run(); err != nil {
+			logger.Fatal("cannot start grpc server", zap.Error(err))
+		}
+	}()
+
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+
+	<-quit
+	logger.Info("Received shutdown signal. Initiating graceful shutdown...")
+
+	grpcServer.GracefulStop()
+
+	if err := mysqlRepo.Conn().Close(); err != nil {
+		logger.Error("failed to close MysqlRepo connection", zap.Error(err))
+	}
+
+	logger.Info("Graceful shutdown completed successfully. 🛑")
 }

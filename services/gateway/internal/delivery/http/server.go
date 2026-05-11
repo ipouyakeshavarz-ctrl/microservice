@@ -3,11 +3,13 @@ package httpserver
 import (
 	"gatewayapp/internal/client/authclient"
 	"gatewayapp/internal/client/cartclient"
+	"gatewayapp/internal/client/orderclient"
 	"gatewayapp/internal/client/productclient"
 	"gatewayapp/internal/client/storeclient"
 	"gatewayapp/internal/client/userclient"
 	"gatewayapp/internal/config"
 	"gatewayapp/internal/delivery/http/carthanler"
+	orderhandler "gatewayapp/internal/delivery/http/orderhanler"
 	"gatewayapp/internal/delivery/http/producthandler"
 	"gatewayapp/internal/delivery/http/storehandler"
 	"gatewayapp/internal/delivery/http/userhandler"
@@ -25,6 +27,7 @@ type Server struct {
 	storeHandler   storehandler.Handler
 	userHandler    userhandler.Handler
 	productHandler producthandler.Handler
+	orderHandler   orderhandler.Handler
 	cartHandler    carthanler.Handler
 	Router         *echo.Echo
 }
@@ -34,6 +37,7 @@ func New(userClient userclient.Client,
 	storeClient storeclient.Client,
 	productClient productclient.Client,
 	cartClient cartclient.Client,
+	orderClient orderclient.Client,
 	config config.Config) Server {
 	return Server{
 		Router:         echo.New(),
@@ -41,6 +45,7 @@ func New(userClient userclient.Client,
 		storeHandler:   storehandler.New(storeClient, authClient),
 		productHandler: producthandler.New(productClient, authClient),
 		cartHandler:    carthanler.New(cartClient, authClient),
+		orderHandler:   orderhandler.New(orderClient, authClient),
 		config:         config,
 	}
 }
@@ -93,6 +98,7 @@ func (s Server) Serve() {
 	s.storeHandler.SetRoutes(s.Router)
 	s.productHandler.SetRoutes(s.Router)
 	s.cartHandler.SetRoutes(s.Router)
+	s.orderHandler.SetRoutes(s.Router)
 
 	// Start server
 	s.Router.Logger.Fatal(s.Router.Start(s.config.HttpServer.Address))

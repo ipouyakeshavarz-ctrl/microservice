@@ -4,18 +4,9 @@ package order;
 
 option go_package = "microservice/api/gen/order";
 
-import "google/protobuf/timestamp.proto";
-
 service OrderService {
   rpc GetOrder(GetOrderRequest) returns (GetOrderResponse);
   rpc ListUserOrders(ListUserOrdersRequest) returns (ListUserOrdersResponse);
-}
-
-enum OrderStatus {
-  ORDER_STATUS_PENDING = 0;
-  ORDER_STATUS_PAID = 1;
-  ORDER_STATUS_FAILED = 2;
-  ORDER_STATUS_CANCELLED = 3;
 }
 
 message OrderItem {
@@ -26,15 +17,18 @@ message OrderItem {
 
 message Order {
   string id = 1;
-  uint64 user_id = 2;
-  repeated OrderItem items = 3;
-  uint64 total_price = 4;
-  OrderStatus status = 5;
-  google.protobuf.Timestamp created_at = 6;
+  string CheckoutId =2;
+  uint64 user_id = 3;
+  repeated OrderItem items = 4;
+  uint64 total_price = 5;
+  string status = 6;
+  int64 created_at = 7;
+
 }
 
 message GetOrderRequest {
-  string order_id = 1;
+  uint64 user_id = 1;
+  string order_id = 2;
 }
 
 message GetOrderResponse {

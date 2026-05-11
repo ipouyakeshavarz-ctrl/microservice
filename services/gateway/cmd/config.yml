@@ -8,6 +8,7 @@ grpc_client:
   store_address: "storeservice:50053"
   product_address: "productservice:50054"
   cart_address: "cartservice:50060"
+  order_address: "orderservice:50062"
 
 http_server:
   address: "0.0.0.0:8080"

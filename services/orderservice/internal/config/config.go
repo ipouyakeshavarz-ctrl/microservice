@@ -11,6 +11,7 @@ type Config struct {
 	Mysql       mysql.Config `koanf:"mysql"`
 	Logger      Logger       `koanf:"logger"`
 	RabbitMQ    RabbitMQ     `koanf:"rabbitmq"`
+	Metrics     Metrics      `koanf:"metrics"`
 }
 
 type Application struct {
@@ -30,4 +31,8 @@ type RabbitMQ struct {
 	URL           string `koanf:"url"`
 	Exchange      string `koanf:"exchange"`
 	CheckoutQueue string `koanf:"checkout_queue"`
+}
+
+type Metrics struct {
+	Port int `koanf:"port"`
 }

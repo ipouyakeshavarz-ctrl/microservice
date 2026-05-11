@@ -5,7 +5,7 @@ import "time"
 type OrderStatus string
 
 const (
-	OrderStatusCreated OrderStatus = "CREATED"
+	OrderStatusCreated OrderStatus = "ORDER_STATUS_CREATED"
 )
 
 type Order struct {
