@@ -8,6 +8,16 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// deleteProduct godoc
+// @Summary Delete product
+// @Tags Product
+// @Security BearerAuth
+// @Accept json
+// @Produce json
+// @Param request body product.DeleteProductRequest true "Delete product payload"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Router /product/delete [post]
 func (h Handler) deleteProduct(c echo.Context) error {
 	var req product.DeleteProductRequest
 	userID := c.Get("user_id").(uint64)

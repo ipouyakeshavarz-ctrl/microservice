@@ -8,6 +8,15 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// ListUserOrders godoc
+// @Summary List user orders
+// @Description Returns all orders for authenticated user
+// @Tags Order
+// @Security BearerAuth
+// @Produce json
+// @Success 200 {object} map[string]interface{}
+// @Failure 401 {object} map[string]interface{}
+// @Router /order/list [get]
 func (h Handler) ListUserOrders(c echo.Context) error {
 	userID := c.Get("user_id").(uint64)
 

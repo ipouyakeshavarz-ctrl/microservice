@@ -15,8 +15,6 @@ func (h Handler) SetRoutes(e *echo.Echo) {
 		middleware.AuthMiddleware(&h.authClient))
 	storeGroup.POST("/update", h.updateStore,
 		middleware.AuthMiddleware(&h.authClient))
-	storeGroup.POST("/update", h.updateStore,
-		middleware.AuthMiddleware(&h.authClient))
 	storeGroup.GET("/list", h.listStore,
 		middleware.AuthMiddleware(&h.authClient))
 

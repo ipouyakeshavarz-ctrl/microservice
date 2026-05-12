@@ -15,6 +15,8 @@ import (
 	"gatewayapp/internal/delivery/http/userhandler"
 	"myapp/pkg/logger"
 
+	echoSwagger "github.com/swaggo/echo-swagger"
+
 	echoprom "github.com/labstack/echo-contrib/prometheus"
 
 	"github.com/labstack/echo/v4"
@@ -91,6 +93,8 @@ func (s Server) Serve() {
 	}))
 	p := echoprom.NewPrometheus("gateway", nil)
 	p.Use(s.Router)
+
+	s.Router.GET("/swagger/*", echoSwagger.WrapHandler)
 
 	// Routes
 	s.Router.GET("/health-check", s.healthCheck)

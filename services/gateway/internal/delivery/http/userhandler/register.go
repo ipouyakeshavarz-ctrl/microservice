@@ -8,6 +8,16 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// userRegister godoc
+// @Summary Register user
+// @Description Register a new user
+// @Tags Users
+// @Accept json
+// @Produce json
+// @Param request body user.RegisterRequest true "Register payload"
+// @Success 201 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Router /users/register [post]
 func (h Handler) userRegister(c echo.Context) error {
 	var req user.RegisterRequest
 

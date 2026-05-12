@@ -8,6 +8,15 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// Checkout godoc
+// @Summary Checkout cart
+// @Description Checkout authenticated user's cart
+// @Tags Cart
+// @Security BearerAuth
+// @Produce json
+// @Success 200 {object} map[string]interface{}
+// @Failure 401 {object} map[string]interface{}
+// @Router /cart/check_out [get]
 func (h Handler) Checkout(c echo.Context) error {
 
 	resp, err := h.cartClient.Checkout(c.Request().Context(), &cart.CheckoutRequest{

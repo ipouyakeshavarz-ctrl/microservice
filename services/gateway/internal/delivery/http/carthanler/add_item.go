@@ -8,6 +8,18 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// AddItem godoc
+// @Summary Add item to cart
+// @Description Add product to authenticated user's cart
+// @Tags Cart
+// @Security BearerAuth
+// @Accept json
+// @Produce json
+// @Param request body cart.AddItemRequest true "Add item payload"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Failure 401 {object} map[string]interface{}
+// @Router /cart/add_item [post]
 func (h Handler) AddItem(c echo.Context) error {
 	var req cart.AddItemRequest
 

@@ -1,0 +1,599 @@
+basePath: /
+definitions:
+  cart.AddItemRequest:
+    properties:
+      product_id:
+        type: integer
+      quantity:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  order.GetOrderRequest:
+    properties:
+      order_id:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  product.CreateProductRequest:
+    properties:
+      category:
+        type: string
+      description:
+        type: string
+      image_url:
+        type: string
+      is_active:
+        type: boolean
+      name:
+        type: string
+      price:
+        type: number
+      sku:
+        type: string
+      stock:
+        type: integer
+      store_id:
+        type: integer
+    type: object
+  product.DeleteProductRequest:
+    properties:
+      product_id:
+        type: integer
+      store_id:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  product.GetProductByIDRequest:
+    properties:
+      product_id:
+        type: integer
+      store_id:
+        type: integer
+    type: object
+  product.UpdateProductRequest:
+    properties:
+      category:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      image_url:
+        type: string
+      is_active:
+        type: boolean
+      name:
+        type: string
+      price:
+        type: number
+      sku:
+        type: string
+      stock:
+        type: integer
+      store_id:
+        type: integer
+    type: object
+  store.Address:
+    properties:
+      city:
+        type: string
+      description:
+        type: string
+      postalCode:
+        type: string
+      province:
+        type: string
+      street:
+        type: string
+    type: object
+  store.CreateStoreRequest:
+    properties:
+      address:
+        $ref: '#/definitions/store.Address'
+      description:
+        type: string
+      logo_url:
+        type: string
+      name:
+        type: string
+      phone_number:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  store.DeleteStoreRequest:
+    properties:
+      store_id:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  store.UpdateStoreRequest:
+    properties:
+      address:
+        $ref: '#/definitions/store.Address'
+      description:
+        type: string
+      is_active:
+        type: boolean
+      logo_url:
+        type: string
+      name:
+        type: string
+      phone_number:
+        type: string
+      store_id:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  user.LoginRequest:
+    properties:
+      password:
+        type: string
+      phone_number:
+        type: string
+    type: object
+  user.RegisterRequest:
+    properties:
+      name:
+        type: string
+      password:
+        type: string
+      phone_number:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Product Microservice Gateway API
+  title: Gateway API
+  version: "1.0"
+paths:
+  /cart/add_item:
+    post:
+      consumes:
+      - application/json
+      description: Add product to authenticated user's cart
+      parameters:
+      - description: Add item payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/cart.AddItemRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Add item to cart
+      tags:
+      - Cart
+  /cart/check_out:
+    get:
+      description: Checkout authenticated user's cart
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Checkout cart
+      tags:
+      - Cart
+  /cart/get_cart:
+    get:
+      description: Returns authenticated user's cart
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get cart
+      tags:
+      - Cart
+  /order/get_order:
+    post:
+      consumes:
+      - application/json
+      description: Get a specific order by ID
+      parameters:
+      - description: Get order payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/order.GetOrderRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get order
+      tags:
+      - Order
+  /order/list:
+    get:
+      description: Returns all orders for authenticated user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: List user orders
+      tags:
+      - Order
+  /product/create:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Create product payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/product.CreateProductRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create product
+      tags:
+      - Product
+  /product/delete:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Delete product payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/product.DeleteProductRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete product
+      tags:
+      - Product
+  /product/get:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Get product payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/product.GetProductByIDRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get product
+      tags:
+      - Product
+  /product/update:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Update product payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/product.UpdateProductRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update product
+      tags:
+      - Product
+  /store/create:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Create store payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/store.CreateStoreRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create store
+      tags:
+      - Store
+  /store/delete:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Delete store payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/store.DeleteStoreRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete store
+      tags:
+      - Store
+  /store/list:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: List stores
+      tags:
+      - Store
+  /store/update:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Update store payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/store.UpdateStoreRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update store
+      tags:
+      - Store
+  /users/login:
+    post:
+      consumes:
+      - application/json
+      description: Login user with phone number and password
+      parameters:
+      - description: Login payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/user.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      summary: User login
+      tags:
+      - Users
+  /users/profile:
+    get:
+      description: Returns authenticated user profile
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get user profile
+      tags:
+      - Users
+  /users/register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user
+      parameters:
+      - description: Register payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/user.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Register user
+      tags:
+      - Users
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

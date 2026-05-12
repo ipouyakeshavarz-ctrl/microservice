@@ -10,6 +10,17 @@ import (
 	"net/http"
 )
 
+// createStore godoc
+// @Summary Create store
+// @Tags Store
+// @Security BearerAuth
+// @Accept json
+// @Produce json
+// @Param request body store.CreateStoreRequest true "Create store payload"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Failure 403 {object} map[string]interface{}
+// @Router /store/create [post]
 func (h Handler) createStore(c echo.Context) error {
 	var req store.CreateStoreRequest
 	userID := c.Get("user_id").(uint64)

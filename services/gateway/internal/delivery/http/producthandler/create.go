@@ -9,6 +9,16 @@ import (
 	"net/http"
 )
 
+// createProduct godoc
+// @Summary Create product
+// @Tags Product
+// @Security BearerAuth
+// @Accept json
+// @Produce json
+// @Param request body product.CreateProductRequest true "Create product payload"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Router /product/create [post]
 func (h Handler) createProduct(c echo.Context) error {
 
 	var req product.CreateProductRequest

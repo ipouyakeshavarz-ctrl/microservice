@@ -8,6 +8,15 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// GetCart godoc
+// @Summary Get cart
+// @Description Returns authenticated user's cart
+// @Tags Cart
+// @Security BearerAuth
+// @Produce json
+// @Success 200 {object} map[string]interface{}
+// @Failure 401 {object} map[string]interface{}
+// @Router /cart/get_cart [get]
 func (h Handler) GetCart(c echo.Context) error {
 	userID := c.Get("user_id").(uint64)
 	resp, err := h.cartClient.GetCart(c.Request().Context(), &cart.GetCartRequest{

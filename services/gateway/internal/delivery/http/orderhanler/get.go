@@ -8,6 +8,18 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// GetOrder godoc
+// @Summary Get order
+// @Description Get a specific order by ID
+// @Tags Order
+// @Security BearerAuth
+// @Accept json
+// @Produce json
+// @Param request body order.GetOrderRequest true "Get order payload"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Failure 401 {object} map[string]interface{}
+// @Router /order/get_order [post]
 func (h Handler) GetOrder(c echo.Context) error {
 	var req order.GetOrderRequest
 

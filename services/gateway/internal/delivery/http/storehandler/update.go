@@ -8,6 +8,16 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// updateStore godoc
+// @Summary Update store
+// @Tags Store
+// @Security BearerAuth
+// @Accept json
+// @Produce json
+// @Param request body store.UpdateStoreRequest true "Update store payload"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Router /store/update [post]
 func (h Handler) updateStore(c echo.Context) error {
 	var req store.UpdateStoreRequest
 	userID := c.Get("user_id").(uint64)

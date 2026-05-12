@@ -16,8 +16,20 @@ import (
 	"os/signal"
 	"syscall"
 
+	_ "gatewayapp/docs"
+
 	"go.uber.org/zap"
 )
+
+// @title Gateway API
+// @version 1.0
+// @description Product Microservice Gateway API
+// @host localhost:8080
+// @BasePath /
+
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 
 func main() {
 
