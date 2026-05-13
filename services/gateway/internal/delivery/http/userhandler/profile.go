@@ -1,8 +1,8 @@
 package userhandler
 
 import (
-	"myapp/api/gen/user"
-	"myapp/pkg/httpmsg"
+	"gatewayapp/internal/dto"
+	"gatewayapp/internal/pkg/httpmsg"
 	"net/http"
 	"strconv"
 
@@ -15,15 +15,20 @@ import (
 // @Tags Users
 // @Security BearerAuth
 // @Produce json
-// @Success 200 {object} map[string]interface{}
-// @Failure 401 {object} map[string]interface{}
+// @Success 200 {object} dto.LoginResponse
+// @Failure 400 {object} dto.ErrorResponse
+// @Failure 401 {object} dto.ErrorResponse
+// @Failure 403 {object} dto.ErrorResponse
+// @Failure 404 {object} dto.ErrorResponse
+// @Failure 422 {object} dto.ErrorResponse
+// @Failure 500 {object} dto.ErrorResponse
 // @Router /users/profile [get]
 func (h Handler) Profile(c echo.Context) error {
 
 	userID := c.Get("user_id").(uint64)
 	resp, err := h.userClient.Profile(
 		c.Request().Context(),
-		&user.ProfileRequest{UserId: strconv.Itoa(int(userID))},
+		&dto.ProfileRequest{UserId: strconv.Itoa(int(userID))},
 	)
 	if err != nil {
 		resp, code := httpmsg.Error(err)

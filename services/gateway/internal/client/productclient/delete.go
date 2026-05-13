@@ -2,16 +2,17 @@ package productclient
 
 import (
 	"context"
-	"myapp/api/gen/product"
+	"gatewayapp/internal/dto"
+	"gatewayapp/internal/pkg/mapper"
 	"myapp/pkg/richerror"
 
 	"google.golang.org/grpc/status"
 )
 
-func (c *Client) DeleteProduct(ctx context.Context, req *product.DeleteProductRequest) (*product.DeleteProductResponse, error) {
+func (c *Client) DeleteProduct(ctx context.Context, req *dto.DeleteProductRequest) (*dto.DeleteProductResponse, error) {
 	const op = "productclient.DeleteProduct"
 
-	res, err := c.client.DeleteProduct(ctx, req)
+	res, err := c.client.DeleteProduct(ctx, mapper.ToDeleteProductRequest(req))
 	if err != nil {
 		if _, ok := status.FromError(err); ok {
 			return nil, err
@@ -21,5 +22,5 @@ func (c *Client) DeleteProduct(ctx context.Context, req *product.DeleteProductRe
 			WithErr(err).
 			WithKind(richerror.KindUnexpected)
 	}
-	return res, nil
+	return mapper.ToDeleteProductResponse(res), nil
 }

@@ -1,8 +1,8 @@
 package producthandler
 
 import (
-	"myapp/api/gen/product"
-	"myapp/pkg/httpmsg"
+	"gatewayapp/internal/dto"
+	"gatewayapp/internal/pkg/httpmsg"
 
 	"github.com/labstack/echo/v4"
 
@@ -15,13 +15,18 @@ import (
 // @Security BearerAuth
 // @Accept json
 // @Produce json
-// @Param request body product.CreateProductRequest true "Create product payload"
-// @Success 200 {object} map[string]interface{}
-// @Failure 400 {object} map[string]interface{}
+// @Param request body dto.CreateProductRequest true "Create product payload"
+// @Success 200 {object} dto.CreateProductResponse
+// @Failure 400 {object} dto.ErrorResponse
+// @Failure 401 {object} dto.ErrorResponse
+// @Failure 403 {object} dto.ErrorResponse
+// @Failure 404 {object} dto.ErrorResponse
+// @Failure 422 {object} dto.ErrorResponse
+// @Failure 500 {object} dto.ErrorResponse
 // @Router /product/create [post]
 func (h Handler) createProduct(c echo.Context) error {
 
-	var req product.CreateProductRequest
+	var req dto.CreateProductRequest
 
 	if err := c.Bind(&req); err != nil {
 

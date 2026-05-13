@@ -8,8 +8,8 @@ import (
 	"gatewayapp/internal/client/storeclient"
 	"gatewayapp/internal/client/userclient"
 	"gatewayapp/internal/config"
-	"gatewayapp/internal/delivery/http/carthanler"
-	orderhandler "gatewayapp/internal/delivery/http/orderhanler"
+	"gatewayapp/internal/delivery/http/carthandler"
+	orderhandler "gatewayapp/internal/delivery/http/orderhandler"
 	"gatewayapp/internal/delivery/http/producthandler"
 	"gatewayapp/internal/delivery/http/storehandler"
 	"gatewayapp/internal/delivery/http/userhandler"
@@ -30,7 +30,7 @@ type Server struct {
 	userHandler    userhandler.Handler
 	productHandler producthandler.Handler
 	orderHandler   orderhandler.Handler
-	cartHandler    carthanler.Handler
+	cartHandler    carthandler.Handler
 	Router         *echo.Echo
 }
 
@@ -46,7 +46,7 @@ func New(userClient userclient.Client,
 		userHandler:    userhandler.New(userClient, authClient),
 		storeHandler:   storehandler.New(storeClient, authClient),
 		productHandler: producthandler.New(productClient, authClient),
-		cartHandler:    carthanler.New(cartClient, authClient),
+		cartHandler:    carthandler.New(cartClient, authClient),
 		orderHandler:   orderhandler.New(orderClient, authClient),
 		config:         config,
 	}

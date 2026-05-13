@@ -2,15 +2,16 @@ package userclient
 
 import (
 	"context"
-	"myapp/api/gen/user"
+	"gatewayapp/internal/dto"
+	"gatewayapp/internal/pkg/mapper"
 	"myapp/pkg/richerror"
 
 	"google.golang.org/grpc/status"
 )
 
-func (c *Client) Login(ctx context.Context, req *user.LoginRequest) (*user.LoginResponse, error) {
+func (c *Client) Login(ctx context.Context, req *dto.LoginRequest) (*dto.LoginResponse, error) {
 	const op = "userclient.Login"
-	res, err := c.client.Login(ctx, req)
+	res, err := c.client.Login(ctx, mapper.ToLoginRequest(req))
 	if err != nil {
 		if _, ok := status.FromError(err); ok {
 			return nil, err
@@ -21,5 +22,5 @@ func (c *Client) Login(ctx context.Context, req *user.LoginRequest) (*user.Login
 			WithKind(richerror.KindUnexpected)
 	}
 
-	return res, nil
+	return mapper.ToLoginResponse(res), nil
 }

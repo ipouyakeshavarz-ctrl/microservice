@@ -1,9 +1,8 @@
 package userhandler
 
 import (
-	"myapp/api/gen/user"
-	"myapp/pkg/httpmsg"
-
+	"gatewayapp/internal/dto"
+	"gatewayapp/internal/pkg/httpmsg"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -15,12 +14,17 @@ import (
 // @Tags Users
 // @Accept json
 // @Produce json
-// @Param request body user.LoginRequest true "Login payload"
-// @Success 200 {object} map[string]interface{}
-// @Failure 400 {object} map[string]interface{}
+// @Param request body dto.LoginRequest true "Login payload"
+// @Success 200 {object} dto.LoginResponse
+// @Failure 400 {object} dto.ErrorResponse
+// @Failure 401 {object} dto.ErrorResponse
+// @Failure 403 {object} dto.ErrorResponse
+// @Failure 404 {object} dto.ErrorResponse
+// @Failure 422 {object} dto.ErrorResponse
+// @Failure 500 {object} dto.ErrorResponse
 // @Router /users/login [post]
 func (h Handler) userLogin(c echo.Context) error {
-	var req user.LoginRequest
+	var req dto.LoginRequest
 	if err := c.Bind(&req); err != nil {
 
 		return echo.NewHTTPError(http.StatusBadRequest)

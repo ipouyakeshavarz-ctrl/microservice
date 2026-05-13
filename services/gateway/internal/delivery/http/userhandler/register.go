@@ -1,8 +1,8 @@
 package userhandler
 
 import (
-	"myapp/api/gen/user"
-	"myapp/pkg/httpmsg"
+	"gatewayapp/internal/dto"
+	"gatewayapp/internal/pkg/httpmsg"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -14,12 +14,17 @@ import (
 // @Tags Users
 // @Accept json
 // @Produce json
-// @Param request body user.RegisterRequest true "Register payload"
-// @Success 201 {object} map[string]interface{}
-// @Failure 400 {object} map[string]interface{}
+// @Param request body dto.RegisterRequest true "Register payload"
+// @Success 201 {object} dto.RegisterResponse
+// @Failure 400 {object} dto.ErrorResponse
+// @Failure 401 {object} dto.ErrorResponse
+// @Failure 403 {object} dto.ErrorResponse
+// @Failure 404 {object} dto.ErrorResponse
+// @Failure 422 {object} dto.ErrorResponse
+// @Failure 500 {object} dto.ErrorResponse
 // @Router /users/register [post]
 func (h Handler) userRegister(c echo.Context) error {
-	var req user.RegisterRequest
+	var req dto.RegisterRequest
 
 	if err := c.Bind(&req); err != nil {
 		return err

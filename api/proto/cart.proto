@@ -11,8 +11,6 @@ service CartService {
 
   rpc GetCart(GetCartRequest) returns (GetCartResponse);
 
-  rpc RemoveItem(RemoveItemRequest) returns (RemoveItemResponse);
-
   rpc Checkout(CheckoutRequest) returns (CheckoutResponse);
 }
 
@@ -44,15 +42,6 @@ message GetCartRequest {
 
 message GetCartResponse {
   Cart cart = 1;
-}
-
-message RemoveItemRequest {
-  uint64 user_id = 1;
-  int64 product_id = 2;
-}
-
-message RemoveItemResponse{
-
 }
 
 message CheckoutRequest {

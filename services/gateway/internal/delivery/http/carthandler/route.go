@@ -1,4 +1,4 @@
-package orderhandler
+package carthandler
 
 import (
 	"gatewayapp/internal/delivery/http/middleware"
@@ -7,11 +7,13 @@ import (
 )
 
 func (h Handler) SetRoutes(e *echo.Echo) {
-	storeGroup := e.Group("/order")
+	storeGroup := e.Group("/cart")
 
-	storeGroup.POST("/get_order", h.GetOrder,
+	storeGroup.POST("/add_item", h.AddItem,
 		middleware.AuthMiddleware(&h.authClient))
-	storeGroup.GET("/list", h.ListUserOrders,
+	storeGroup.GET("/check_out", h.Checkout,
+		middleware.AuthMiddleware(&h.authClient))
+	storeGroup.GET("/get_cart", h.GetCart,
 		middleware.AuthMiddleware(&h.authClient))
 
 }

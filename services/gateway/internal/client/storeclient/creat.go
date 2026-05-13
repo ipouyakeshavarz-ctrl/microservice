@@ -2,17 +2,18 @@ package storeclient
 
 import (
 	"context"
-	"myapp/api/gen/store"
+	"gatewayapp/internal/dto"
+	"gatewayapp/internal/pkg/mapper"
 	"myapp/pkg/richerror"
 
 	"google.golang.org/grpc/status"
 )
 
 func (c *Client) CreateStore(ctx context.Context,
-	req *store.CreateStoreRequest) (*store.CreateStoreResponse, error) {
+	req *dto.CreateStoreRequest) (*dto.CreateStoreResponse, error) {
 	const op = "storeclient.CreateStore"
 
-	res, err := c.client.CreateStore(ctx, req)
+	res, err := c.client.CreateStore(ctx,mapper.ToCreateStoreRequest(req))
 	if err != nil {
 		if _, ok := status.FromError(err); ok {
 			return nil, err
@@ -23,5 +24,5 @@ func (c *Client) CreateStore(ctx context.Context,
 			WithKind(richerror.KindUnexpected)
 	}
 
-	return res, nil
+	return mapper.ToCreateStoreResponse(res), nil
 }

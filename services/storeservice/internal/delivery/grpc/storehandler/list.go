@@ -7,7 +7,7 @@ import (
 	"myapp/pkg/richerror"
 
 	"storeapp/internal/param"
-	"storeapp/internal/pkg/portobufermaper"
+	"storeapp/internal/pkg/portobufmaper"
 )
 
 func (h *Handler) ListStoresByUser(ctx context.Context,
@@ -27,6 +27,6 @@ func (h *Handler) ListStoresByUser(ctx context.Context,
 		})
 	}
 
-	return portobufermaper.MapListResponseToProtobuf(resp), nil
+	return portobufmaper.MapListResponseToProtobuf(resp), nil
 
 }

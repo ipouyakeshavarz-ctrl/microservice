@@ -2,16 +2,17 @@ package productclient
 
 import (
 	"context"
-	"myapp/api/gen/product"
+	"gatewayapp/internal/dto"
+	"gatewayapp/internal/pkg/mapper"
 	"myapp/pkg/richerror"
 
 	"google.golang.org/grpc/status"
 )
 
-func (c *Client) GetProductByID(ctx context.Context, req *product.GetProductByIDRequest) (*product.GetProductResponse, error) {
+func (c *Client) GetProductByID(ctx context.Context, req *dto.GetProductByIDRequest) (*dto.GetProductResponse, error) {
 	const op = "productclient.GetProductByID"
 
-	res, err := c.client.GetProductByID(ctx, req)
+	res, err := c.client.GetProductByID(ctx, mapper.ToGetProductByIDRequest(req))
 	if err != nil {
 		if _, ok := status.FromError(err); ok {
 			return nil, err
@@ -21,5 +22,5 @@ func (c *Client) GetProductByID(ctx context.Context, req *product.GetProductByID
 			WithErr(err).
 			WithKind(richerror.KindUnexpected)
 	}
-	return res, nil
+	return mapper.ToGetProductByIDResponse(res), nil
 }

@@ -1,4 +1,4 @@
-package storehandler
+package carthandler
 
 import (
 	"gatewayapp/internal/dto"
@@ -8,27 +8,30 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// listStore godoc
-// @Summary List stores
-// @Tags Store
+// Checkout godoc
+// @Summary Checkout cart
+// @Description Checkout authenticated user's cart
+// @Tags Cart
 // @Security BearerAuth
 // @Produce json
-// @Success 200 {object} dto.ListStoresByUserResponse
+// @Success 200 {object} dto.CheckoutResponse
 // @Failure 400 {object} dto.ErrorResponse
 // @Failure 401 {object} dto.ErrorResponse
 // @Failure 403 {object} dto.ErrorResponse
 // @Failure 404 {object} dto.ErrorResponse
 // @Failure 422 {object} dto.ErrorResponse
 // @Failure 500 {object} dto.ErrorResponse
-// @Router /store/list [get]
-func (h Handler) listStore(c echo.Context) error {
-	userID := c.Get("user_id").(uint64)
+// @Router /cart/check_out [get]
+func (h Handler) Checkout(c echo.Context) error {
 
-	resp, err := h.storeClient.ListStoresByUser(c.Request().Context(),
-		&dto.ListStoresByUserRequest{UserID: userID})
+	resp, err := h.cartClient.Checkout(c.Request().Context(), &dto.CheckoutRequest{
+		UserID: c.Get("user_id").(uint64),
+	})
 	if err != nil {
 		resp, code := httpmsg.Error(err)
 		return c.JSON(code, resp)
 	}
+
 	return c.JSON(http.StatusOK, resp)
+
 }

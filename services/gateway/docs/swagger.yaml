@@ -1,22 +1,67 @@
 basePath: /
 definitions:
-  cart.AddItemRequest:
+  dto.AddItemRequest:
     properties:
       product_id:
+        example: 10
         type: integer
       quantity:
+        example: 2
         type: integer
       user_id:
+        example: 5
         type: integer
     type: object
-  order.GetOrderRequest:
+  dto.AddItemResponse:
     properties:
-      order_id:
+      success:
+        example: true
+        type: boolean
+    type: object
+  dto.Address:
+    properties:
+      city:
+        example: Tehran
         type: string
+      description:
+        example: near metro
+        type: string
+      postal_code:
+        example: "1234567890"
+        type: string
+      province:
+        example: Tehran
+        type: string
+      street:
+        example: Valiasr
+        type: string
+    type: object
+  dto.Cart:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/dto.CartItem'
+        type: array
       user_id:
+        example: 5
         type: integer
     type: object
-  product.CreateProductRequest:
+  dto.CartItem:
+    properties:
+      product_id:
+        example: 10
+        type: integer
+      quantity:
+        example: 2
+        type: integer
+    type: object
+  dto.CheckoutResponse:
+    properties:
+      checkout_id:
+        example: checkout_123
+        type: string
+    type: object
+  dto.CreateProductRequest:
     properties:
       category:
         type: string
@@ -37,7 +82,36 @@ definitions:
       store_id:
         type: integer
     type: object
-  product.DeleteProductRequest:
+  dto.CreateProductResponse:
+    properties:
+      product:
+        $ref: '#/definitions/dto.ProductInfo'
+    type: object
+  dto.CreateStoreRequest:
+    properties:
+      address:
+        $ref: '#/definitions/dto.Address'
+      description:
+        example: Best grocery store
+        type: string
+      logo_url:
+        example: https://cdn.example.com/logo.png
+        type: string
+      name:
+        example: My Store
+        type: string
+      phone_number:
+        example: "09121234567"
+        type: string
+      user_id:
+        type: integer
+    type: object
+  dto.CreateStoreResponse:
+    properties:
+      store:
+        $ref: '#/definitions/dto.StoreInfo'
+    type: object
+  dto.DeleteProductRequest:
     properties:
       product_id:
         type: integer
@@ -46,14 +120,204 @@ definitions:
       user_id:
         type: integer
     type: object
-  product.GetProductByIDRequest:
+  dto.DeleteProductResponse:
     properties:
-      product_id:
-        type: integer
+      success:
+        example: true
+        type: boolean
+    type: object
+  dto.DeleteStoreRequest:
+    properties:
       store_id:
+        example: 1
+        type: integer
+      user_id:
+        example: 10
         type: integer
     type: object
-  product.UpdateProductRequest:
+  dto.DeleteStoreResponse:
+    properties:
+      success:
+        example: true
+        type: boolean
+    type: object
+  dto.ErrorResponse:
+    properties:
+      errors:
+        additionalProperties:
+          type: string
+        type: object
+      message:
+        type: string
+    type: object
+  dto.GetCartResponse:
+    properties:
+      cart:
+        $ref: '#/definitions/dto.Cart'
+    type: object
+  dto.GetOrderResponse:
+    properties:
+      order:
+        $ref: '#/definitions/dto.Order'
+    type: object
+  dto.GetProductResponse:
+    properties:
+      product:
+        $ref: '#/definitions/dto.ProductInfo'
+    type: object
+  dto.ListStoresByUserResponse:
+    properties:
+      stores:
+        items:
+          $ref: '#/definitions/dto.StoreInfo'
+        type: array
+    type: object
+  dto.ListUserOrdersResponse:
+    properties:
+      orders:
+        items:
+          $ref: '#/definitions/dto.Order'
+        type: array
+    type: object
+  dto.LoginRequest:
+    properties:
+      password:
+        example: "12345678"
+        type: string
+      phone_number:
+        example: "09121234567"
+        type: string
+    type: object
+  dto.LoginResponse:
+    properties:
+      tokens:
+        $ref: '#/definitions/dto.Tokens'
+      user:
+        $ref: '#/definitions/dto.UserInfo'
+    type: object
+  dto.Order:
+    properties:
+      checkout_id:
+        example: checkout_123
+        type: string
+      created_at:
+        example: 1710000000
+        type: integer
+      id:
+        example: order_123
+        type: string
+      items:
+        items:
+          $ref: '#/definitions/dto.OrderItem'
+        type: array
+      status:
+        example: paid
+        type: string
+      total_price:
+        example: 100000
+        type: integer
+      user_id:
+        example: 5
+        type: integer
+    type: object
+  dto.OrderItem:
+    properties:
+      price:
+        example: 50000
+        type: integer
+      product_id:
+        example: 10
+        type: integer
+      quantity:
+        example: 2
+        type: integer
+    type: object
+  dto.ProductInfo:
+    properties:
+      category:
+        example: electronics
+        type: string
+      description:
+        example: High performance laptop
+        type: string
+      id:
+        example: 1
+        type: integer
+      image_url:
+        example: https://cdn.example.com/laptop.png
+        type: string
+      is_active:
+        example: true
+        type: boolean
+      name:
+        example: Laptop
+        type: string
+      price:
+        example: 2500.5
+        type: number
+      sku:
+        example: LAPTOP-001
+        type: string
+      stock:
+        example: 20
+        type: integer
+      store_id:
+        example: 10
+        type: integer
+    type: object
+  dto.RegisterRequest:
+    properties:
+      name:
+        example: Ali
+        type: string
+      password:
+        example: "12345678"
+        type: string
+      phone_number:
+        example: "09121234567"
+        type: string
+    type: object
+  dto.RegisterResponse:
+    properties:
+      user:
+        $ref: '#/definitions/dto.UserInfo'
+    type: object
+  dto.StoreInfo:
+    properties:
+      address:
+        $ref: '#/definitions/dto.Address'
+      description:
+        example: Best grocery store
+        type: string
+      id:
+        example: 1
+        type: integer
+      is_active:
+        example: true
+        type: boolean
+      logo_url:
+        example: https://cdn.example.com/logo.png
+        type: string
+      name:
+        example: My Store
+        type: string
+      phone_number:
+        example: "09121234567"
+        type: string
+      user_id:
+        example: 10
+        type: integer
+    type: object
+  dto.Tokens:
+    properties:
+      access_token:
+        example: eyJhbGciOiJIUzI1NiIs...
+        type: string
+      refresh_token:
+        example: eyJhbGciOiJIUzI1NiIs...
+        type: string
+    type: object
+  dto.UpdateProductRequest:
     properties:
       category:
         type: string
@@ -76,74 +340,52 @@ definitions:
       store_id:
         type: integer
     type: object
-  store.Address:
+  dto.UpdateProductResponse:
     properties:
-      city:
-        type: string
-      description:
-        type: string
-      postalCode:
-        type: string
-      province:
-        type: string
-      street:
-        type: string
+      product:
+        $ref: '#/definitions/dto.ProductInfo'
     type: object
-  store.CreateStoreRequest:
+  dto.UpdateStoreRequest:
     properties:
       address:
-        $ref: '#/definitions/store.Address'
+        $ref: '#/definitions/dto.Address'
       description:
-        type: string
-      logo_url:
-        type: string
-      name:
-        type: string
-      phone_number:
-        type: string
-      user_id:
-        type: integer
-    type: object
-  store.DeleteStoreRequest:
-    properties:
-      store_id:
-        type: integer
-      user_id:
-        type: integer
-    type: object
-  store.UpdateStoreRequest:
-    properties:
-      address:
-        $ref: '#/definitions/store.Address'
-      description:
+        example: Updated description
         type: string
       is_active:
+        example: true
         type: boolean
       logo_url:
+        example: https://cdn.example.com/logo.png
         type: string
       name:
+        example: Updated Store
         type: string
       phone_number:
+        example: "09121234567"
         type: string
       store_id:
+        example: 1
         type: integer
       user_id:
+        example: 10
         type: integer
     type: object
-  user.LoginRequest:
+  dto.UpdateStoreResponse:
     properties:
-      password:
-        type: string
-      phone_number:
-        type: string
+      store:
+        $ref: '#/definitions/dto.StoreInfo'
     type: object
-  user.RegisterRequest:
+  dto.UserInfo:
     properties:
+      id:
+        example: 1
+        type: integer
       name:
-        type: string
-      password:
+        example: Ali
         type: string
       phone_number:
+        example: "09121234567"
         type: string
     type: object
 host: localhost:8080
@@ -164,25 +406,38 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/cart.AddItemRequest'
+          $ref: '#/definitions/dto.AddItemRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/dto.AddItemResponse'
         "400":
           description: Bad Request
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/dto.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/dto.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Add item to cart
@@ -197,13 +452,31 @@ paths:
         "200":
           description: OK
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/dto.CheckoutResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/dto.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Checkout cart
@@ -218,53 +491,36 @@ paths:
         "200":
           description: OK
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/dto.GetCartResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/dto.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Get cart
       tags:
       - Cart
-  /order/get_order:
-    post:
-      consumes:
-      - application/json
-      description: Get a specific order by ID
-      parameters:
-      - description: Get order payload
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/order.GetOrderRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            additionalProperties: true
-            type: object
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties: true
-            type: object
-        "401":
-          description: Unauthorized
-          schema:
-            additionalProperties: true
-            type: object
-      security:
-      - BearerAuth: []
-      summary: Get order
-      tags:
-      - Order
   /order/list:
     get:
       description: Returns all orders for authenticated user
@@ -274,18 +530,82 @@ paths:
         "200":
           description: OK
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/dto.ListUserOrdersResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/dto.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
       security:
       - BearerAuth: []
       summary: List user orders
       tags:
       - Order
+  /orders/{id}:
+    get:
+      description: Get a specific order by ID
+      parameters:
+      - description: Order ID
+        example: 15
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.GetOrderResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get order
+      tags:
+      - Orders
   /product/create:
     post:
       consumes:
@@ -296,20 +616,38 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/product.CreateProductRequest'
+          $ref: '#/definitions/dto.CreateProductRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/dto.CreateProductResponse'
         "400":
           description: Bad Request
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Create product
@@ -325,20 +663,38 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/product.DeleteProductRequest'
+          $ref: '#/definitions/dto.DeleteProductRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/dto.DeleteProductResponse'
         "400":
           description: Bad Request
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Delete product
@@ -346,28 +702,53 @@ paths:
       - Product
   /product/get:
     get:
-      consumes:
-      - application/json
+      description: |-
+        Retrieve product by IDs.
+        Example: /product/get?product_id=12&store_id=3
       parameters:
-      - description: Get product payload
-        in: body
-        name: request
+      - description: Product ID
+        example: 12
+        in: query
+        name: product_id
         required: true
-        schema:
-          $ref: '#/definitions/product.GetProductByIDRequest'
+        type: integer
+      - description: Store ID
+        example: 3
+        in: query
+        name: store_id
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/dto.GetProductResponse'
         "400":
           description: Bad Request
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Get product
@@ -383,20 +764,38 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/product.UpdateProductRequest'
+          $ref: '#/definitions/dto.UpdateProductRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/dto.UpdateProductResponse'
         "400":
           description: Bad Request
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Update product
@@ -412,25 +811,38 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/store.CreateStoreRequest'
+          $ref: '#/definitions/dto.CreateStoreRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/dto.CreateStoreResponse'
         "400":
           description: Bad Request
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
         "403":
           description: Forbidden
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Create store
@@ -446,20 +858,38 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/store.DeleteStoreRequest'
+          $ref: '#/definitions/dto.DeleteStoreRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/dto.DeleteStoreResponse'
         "400":
           description: Bad Request
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Delete store
@@ -473,13 +903,31 @@ paths:
         "200":
           description: OK
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/dto.ListStoresByUserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/dto.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
       security:
       - BearerAuth: []
       summary: List stores
@@ -495,20 +943,38 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/store.UpdateStoreRequest'
+          $ref: '#/definitions/dto.UpdateStoreRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/dto.UpdateStoreResponse'
         "400":
           description: Bad Request
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Update store
@@ -525,20 +991,38 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/user.LoginRequest'
+          $ref: '#/definitions/dto.LoginRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/dto.LoginResponse'
         "400":
           description: Bad Request
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
       summary: User login
       tags:
       - Users
@@ -551,13 +1035,31 @@ paths:
         "200":
           description: OK
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/dto.LoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/dto.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Get user profile
@@ -574,20 +1076,38 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/user.RegisterRequest'
+          $ref: '#/definitions/dto.RegisterRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/dto.RegisterResponse'
         "400":
           description: Bad Request
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
       summary: Register user
       tags:
       - Users

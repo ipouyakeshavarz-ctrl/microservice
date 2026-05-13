@@ -1,4 +1,4 @@
-package portobufermaper
+package portobufmaper
 
 import (
 	"myapp/api/gen/store"

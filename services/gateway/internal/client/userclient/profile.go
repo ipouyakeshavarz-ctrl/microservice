@@ -2,16 +2,17 @@ package userclient
 
 import (
 	"context"
-	"myapp/api/gen/user"
+	"gatewayapp/internal/dto"
+	"gatewayapp/internal/pkg/mapper"
 	"myapp/pkg/richerror"
 
 	"google.golang.org/grpc/status"
 )
 
-func (c *Client) Profile(ctx context.Context, req *user.ProfileRequest) (*user.ProfileResponse, error) {
+func (c *Client) Profile(ctx context.Context, req *dto.ProfileRequest) (*dto.ProfileResponse, error) {
 	const op = "userclient.Profile"
 
-	res, err := c.client.GetProfile(ctx, req)
+	res, err := c.client.GetProfile(ctx, mapper.ToProfileRequest(req))
 	if err != nil {
 		if _, ok := status.FromError(err); ok {
 			return nil, err
@@ -22,5 +23,5 @@ func (c *Client) Profile(ctx context.Context, req *user.ProfileRequest) (*user.P
 			WithKind(richerror.KindUnexpected)
 	}
 
-	return res, nil
+	return mapper.ToProfileResponse(res), nil
 }

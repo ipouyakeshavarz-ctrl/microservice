@@ -1,8 +1,8 @@
 package producthandler
 
 import (
-	"myapp/api/gen/product"
-	"myapp/pkg/httpmsg"
+	"gatewayapp/internal/dto"
+	"gatewayapp/internal/pkg/httpmsg"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -14,12 +14,17 @@ import (
 // @Security BearerAuth
 // @Accept json
 // @Produce json
-// @Param request body product.UpdateProductRequest true "Update product payload"
-// @Success 201 {object} map[string]interface{}
-// @Failure 400 {object} map[string]interface{}
+// @Param request body dto.UpdateProductRequest true "Update product payload"
+// @Success 201 {object} dto.UpdateProductResponse
+// @Failure 400 {object} dto.ErrorResponse
+// @Failure 401 {object} dto.ErrorResponse
+// @Failure 403 {object} dto.ErrorResponse
+// @Failure 404 {object} dto.ErrorResponse
+// @Failure 422 {object} dto.ErrorResponse
+// @Failure 500 {object} dto.ErrorResponse
 // @Router /product/update [post]
 func (h Handler) updateProduct(c echo.Context) error {
-	var req product.UpdateProductRequest
+	var req dto.UpdateProductRequest
 	if err := c.Bind(&req); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest)
 	}

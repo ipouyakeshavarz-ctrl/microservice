@@ -2,15 +2,16 @@ package cartclient
 
 import (
 	"context"
-	"myapp/api/gen/cart"
+	"gatewayapp/internal/dto"
+	"gatewayapp/internal/pkg/mapper"
 	"myapp/pkg/richerror"
 
 	"google.golang.org/grpc/status"
 )
 
-func (c *Client) AddItem(ctx context.Context, req *cart.AddItemRequest) (*cart.AddItemResponse, error) {
+func (c *Client) AddItem(ctx context.Context, req *dto.AddItemRequest) (*dto.AddItemResponse, error) {
 	const op = "CartService.AddItem"
-	res, err := c.client.AddItem(ctx, req)
+	res, err := c.client.AddItem(ctx, mapper.ToAddItemRequest(req))
 	if err != nil {
 		if _, ok := status.FromError(err); ok {
 			return nil, err
@@ -20,6 +21,6 @@ func (c *Client) AddItem(ctx context.Context, req *cart.AddItemRequest) (*cart.A
 			WithErr(err).
 			WithKind(richerror.KindUnexpected)
 	}
-	return res, nil
+	return mapper.ToAddItemResponse(res), nil
 
 }

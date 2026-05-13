@@ -2,17 +2,17 @@ package orderclient
 
 import (
 	"context"
-	"myapp/api/gen/order"
+	"gatewayapp/internal/dto"
+	"gatewayapp/internal/pkg/mapper"
 	"myapp/pkg/richerror"
 
 	"google.golang.org/grpc/status"
 )
 
-func (c *Client) ListUserOrders(ctx context.Context,
-	req *order.ListUserOrdersRequest) (*order.ListUserOrdersResponse, error) {
+func (c *Client) ListUserOrders(ctx context.Context, req *dto.ListUserOrdersRequest) (*dto.ListUserOrdersResponse, error) {
 	const op = "orderClient.ListUserOrders"
 
-	res, err := c.client.ListUserOrders(ctx, req)
+	res, err := c.client.ListUserOrders(ctx, mapper.ToListUserOrdersRequest(req))
 	if err != nil {
 		if _, ok := status.FromError(err); ok {
 			return nil, err
@@ -22,5 +22,5 @@ func (c *Client) ListUserOrders(ctx context.Context,
 			WithErr(err).
 			WithKind(richerror.KindUnexpected)
 	}
-	return res, nil
+	return mapper.ToListUserOrdersResponse(res), nil
 }

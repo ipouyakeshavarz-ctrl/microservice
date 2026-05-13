@@ -2,17 +2,17 @@ package storeclient
 
 import (
 	"context"
-	"myapp/api/gen/store"
+	"gatewayapp/internal/dto"
+	"gatewayapp/internal/pkg/mapper"
 	"myapp/pkg/richerror"
 
 	"google.golang.org/grpc/status"
 )
 
-func (c *Client) UpdateStore(ctx context.Context,
-	req *store.UpdateStoreRequest) (*store.UpdateStoreResponse, error) {
+func (c *Client) UpdateStore(ctx context.Context, req *dto.UpdateStoreRequest) (*dto.UpdateStoreResponse, error) {
 	const op = "storeclient.UpdateStore"
 
-	res, err := c.client.UpdateStore(ctx, req)
+	res, err := c.client.UpdateStore(ctx, mapper.ToUpdateStoreRequest(req))
 	if err != nil {
 		if _, ok := status.FromError(err); ok {
 			return nil, err
@@ -22,5 +22,5 @@ func (c *Client) UpdateStore(ctx context.Context,
 			WithErr(err).
 			WithKind(richerror.KindUnexpected)
 	}
-	return res, nil
+	return mapper.ToUpdateStoreResponse(res), nil
 }

@@ -1,4 +1,4 @@
-package storehandler
+package carthandler
 
 import (
 	"gatewayapp/internal/dto"
@@ -8,37 +8,28 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// deleteStore godoc
-// @Summary Delete store
-// @Tags Store
+// GetCart godoc
+// @Summary Get cart
+// @Description Returns authenticated user's cart
+// @Tags Cart
 // @Security BearerAuth
-// @Accept json
 // @Produce json
-// @Param request body dto.DeleteStoreRequest true "Delete store payload"
-// @Success 200 {object} dto.DeleteStoreResponse
+// @Success 200 {object} dto.GetCartResponse
 // @Failure 400 {object} dto.ErrorResponse
 // @Failure 401 {object} dto.ErrorResponse
 // @Failure 403 {object} dto.ErrorResponse
 // @Failure 404 {object} dto.ErrorResponse
 // @Failure 422 {object} dto.ErrorResponse
 // @Failure 500 {object} dto.ErrorResponse
-// @Router /store/delete [post]
-func (h Handler) deleteStore(c echo.Context) error {
-	var req dto.DeleteStoreRequest
+// @Router /cart/get_cart [get]
+func (h Handler) GetCart(c echo.Context) error {
 	userID := c.Get("user_id").(uint64)
-	if err := c.Bind(&req); err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest)
-	}
-
-	resp, err := h.storeClient.DeleteStore(c.Request().Context(), &dto.DeleteStoreRequest{
-		UserID:  userID,
-		StoreID: req.StoreID,
+	resp, err := h.cartClient.GetCart(c.Request().Context(), &dto.GetCartRequest{
+		UserID: userID,
 	})
 	if err != nil {
 		resp, code := httpmsg.Error(err)
 		return c.JSON(code, resp)
 	}
-
 	return c.JSON(http.StatusOK, resp)
-
 }
