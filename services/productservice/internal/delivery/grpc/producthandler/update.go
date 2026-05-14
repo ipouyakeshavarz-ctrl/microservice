@@ -36,6 +36,13 @@ func (h *Handler) UpdateProduct(ctx context.Context, req *product.UpdateProductR
 		IsActive:    req.IsActive,
 	}
 
+	if fieldErrors, err := h.productV.ValidateUpdateRequest(input); err != nil {
+		return nil, richerror.New(op).
+			WithKind(richerror.KindInvalid).
+			WithMessage(errmsg.ErrorMsgInvalidInput).
+			WithFields(fieldErrors)
+	}
+
 	resp, err := h.productSvc.Update(ctx, input)
 
 	if err != nil {

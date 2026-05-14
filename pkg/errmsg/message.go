@@ -36,4 +36,6 @@ const (
 	ErrorMsgSkuAlreadyExists                  = "sku already exists"
 	ErrorMsgFailedToGetProductInDB            = "failed to get product in DB"
 	ErrorMsgFailedToGetCartInDB               = "failed to get cart in DB"
+	ErrorMsgSKUIsNotValid                     = "sku is not valid"
+	ErrorMsgImageURLIsNotValid                = "image url is not valid"
 )

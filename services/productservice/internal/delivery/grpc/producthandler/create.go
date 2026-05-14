@@ -32,6 +32,13 @@ func (h *Handler) CreateProduct(ctx context.Context, req *product.CreateProductR
 		IsActive:    req.IsActive,
 	}
 
+	if fieldErrors, err := h.productV.ValidateCreateRequest(input); err != nil {
+		return nil, richerror.New(op).
+			WithKind(richerror.KindInvalid).
+			WithMessage(errmsg.ErrorMsgInvalidInput).
+			WithFields(fieldErrors)
+	}
+
 	resp, err := h.productSvc.Create(ctx, input)
 
 	if err != nil {
