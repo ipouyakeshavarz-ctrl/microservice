@@ -11,9 +11,12 @@ A production-ready e-commerce backend built with Go, using a microservices archi
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
 - [API Endpoints](#api-endpoints)
+- [API Documentation (Swagger)](#api-documentation-swagger)
 - [Getting Started](#getting-started)
 - [Configuration](#configuration)
 - [Observability](#observability)
+- [Internal Design Patterns](#internal-design-patterns)
+- [License](#license)
 
 ---
 
@@ -65,19 +68,20 @@ A production-ready e-commerce backend built with Go, using a microservices archi
 
 ## Tech Stack
 
-| Category | Technology |
-|---|---|
-| Language | Go 1.22+ |
-| HTTP Framework | [Echo v4](https://echo.labstack.com/) |
-| Service Communication | gRPC + Protocol Buffers |
-| Primary Database | MySQL 8 |
-| Cache | Redis 7 |
-| Message Broker | RabbitMQ 3.13 |
-| Authentication | JWT (HS256) |
-| Logger | [Zap](https://github.com/uber-go/zap) + Lumberjack (log rotation) |
-| Config | [Koanf](https://github.com/knadh/koanf) (YAML + ENV override) |
-| Metrics | Prometheus + Grafana |
-| Containerization | Docker + Docker Compose |
+| Category              | Technology                                                        |
+|-----------------------|-------------------------------------------------------------------|
+| Language              | Go 1.22+                                                          |
+| HTTP Framework        | [Echo v4](https://echo.labstack.com/)                             |
+| Service Communication | gRPC + Protocol Buffers                                           |
+| Primary Database      | MySQL 8                                                           |
+| Cache                 | Redis 7                                                           |
+| Message Broker        | RabbitMQ 3.13                                                     |
+| Authentication        | JWT (HS256)                                                       |
+| Swagger               |  OpenAPI 3.0 (API documentation)                                  |
+| Logger                | [Zap](https://github.com/uber-go/zap) + Lumberjack (log rotation) |
+| Config                | [Koanf](https://github.com/knadh/koanf) (YAML + ENV override)     |
+| Metrics               | Prometheus + Grafana                                              |
+| Containerization      | Docker + Docker Compose                                           |
 
 ---
 
@@ -91,9 +95,9 @@ A production-ready e-commerce backend built with Go, using a microservices archi
 ├── pkg/
 │   ├── config/         # Config loader (koanf)
 │   ├── richerror/      # Domain error type (Kind, Op, Message)
-│   ├── grpcerror/      # gRPC ↔ RichError mapping
 │   ├── httpmsg/        # HTTP error response mapper
 │   ├── interceptor/    # gRPC server error interceptor
+│   ├── metrics/        # Shared Prometheus metrics
 │   └── logger/         # Global zap logger setup
 ├── services/
 │   ├── gateway/        # HTTP API Gateway (Echo)
@@ -256,6 +260,29 @@ docker compose down -v       # stop and remove all volumes (wipes data)
 ```
 
 ---
+## 📚 API Documentation (Swagger)
+
+Gateway includes interactive API documentation via Swagger/OpenAPI:
+
+- **Swagger UI**: `http://localhost:8080/swagger/index.html`
+- **OpenAPI Spec**: Available in `gateway/docs/swagger.json` and `gateway/docs/swagger.yaml`
+
+### Features
+- Interactive API testing interface
+- Complete request/response schemas
+- JWT Bearer authentication support (`BearerAuth`)
+- Auto-generated from code annotations
+
+### Regenerate Swagger docs
+After modifying API handlers or annotations:
+```bash
+
+cd services/gateway
+swag init -g cmd/main.go
+The generated files will be updated in `gateway/docs/`.
+
+```
+---
 
 ## Configuration
 
@@ -284,7 +311,38 @@ logger:
 
 ---
 
-## Observability
+## 🔍 Observability
+
+### Quick Access
+
+| Service | URL | Credentials |
+|---------|-----|-------------|
+| **Prometheus** | http://localhost:9090 | - |
+| **Grafana** | http://localhost:3000 | `admin / admin` |
+| **RabbitMQ Management** | http://localhost:15672 | `user / password` |
+| **Gateway Metrics** | http://localhost:8080/metrics | - |
+| **Gateway Health** | http://localhost:8080/health-check | - |
+
+### Components
+
+#### Prometheus
+- Scrapes metrics from all microservices every 15 seconds
+- Configuration: `prometheus.yml`
+- Metrics endpoint pattern: `http://<service>:<metrics-port>/metrics`
+
+#### Grafana
+- Pre-configured dashboards for service monitoring
+- Default credentials: `admin / admin` (change on first login)
+- Connected to Prometheus as data source
+
+#### RabbitMQ Management UI
+- Monitor queues, exchanges, and message rates
+- Default credentials: `user / password`
+
+#### Structured Logging
+- **Zap**: High-performance structured logging
+- **Lumberjack**: Log rotation and management
+- Logs are written to service-specific files with automatic rotation
 
 ### Prometheus
 
@@ -314,6 +372,55 @@ All services use **Zap** for structured JSON logging with log rotation via Lumbe
 
 ## Internal Design Patterns
 
+The project follows several internal design patterns to maintain clean architecture, scalability, and separation of concerns.
+
+# 🏗️ Internal Design Patterns
+
+## Layered Architecture
+
+The project follows Clean Architecture principles with a clear separation of concerns:
+```text
+internal/
+├── delivery/     # Presentation Layer (HTTP/gRPC handlers)
+├── service/      # Business Logic Layer
+├── repository/   # Data Access Layer
+├── domain/       # Core Entities & Business Models
+├── param/        # Request/Response DTOs
+└── config/       # Configuration Management
+
+```
+### Layer Responsibilities 
+
+
+| Layer | Purpose | Dependencies |
+|---------|-----|-------------|
+|Delivery|	Implement business logic, orchestrate operations |	→ Repository|
+|Repository| 	Database queries, data persistence |	→ Domain|
+|Domain| 	Core business entities (User, Product, Order, etc.)| 	None|
+|Param| 	Data Transfer Objects for API contracts| 	None|
+
+# Benefits
+
+- ✅ Separation of Concerns – Each layer has a single responsibility
+- ✅ Testability – Layers can be tested independently with mocks
+- ✅ Scalability – Easy to swap implementations (e.g., change DB)
+- ✅ Maintainability – Changes in one layer don’t cascade to others
+
+---
+
+# Example Flow
+```text
+HTTP Request
+↓
+Handler (delivery)
+↓
+Service (business logic)
+↓
+Repository (DB)
+↓
+Domain Entity
+```
+
 ### RichError
 
 All services use a custom `RichError` type (`pkg/richerror`) that carries:
@@ -327,16 +434,40 @@ This allows the gRPC interceptor and HTTP mapper to automatically convert domain
 ### Async Checkout Flow
 
 ```
-cartservice               RabbitMQ             orderservice
-     │                       │                      │
-     │── checkout request ──▶│                      │
-     │── CartCheckedOutEvent ▶│                      │
-     │                       │── consume event ─────▶│
-     │                       │                      │── CreateOrder in MySQL
+Client
+  │
+  │ POST /cart/check_out
+  ▼
+API Gateway
+  │
+  │ gRPC
+  ▼
+CartService
+  │
+  │ 1. Read cart from Redis
+  │ 2. Create CartCheckedOutEvent
+  │
+  ├──────── publish event ────────▶ RabbitMQ
+  │
+  │                               │
+  │                               ▼
+  │                       OrderService
+  │                               │
+  │                               │ consume event
+  │                               │
+  │                               ▼
+  │                         Create Order
+  │                               │
+  │                               ▼
+  │                             MySQL
+  │
+  ▼
+Response to Client
+
 ```
 
 ---
 
 ## License
 
-MIT
+This project is for educational and experimental purposes.
