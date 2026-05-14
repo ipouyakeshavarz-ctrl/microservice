@@ -14,6 +14,7 @@ import (
 	"productapp/internal/repository/redis"
 	"productapp/internal/repository/redis/productcache"
 	productservice "productapp/internal/service"
+	productvalidator "productapp/internal/validator"
 	"syscall"
 	"time"
 
@@ -51,8 +52,8 @@ func main() {
 	}
 
 	productSvc := productservice.New(productRepo, productCache)
-
-	grpcServer := grpc.NewServer(*productSvc, cfg2.GrpcServer.ProductAddress, cfg2.Metrics.Port)
+	productV := productvalidator.New()
+	grpcServer := grpc.NewServer(productV, *productSvc, cfg2.GrpcServer.ProductAddress, cfg2.Metrics.Port)
 
 	go func() {
 		logger.Info("🚀gRPC server started on ",
